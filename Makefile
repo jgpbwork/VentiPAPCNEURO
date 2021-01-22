@@ -68,7 +68,8 @@ SOURCES       = main.cpp \
 		DrvGpio.cpp \
 		DrvRtc.cpp \
 		ThrInput.cpp \
-		Time.cpp qrc_assets.cpp \
+		Time.cpp \
+		processesclass.cpp qrc_assets.cpp \
 		moc_mainmenu.cpp \
 		moc_mainscreen.cpp \
 		moc_mainwindow.cpp \
@@ -99,6 +100,7 @@ OBJECTS       = main.o \
 		DrvRtc.o \
 		ThrInput.o \
 		Time.o \
+		processesclass.o \
 		qrc_assets.o \
 		moc_mainmenu.o \
 		moc_mainscreen.o \
@@ -207,7 +209,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		Singleton.h \
 		QMath.h \
 		ThrInput.h \
-		Time.h main.cpp \
+		Time.h \
+		processesclass.h main.cpp \
 		mainmenu.cpp \
 		mainscreen.cpp \
 		mainwindow.cpp \
@@ -225,7 +228,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		DrvGpio.cpp \
 		DrvRtc.cpp \
 		ThrInput.cpp \
-		Time.cpp
+		Time.cpp \
+		processesclass.cpp
 QMAKE_TARGET  = VentiApp
 DESTDIR       = 
 TARGET        = VentiApp
@@ -416,8 +420,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents assets.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainmenu.h mainscreen.h mainwindow.h mylabelanimated.h mywidgetanimated.h optiondatetime.h optioncalibration.h globalfunctions.h optionalarmlimit.h optiongeneral.h DrvI2C.h DrvAdc.h IEEE754.h DrvGauge.h DrvGpio.h DrvRtc.h GMacros.h Singleton.h QMath.h ThrInput.h Time.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainmenu.cpp mainscreen.cpp mainwindow.cpp mylabelanimated.cpp mywidgetanimated.cpp optiondatetime.cpp optioncalibration.cpp globalfunctions.cpp optionalarmlimit.cpp optiongeneral.cpp DrvI2C.cpp DrvAdc.cpp IEEE754.cpp DrvGauge.cpp DrvGpio.cpp DrvRtc.cpp ThrInput.cpp Time.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainmenu.h mainscreen.h mainwindow.h mylabelanimated.h mywidgetanimated.h optiondatetime.h optioncalibration.h globalfunctions.h optionalarmlimit.h optiongeneral.h DrvI2C.h DrvAdc.h IEEE754.h DrvGauge.h DrvGpio.h DrvRtc.h GMacros.h Singleton.h QMath.h ThrInput.h Time.h processesclass.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainmenu.cpp mainscreen.cpp mainwindow.cpp mylabelanimated.cpp mywidgetanimated.cpp optiondatetime.cpp optioncalibration.cpp globalfunctions.cpp optionalarmlimit.cpp optiongeneral.cpp DrvI2C.cpp DrvAdc.cpp IEEE754.cpp DrvGauge.cpp DrvGpio.cpp DrvRtc.cpp ThrInput.cpp Time.cpp processesclass.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainmenu.ui mainscreen.ui mainwindow.ui optiondatetime.ui optioncalibration.ui optionalarmlimit.ui optiongeneral.ui $(DISTDIR)/
 
 
@@ -520,6 +524,13 @@ moc_mainscreen.cpp: mainmenu.h \
 
 moc_mainwindow.cpp: mainscreen.h \
 		mainmenu.h \
+		ThrInput.h \
+		Singleton.h \
+		GMacros.h \
+		DrvAdc.h \
+		DrvI2C.h \
+		DrvRtc.h \
+		DrvGauge.h \
 		mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -625,7 +636,14 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 main.o: main.cpp mainwindow.h \
 		mainscreen.h \
-		mainmenu.h
+		mainmenu.h \
+		ThrInput.h \
+		Singleton.h \
+		GMacros.h \
+		DrvAdc.h \
+		DrvI2C.h \
+		DrvRtc.h \
+		DrvGauge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainmenu.o: mainmenu.cpp mainmenu.h \
@@ -642,12 +660,20 @@ mainscreen.o: mainscreen.cpp mainscreen.h \
 		mainmenu.h \
 		ui_mainscreen.h \
 		mywidgetanimated.h \
-		globalfunctions.h
+		globalfunctions.h \
+		processesclass.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainscreen.o mainscreen.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		mainscreen.h \
 		mainmenu.h \
+		ThrInput.h \
+		Singleton.h \
+		GMacros.h \
+		DrvAdc.h \
+		DrvI2C.h \
+		DrvRtc.h \
+		DrvGauge.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
@@ -726,6 +752,9 @@ ThrInput.o: ThrInput.cpp ThrInput.h \
 Time.o: Time.cpp Time.h \
 		QMath.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Time.o Time.cpp
+
+processesclass.o: processesclass.cpp processesclass.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o processesclass.o processesclass.cpp
 
 qrc_assets.o: qrc_assets.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_assets.o qrc_assets.cpp

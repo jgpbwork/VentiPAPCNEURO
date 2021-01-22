@@ -342,10 +342,11 @@
    </property>
    <property name="styleSheet">
     <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);
+
 </string>
    </property>
    <property name="text">
-    <string>100</string>
+    <string/>
    </property>
    <property name="pixmap">
     <pixmap resource="assets.qrc">:/icons/main_menu/calibration_menu/ok.png</pixmap>

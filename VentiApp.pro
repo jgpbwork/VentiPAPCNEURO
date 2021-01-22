@@ -34,7 +34,8 @@ SOURCES += \
     DrvGpio.cpp \
     DrvRtc.cpp \
     ThrInput.cpp \
-    Time.cpp
+    Time.cpp \
+    processesclass.cpp
 
 HEADERS += \
     mainmenu.h \
@@ -57,7 +58,8 @@ HEADERS += \
     Singleton.h \
     QMath.h \
     ThrInput.h \
-    Time.h
+    Time.h \
+    processesclass.h
 
 FORMS += \
     mainmenu.ui \

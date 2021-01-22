@@ -2,6 +2,11 @@
 #include "ui_mainscreen.h"
 #include <QDebug>
 #include "globalfunctions.h"
+#include "processesclass.h"
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QPlainTextEdit>
+#include <QGraphicsDropShadowEffect>
 
 MainScreen::MainScreen(QWidget *parent) :
     QWidget(parent),
@@ -26,6 +31,55 @@ MainScreen::MainScreen(QWidget *parent) :
     ui->widget_o2_porcentile_mini->hide();
 
     GlobalFunctions::loadData();
+
+    QString answer = ProcessesClass::executeProcess(this, "sudo i2cdetect -y 1",
+                                                    ProcessesClass::LINUX, 1000, true);
+
+    if( ((answer.contains("48")) || (answer.contains("49"))) && answer.contains("64")
+            && answer.contains("68")){
+
+        qDebug()<<"answer"<<answer;
+    }
+    else{
+        QWidget *widget = new QWidget(this);
+        QWidget *widget_blur = new QWidget(this);
+        widget_blur->setFixedSize(320, 480);
+        widget_blur->setStyleSheet("background-color: rgba(100, 100, 100, 100);");
+        widget->setFixedSize(300, 150);
+        widget->move(10, 165);
+        widget->setStyleSheet("border-radius: 10px");
+
+
+        qDebug()<<"answer"<<answer;
+        QLabel *icon = new QLabel(widget);
+        icon->setPixmap(QPixmap(":icons/main_menu/calibration_menu/error.png"));
+        icon->setScaledContents(true);
+        icon->setFixedSize(30, 30);
+        icon->move(10,10);
+
+        QLabel *message = new QLabel(widget);
+        QFont f = this->font();
+        message->setText("Error");
+        message->setFont(f);
+        message->move(120,10);
+
+        QPlainTextEdit *messageText = new QPlainTextEdit(widget);
+        messageText->setFixedSize(300, 85);
+        f.setPointSize(12);
+        messageText->setPlainText("Reinicie el equipo. Si persiste el error, contacte a email@example.com");
+        messageText->setFont(f);
+        messageText->move(10,55);
+
+        QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(this);
+        eff->setBlurRadius(20);
+        eff->setOffset(1);
+        eff->setColor(QColor(Qt::red));
+        widget->setGraphicsEffect(eff);
+
+        widget_blur->show();
+        widget->show();
+        widget->raise();
+    }
 }
 
 MainScreen::~MainScreen()

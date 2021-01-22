@@ -27,7 +27,7 @@ bool GlobalFunctions::saveData(){
         QJsonDocument d;
         d.setObject(jsonObject);
         QDataStream out(&file);
-        out << d.toJson();
+        out << d.toJson(QJsonDocument::Compact);
         file.close();
         return true;
     }
@@ -42,8 +42,10 @@ bool GlobalFunctions::loadData(){
         QByteArray bytes;
         QDataStream in(&file);
         in >> bytes;
-        d.fromJson(bytes);
-        jsonObject = d.object();
+        d = QJsonDocument::fromJson(bytes);
+        if(d.isObject()){
+            jsonObject = d.object();
+        }
         readValues(jsonObject);
         file.close();
         return true;

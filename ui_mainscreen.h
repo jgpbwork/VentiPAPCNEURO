@@ -132,6 +132,7 @@ public:
         font4.setWeight(50);
         l_oxygen_value->setFont(font4);
         l_oxygen_value->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"\n"
 ""));
         l_oxygen_value->setPixmap(QPixmap(QString::fromUtf8(":/icons/main_menu/calibration_menu/ok.png")));
         l_oxygen_value->setScaledContents(true);
@@ -292,7 +293,7 @@ public:
         label_2->setText(QApplication::translate("MainScreen", "mi\303\251 06/01/2021", nullptr));
         label_3->setText(QApplication::translate("MainScreen", "5h 12m", nullptr));
         label_4->setText(QString());
-        l_oxygen_value->setText(QApplication::translate("MainScreen", "100", nullptr));
+        l_oxygen_value->setText(QString());
         l_max_value->setText(QApplication::translate("MainScreen", "28", nullptr));
         label_11->setText(QApplication::translate("MainScreen", "max", nullptr));
         l_min_value->setText(QApplication::translate("MainScreen", "16", nullptr));
