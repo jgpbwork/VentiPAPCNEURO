@@ -23,11 +23,16 @@ public:
     bool deviceConfigure();
     void validateReading();
 
+    bool setDateTime(QDateTime);
+
+    QDateTime& getDateTime();
+
     QThread &getThreadInstance();
 
 signals:
     void updateOxygenLevel(double);
     void updateBatteryLevel(QString);
+    void updateRealTimeClock(QDateTime);
 
     void inRange();
     void outOfRange();
@@ -35,6 +40,7 @@ signals:
 public slots:   
     void readValue();
     void updateReadings(std::float_t oxygenVal, std::float_t battVal);
+    void updateDateTime(QDateTime &refValue);
     void setMinimumValue(const QString &value);
     void setMaximumValue(const QString value);
 
@@ -58,5 +64,7 @@ inline QThread& ThrInput::getThreadInstance() {
     return *this->qThrInput_;
 }
 
-
+inline QDateTime& ThrInput::getDateTime(){
+    return this->drvRtc.getDateTime();
+}
 #endif // THRINPUT_H

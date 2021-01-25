@@ -2,6 +2,7 @@
 #define MAINSCREEN_H
 
 #include <QWidget>
+#include <QDateTime>
 #include "mainmenu.h"
 
 namespace Ui {
@@ -19,6 +20,9 @@ public:
     void setOxygenImage(QString image);
 public slots:
     void setOxygenValue(double value);
+    void setDate(QDate date);
+    void setTime(QTime time);
+
     void setBlockedDisplayValue(bool b){ blockedDisplayValue = b; }
     bool getBlockedDisplayValue(){ return blockedDisplayValue; }
 signals:

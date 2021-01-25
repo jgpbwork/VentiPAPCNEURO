@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainScreen_t {
-    QByteArrayData data[12];
-    char stringdata0[155];
+    QByteArrayData data[16];
+    char stringdata0[181];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,17 +36,22 @@ QT_MOC_LITERAL(1, 11, 12), // "menu_clicked"
 QT_MOC_LITERAL(2, 24, 0), // ""
 QT_MOC_LITERAL(3, 25, 14), // "setOxygenValue"
 QT_MOC_LITERAL(4, 40, 5), // "value"
-QT_MOC_LITERAL(5, 46, 22), // "setBlockedDisplayValue"
-QT_MOC_LITERAL(6, 69, 1), // "b"
-QT_MOC_LITERAL(7, 71, 22), // "getBlockedDisplayValue"
-QT_MOC_LITERAL(8, 94, 15), // "emitMenuClicked"
-QT_MOC_LITERAL(9, 110, 14), // "hideWidgetMenu"
-QT_MOC_LITERAL(10, 125, 14), // "showWidgetMenu"
-QT_MOC_LITERAL(11, 140, 14) // "setAlarmLimits"
+QT_MOC_LITERAL(5, 46, 7), // "setDate"
+QT_MOC_LITERAL(6, 54, 4), // "date"
+QT_MOC_LITERAL(7, 59, 7), // "setTime"
+QT_MOC_LITERAL(8, 67, 4), // "time"
+QT_MOC_LITERAL(9, 72, 22), // "setBlockedDisplayValue"
+QT_MOC_LITERAL(10, 95, 1), // "b"
+QT_MOC_LITERAL(11, 97, 22), // "getBlockedDisplayValue"
+QT_MOC_LITERAL(12, 120, 15), // "emitMenuClicked"
+QT_MOC_LITERAL(13, 136, 14), // "hideWidgetMenu"
+QT_MOC_LITERAL(14, 151, 14), // "showWidgetMenu"
+QT_MOC_LITERAL(15, 166, 14) // "setAlarmLimits"
 
     },
     "MainScreen\0menu_clicked\0\0setOxygenValue\0"
-    "value\0setBlockedDisplayValue\0b\0"
+    "value\0setDate\0date\0setTime\0time\0"
+    "setBlockedDisplayValue\0b\0"
     "getBlockedDisplayValue\0emitMenuClicked\0"
     "hideWidgetMenu\0showWidgetMenu\0"
     "setAlarmLimits"
@@ -59,7 +64,7 @@ static const uint qt_meta_data_MainScreen[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -67,23 +72,27 @@ static const uint qt_meta_data_MainScreen[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   54,    2, 0x06 /* Public */,
+       1,    0,   64,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       3,    1,   55,    2, 0x0a /* Public */,
-       5,    1,   58,    2, 0x0a /* Public */,
-       7,    0,   61,    2, 0x0a /* Public */,
-       8,    0,   62,    2, 0x08 /* Private */,
-       9,    0,   63,    2, 0x08 /* Private */,
-      10,    0,   64,    2, 0x08 /* Private */,
-      11,    0,   65,    2, 0x08 /* Private */,
+       3,    1,   65,    2, 0x0a /* Public */,
+       5,    1,   68,    2, 0x0a /* Public */,
+       7,    1,   71,    2, 0x0a /* Public */,
+       9,    1,   74,    2, 0x0a /* Public */,
+      11,    0,   77,    2, 0x0a /* Public */,
+      12,    0,   78,    2, 0x08 /* Private */,
+      13,    0,   79,    2, 0x08 /* Private */,
+      14,    0,   80,    2, 0x08 /* Private */,
+      15,    0,   81,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Double,    4,
-    QMetaType::Void, QMetaType::Bool,    6,
+    QMetaType::Void, QMetaType::QDate,    6,
+    QMetaType::Void, QMetaType::QTime,    8,
+    QMetaType::Void, QMetaType::Bool,   10,
     QMetaType::Bool,
     QMetaType::Void,
     QMetaType::Void,
@@ -101,13 +110,15 @@ void MainScreen::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->menu_clicked(); break;
         case 1: _t->setOxygenValue((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 2: _t->setBlockedDisplayValue((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 3: { bool _r = _t->getBlockedDisplayValue();
+        case 2: _t->setDate((*reinterpret_cast< QDate(*)>(_a[1]))); break;
+        case 3: _t->setTime((*reinterpret_cast< QTime(*)>(_a[1]))); break;
+        case 4: _t->setBlockedDisplayValue((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 5: { bool _r = _t->getBlockedDisplayValue();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 4: _t->emitMenuClicked(); break;
-        case 5: _t->hideWidgetMenu(); break;
-        case 6: _t->showWidgetMenu(); break;
-        case 7: _t->setAlarmLimits(); break;
+        case 6: _t->emitMenuClicked(); break;
+        case 7: _t->hideWidgetMenu(); break;
+        case 8: _t->showWidgetMenu(); break;
+        case 9: _t->setAlarmLimits(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -147,13 +158,13 @@ int MainScreen::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 10)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 10;
     }
     return _id;
 }

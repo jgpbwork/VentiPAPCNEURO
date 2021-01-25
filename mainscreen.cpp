@@ -92,6 +92,20 @@ void MainScreen::setAlarmLimits(){
     ui->l_max_value->setText(QString::number(GlobalFunctions::configured_max_limit));
 }
 
+void MainScreen::setDate(QDate date){
+    if(date.isValid()){
+    ///set label_2
+    ui->label_2->setText(date.toString());
+    }
+}
+
+void MainScreen::setTime(QTime time){
+    if(time.isValid()){
+    ///set label
+    ui->label->setText(time.toString("hh:mm"));
+    }
+}
+
 void MainScreen::setOxygenValue(double value)
 {
     GlobalFunctions::lastSettedValue = value;

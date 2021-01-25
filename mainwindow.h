@@ -21,6 +21,8 @@ public:
 
 public slots:
     void setOxygenValue(double value);
+    void setDateTime(QDateTime dateTime);
+
 private slots:
     void initApp();
     void setRandomValue();

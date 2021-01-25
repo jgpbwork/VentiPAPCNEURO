@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ThrInput_t {
-    QByteArrayData data[14];
-    char stringdata0[160];
+    QByteArrayData data[18];
+    char stringdata0[215];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,23 +35,29 @@ QT_MOC_LITERAL(0, 0, 8), // "ThrInput"
 QT_MOC_LITERAL(1, 9, 17), // "updateOxygenLevel"
 QT_MOC_LITERAL(2, 27, 0), // ""
 QT_MOC_LITERAL(3, 28, 18), // "updateBatteryLevel"
-QT_MOC_LITERAL(4, 47, 7), // "inRange"
-QT_MOC_LITERAL(5, 55, 10), // "outOfRange"
-QT_MOC_LITERAL(6, 66, 9), // "readValue"
-QT_MOC_LITERAL(7, 76, 14), // "updateReadings"
-QT_MOC_LITERAL(8, 91, 12), // "std::float_t"
-QT_MOC_LITERAL(9, 104, 9), // "oxygenVal"
-QT_MOC_LITERAL(10, 114, 7), // "battVal"
-QT_MOC_LITERAL(11, 122, 15), // "setMinimumValue"
-QT_MOC_LITERAL(12, 138, 5), // "value"
-QT_MOC_LITERAL(13, 144, 15) // "setMaximumValue"
+QT_MOC_LITERAL(4, 47, 19), // "updateRealTimeClock"
+QT_MOC_LITERAL(5, 67, 7), // "inRange"
+QT_MOC_LITERAL(6, 75, 10), // "outOfRange"
+QT_MOC_LITERAL(7, 86, 9), // "readValue"
+QT_MOC_LITERAL(8, 96, 14), // "updateReadings"
+QT_MOC_LITERAL(9, 111, 12), // "std::float_t"
+QT_MOC_LITERAL(10, 124, 9), // "oxygenVal"
+QT_MOC_LITERAL(11, 134, 7), // "battVal"
+QT_MOC_LITERAL(12, 142, 14), // "updateDateTime"
+QT_MOC_LITERAL(13, 157, 10), // "QDateTime&"
+QT_MOC_LITERAL(14, 168, 8), // "refValue"
+QT_MOC_LITERAL(15, 177, 15), // "setMinimumValue"
+QT_MOC_LITERAL(16, 193, 5), // "value"
+QT_MOC_LITERAL(17, 199, 15) // "setMaximumValue"
 
     },
     "ThrInput\0updateOxygenLevel\0\0"
-    "updateBatteryLevel\0inRange\0outOfRange\0"
-    "readValue\0updateReadings\0std::float_t\0"
-    "oxygenVal\0battVal\0setMinimumValue\0"
-    "value\0setMaximumValue"
+    "updateBatteryLevel\0updateRealTimeClock\0"
+    "inRange\0outOfRange\0readValue\0"
+    "updateReadings\0std::float_t\0oxygenVal\0"
+    "battVal\0updateDateTime\0QDateTime&\0"
+    "refValue\0setMinimumValue\0value\0"
+    "setMaximumValue"
 };
 #undef QT_MOC_LITERAL
 
@@ -61,36 +67,40 @@ static const uint qt_meta_data_ThrInput[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   54,    2, 0x06 /* Public */,
-       3,    1,   57,    2, 0x06 /* Public */,
-       4,    0,   60,    2, 0x06 /* Public */,
-       5,    0,   61,    2, 0x06 /* Public */,
+       1,    1,   64,    2, 0x06 /* Public */,
+       3,    1,   67,    2, 0x06 /* Public */,
+       4,    1,   70,    2, 0x06 /* Public */,
+       5,    0,   73,    2, 0x06 /* Public */,
+       6,    0,   74,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    0,   62,    2, 0x0a /* Public */,
-       7,    2,   63,    2, 0x0a /* Public */,
-      11,    1,   68,    2, 0x0a /* Public */,
-      13,    1,   71,    2, 0x0a /* Public */,
+       7,    0,   75,    2, 0x0a /* Public */,
+       8,    2,   76,    2, 0x0a /* Public */,
+      12,    1,   81,    2, 0x0a /* Public */,
+      15,    1,   84,    2, 0x0a /* Public */,
+      17,    1,   87,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Double,    2,
     QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::QDateTime,    2,
     QMetaType::Void,
     QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 8, 0x80000000 | 8,    9,   10,
-    QMetaType::Void, QMetaType::QString,   12,
-    QMetaType::Void, QMetaType::QString,   12,
+    QMetaType::Void, 0x80000000 | 9, 0x80000000 | 9,   10,   11,
+    QMetaType::Void, 0x80000000 | 13,   14,
+    QMetaType::Void, QMetaType::QString,   16,
+    QMetaType::Void, QMetaType::QString,   16,
 
        0        // eod
 };
@@ -103,12 +113,14 @@ void ThrInput::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         switch (_id) {
         case 0: _t->updateOxygenLevel((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 1: _t->updateBatteryLevel((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 2: _t->inRange(); break;
-        case 3: _t->outOfRange(); break;
-        case 4: _t->readValue(); break;
-        case 5: _t->updateReadings((*reinterpret_cast< std::float_t(*)>(_a[1])),(*reinterpret_cast< std::float_t(*)>(_a[2]))); break;
-        case 6: _t->setMinimumValue((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 7: _t->setMaximumValue((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 2: _t->updateRealTimeClock((*reinterpret_cast< QDateTime(*)>(_a[1]))); break;
+        case 3: _t->inRange(); break;
+        case 4: _t->outOfRange(); break;
+        case 5: _t->readValue(); break;
+        case 6: _t->updateReadings((*reinterpret_cast< std::float_t(*)>(_a[1])),(*reinterpret_cast< std::float_t(*)>(_a[2]))); break;
+        case 7: _t->updateDateTime((*reinterpret_cast< QDateTime(*)>(_a[1]))); break;
+        case 8: _t->setMinimumValue((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 9: _t->setMaximumValue((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -128,16 +140,23 @@ void ThrInput::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
             }
         }
         {
-            using _t = void (ThrInput::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ThrInput::inRange)) {
+            using _t = void (ThrInput::*)(QDateTime );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ThrInput::updateRealTimeClock)) {
                 *result = 2;
                 return;
             }
         }
         {
             using _t = void (ThrInput::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ThrInput::outOfRange)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ThrInput::inRange)) {
                 *result = 3;
+                return;
+            }
+        }
+        {
+            using _t = void (ThrInput::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ThrInput::outOfRange)) {
+                *result = 4;
                 return;
             }
         }
@@ -171,13 +190,13 @@ int ThrInput::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 10)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 10;
     }
     return _id;
 }
@@ -197,15 +216,22 @@ void ThrInput::updateBatteryLevel(QString _t1)
 }
 
 // SIGNAL 2
-void ThrInput::inRange()
+void ThrInput::updateRealTimeClock(QDateTime _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
-void ThrInput::outOfRange()
+void ThrInput::inRange()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
+}
+
+// SIGNAL 4
+void ThrInput::outOfRange()
+{
+    QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

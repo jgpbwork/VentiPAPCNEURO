@@ -9,7 +9,7 @@
 #define INIT_MIN_CAL_STATE 2
 #define INIT_MAX_CAL_STATE 5
 
-#define CAL_TIME 5*1000 //2min //Unit -> milliseconds
+#define CAL_TIME 120*1000 //2min //Unit -> milliseconds
 #define CAL_INCREASE_VALUE 1
 
 class MainScreen;

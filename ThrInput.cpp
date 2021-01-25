@@ -2,8 +2,7 @@
 #include "IEEE754.h"
 #include <QDebug>
 #include <wiringPiI2C.h>
-
-
+#include <sys/time.h>
 
 ThrInput::ThrInput(QObject *parent) : QObject(),
                                       Singleton(this) {
@@ -17,19 +16,23 @@ ThrInput::ThrInput(QObject *parent) : QObject(),
     /// Real Time Clock Initialization.
     /// Analog to Digital Converter for Oxigen Sensor Initialization Sequence...
 
-    this->drvRtc.Initialize();
     this->drvAdc.Initialize();
+    this->drvRtc.Initialize();    
     this->drvBattGauge.Initialize();
 
-    /// Instance Variables Initialization and Synchronization Sequence...
-    int seconds = this->drvRtc.getSeconds();
-    int minutes = this->drvRtc.getMinutes();
-    int hours = this->drvRtc.getHours();
+//    timeval curTime;
+//    gettimeofday(&curTime, NULL);
+//    qDebug() << curTime.tv_sec;
 
-    int dayOfWeek = this->drvRtc.getWeekDay();
-    int day = this->drvRtc.getDay();
-    int month = this->drvRtc.getMonth();
-    int year = this->drvRtc.getYear();
+    /// Instance Variables Initialization and Synchronization Sequence...
+//    int seconds = this->drvRtc.getSeconds();
+//    int minutes = this->drvRtc.getMinutes();
+//    int hours = this->drvRtc.getHours();
+
+//    int dayOfWeek = this->drvRtc.getWeekDay();
+//    int day = this->drvRtc.getDay();
+//    int month = this->drvRtc.getMonth();
+//    int year = this->drvRtc.getYear();
 
     qThrInput_ = QThread::create(&ThrInput::ThrInputRun);
     if(qThrInput_ != nullptr /*&& this->sensor != nullptr*/){
@@ -79,11 +82,15 @@ void ThrInput::ThrInputRun() {
     std::uint16_t lastDataADC = 0, battVoltage = 0, battTemp = 0;
     float val = 0.0f;
     float engValue = 0.0f, battEngValue = 0.0f;
+    ThrInput::instance().drvRtc.start();
+
+    qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
     while(true)
     {
         //ThrInput::instance().sensor->waitForReadyRead(Q_WAIT_FOREVER);  ///wait forever
         //ThrInput::instance().validateReading();
-        ThrInput::instance().qThrInput_->msleep(1000);   ///Wait a second to update readings...
+
+        ThrInput::instance().qThrInput_->msleep(1000);   ///Wait a second to update readings...        
         lastDataADC = 0;
         val = 0.0f;
         engValue = 0.0f;
@@ -92,20 +99,24 @@ void ThrInput::ThrInputRun() {
             continue;
         }
         /// data validation...
-        val = ThrInput::instance().drvAdc.ToEngValue(lastDataADC);// * 1000.0f;
-        qDebug() << "Sensor Voltage: " << val;
+        val = ThrInput::instance().drvAdc.ToEngValue(lastDataADC);
         engValue = (val * 1000.0f) * 20.9f / 11.5f;
+//        qDebug() << "Sensor Voltage: " << val << " (" << engValue << ") % O2.";
         ThrInput::instance().lastReading = val;
 
         /// Continue to read RTC
-
+        //ThrInput::instance().drvRtc.getDateTime();
         /// Continue to read Battery Gauge Value
         battVoltage = ThrInput::instance().drvBattGauge.readVoltage();
         battTemp = ThrInput::instance().drvBattGauge.readTemperature();
         battEngValue = ThrInput::instance().drvBattGauge.ToEngValue(battVoltage);
 
+        if(ThrInput::instance().drvRtc.update()){
+            qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
+            ThrInput::instance().updateRealTimeClock(ThrInput::instance().drvRtc.getDateTime());
+        }
         /// emit UI signal...
-        ThrInput::instance().updateReadings(val/*engValue*/, battEngValue);
+        ThrInput::instance().updateReadings(val, battEngValue);
 
     }
 }
@@ -125,6 +136,12 @@ void ThrInput::updateReadings(std::float_t oxygenVal, std::float_t battVal) {
     emit updateOxygenLevel(static_cast<double>(oxygenVal));
 //    emit updateOxygenLevel(QString::number(static_cast<double>(oxygenVal), 'f', 1));
     emit updateBatteryLevel("Batt: " + QString::number(static_cast<double>(battVal), 'f', 2) + " volts");
+    ///TODO emit RTC content with QDateTime Variable...
+}
+
+void ThrInput::updateDateTime(QDateTime &refValue) {
+    if(refValue.isValid())
+        emit updateRealTimeClock(refValue);
 }
 
 void ThrInput::readValue()

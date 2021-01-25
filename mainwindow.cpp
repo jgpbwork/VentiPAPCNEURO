@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    timer.start();
 
     connect(&thrInput, &ThrInput::updateOxygenLevel, this, &MainWindow::setOxygenValue);
+    connect(&thrInput, &ThrInput::updateRealTimeClock, this, &MainWindow::setDateTime);
 }
 
 MainWindow::~MainWindow()
@@ -33,12 +34,19 @@ void MainWindow::initApp(){
     if(main_screen){
         main_screen->show();
     }
-    setOxygenValue(0);
+    setOxygenValue(20);
 }
 
 void MainWindow::setOxygenValue(double value){
     if(main_screen){
         main_screen->setOxygenValue(value);
+    }
+}
+
+void MainWindow::setDateTime(QDateTime dateTime){
+    if(main_screen){
+        main_screen->setDate(dateTime.date());
+        main_screen->setTime(dateTime.time());
     }
 }
 
