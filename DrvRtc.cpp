@@ -1,29 +1,81 @@
 #include "DrvRtc.h"
 #include "ThrInput.h"
+
 #include <wiringPiI2C.h>
+#include <sys/time.h>
 
 DS1307::DS1307() : isRunning_(false) {
-    this->dateTime_ = QDateTime::fromString("01.01.2001", "dd.MM.yyyy");
+    this->dateTime_ = QDateTime::fromString("Fri Jan 01 12:00:00 2021");
 }
 
 DS1307::~DS1307(){}
 
 bool DS1307::Initialize() {
     std:uint8_t sec, min, hour, day, month, year;
+    time_t rawTime;
+    struct tm *timeInfo;
+
     this->identifier_ = wiringPiI2CSetup(DEVICE_ID);
     this->state_ = (this->identifier_ == -1) ? INACTIVE : ACTIVE;
     if(this->state_ == ACTIVE){
         int ctrlReg = wiringPiI2CReadReg8(this->identifier_, CTRL_REG);
         ctrlReg = wiringPiI2CWriteReg8(this->identifier_, CTRL_REG, RATE_SELECT_4kHz | SQUARE_WAVE_ENABLED);
         ctrlReg = wiringPiI2CReadReg8(this->identifier_, CTRL_REG);
+
+        ///Set DateTime from Local System time at boot
+        time(&rawTime);
+        timeInfo = localtime(&rawTime);
+        QString dt = asctime(timeInfo);
+        dt = dt.remove(dt.size()-1, 1);
+        QDateTime local = QDateTime::fromString(dt);
+
+        this->dateTime_ = (local.isValid()) ? local
+                                            : QDateTime::fromString("Fri Jan 01 12:00:00 2021");
+
+        if(this->dateTime_.isValid()){
+            int year_t = this->dateTime_.date().year();
+
+            if(year_t >= BASE_YEAR){
+                year_t -= BASE_YEAR;
+            }
+            else{
+                year_t = 1;
+            }
+            //if()
+            qDebug()<< "Setting year: " << static_cast<std::uint8_t>(year_t);
+            qDebug() << "Set Year: " << this->writeDevice(YEAR_REG,
+                                                          DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                              (this->dateTime_.date().year() - 2000)))
+                                     << this->getYear(year) << year;
+            qDebug() << "Set Month: " << this->writeDevice(MONTH_REG,
+                                                           DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                               (this->dateTime_.date().month())))
+                                      << this->getMonth(month) << month;
+            qDebug() << "Set Day: " << this->writeDevice(DAY_REG,
+                                                         DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                             (this->dateTime_.date().day())))
+                                    << this->getDay(day) << day;
+
+            qDebug() << "Set Hour: " << this->writeDevice(HOURS_REG,
+                                                          DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                              (this->dateTime_.time().hour())))
+                                     << this->getHours(hour) << hour;
+            qDebug() << "Set Minutes: " << this->writeDevice(MINUTES_REG,
+                                                             DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                                 (this->dateTime_.time().minute())))
+                                        << this->getMinutes(min) << min;
+        }
+
+        qDebug() << "System tiem at boot: " << this->dateTime_.toString("ddd MMM dd hh:mm:ss yyyy")
+                 << "After casted: " << local.toString("ddd MMM dd hh:mm:ss yyyy");
+
+        int val1;
+        this->readDevice(YEAR_REG, val1);
+
+        sec = static_cast<std::uint8_t>(val1 & SEC_BCD_FORMAT_MASK);
+
         if(!this->isRunning())
             this->start();
-        this->writeDevice(YEAR_REG, 21);
-        this->writeDevice(MONTH_REG, 01);
-        this->writeDevice(DAY_REG, 23);
-
-        this->writeDevice(HOURS_REG, 23);
-        this->writeDevice(MINUTES_REG, 34);
 
 //        qDebug() << this->getSeconds(sec) << sec
 //                 << DS1307::formatFromBCD(static_cast<std::uint8_t>(sec) &
@@ -76,6 +128,20 @@ std::uint8_t DS1307::formatFromBCD(std::uint8_t value) {
     return result;
 }
 
+std::uint8_t DS1307::formatToBCD(std::uint8_t value){
+    std::uint8_t shift = 0;
+    std::uint8_t retVal = 0;
+
+    qDebug() << "Input Val : " << value;
+
+    while(value){
+        retVal |= (value % 10) << (shift++ << 2);
+        value /= 10;
+    }
+    qDebug() << "Ouput Value: " << retVal;
+    return retVal;
+}
+
 bool DS1307::stop() {
     if(this->isRunning_){
         if(this->writeDevice(static_cast<int>(HALT_REG),
@@ -101,6 +167,7 @@ bool DS1307::start() {
 bool DS1307::update(){
     std:uint8_t sec = 0, min = 0, hour = 0, wday = 1, day = 0, month = 0, year = 0;
     if(this->isRunning()){
+        ThrInput::instance().getThreadInstance().msleep(100);
         this->getYear(year);
         ThrInput::instance().getThreadInstance().msleep(10);
         this->getMonth(month);
@@ -123,7 +190,6 @@ bool DS1307::update(){
             this->dateTime_.setDate(*date);
         if(time->isValid())
             this->dateTime_.setTime(*time);
-
         ///check dateTime overflow
         //qDebug() << "DateTime after: " << this->dateTime_.toString();
         return true;
