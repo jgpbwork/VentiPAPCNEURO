@@ -24,6 +24,9 @@
     Class(const Class &) DECLARE_DELETE; \
     Class &operator=(const Class &) DECLARE_DELETE
 
+
+//Test Pull from two repositories
+
 #define Q_WAIT_FOREVER -1
 
 #endif // GMACROS_H

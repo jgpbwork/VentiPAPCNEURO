@@ -85,6 +85,12 @@ void ThrInput::ThrInputRun() {
     ThrInput::instance().drvRtc.start();
 
     qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
+
+    time_t rawTime;
+    struct tm *timeInfo;
+
+
+
     while(true)
     {
         //ThrInput::instance().sensor->waitForReadyRead(Q_WAIT_FOREVER);  ///wait forever
@@ -113,6 +119,9 @@ void ThrInput::ThrInputRun() {
 
         if(ThrInput::instance().drvRtc.update()){
             qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
+            time(&rawTime);
+            timeInfo = localtime(&rawTime);
+            qDebug() << "System time: " << asctime(timeInfo);
             ThrInput::instance().updateRealTimeClock(ThrInput::instance().drvRtc.getDateTime());
         }
         /// emit UI signal...

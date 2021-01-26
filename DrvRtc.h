@@ -15,7 +15,7 @@ public:
     QDateTime &getDateTime();
 
     static std::uint8_t formatFromBCD(std::uint8_t value);
-
+    static std::uint8_t formatToBCD(std::uint8_t value);
 
     bool stop();
     bool start();
@@ -45,7 +45,7 @@ private:
     };
 
     enum Settings{
-        BASE_YEAR           = 0x07D0, ///Valid Leap year range from 2000 to 2099.
+        BASE_YEAR           = 0x07D0, ///Valid Leap year range from 2001 to 2100.
         YEAR_MIN            = 0x00,
         YEAR_MAX            = 0x99,
         MONTH_MIN           = 0x01,
