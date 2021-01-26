@@ -35,6 +35,8 @@ SOURCES += \
     DrvRtc.cpp \
     ThrInput.cpp \
     Time.cpp \
+    optionsetdate.cpp \
+    optionsettime.cpp \
     processesclass.cpp
 
 HEADERS += \
@@ -59,6 +61,8 @@ HEADERS += \
     QMath.h \
     ThrInput.h \
     Time.h \
+    optionsetdate.h \
+    optionsettime.h \
     processesclass.h
 
 FORMS += \
@@ -68,7 +72,9 @@ FORMS += \
     optiondatetime.ui \
     optioncalibration.ui \
     optionalarmlimit.ui \
-    optiongeneral.ui
+    optiongeneral.ui \
+    optionsetdate.ui \
+    optionsettime.ui
 
 LIBS += -L/usr/local/include -lwiringPi \
         -L/usr/local/lib -lpigpiod_if2 #To include libpigpiod_if2.so from /usr/local/lib
