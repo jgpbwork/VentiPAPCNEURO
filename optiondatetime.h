@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #ifndef OPTIONDATETIME_H
 #define OPTIONDATETIME_H
 
@@ -24,3 +25,39 @@ private:
 };
 
 #endif // OPTIONDATETIME_H
+=======
+#ifndef OPTIONDATETIME_H
+#define OPTIONDATETIME_H
+
+#include <QWidget>
+
+namespace Ui {
+class OptionDateTime;
+}
+
+class OptionDateTime : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit OptionDateTime(QWidget *parent = nullptr);
+    ~OptionDateTime();
+
+signals:
+    void closing();
+private slots:
+    void on_l_date_time_back_clicked();
+    void on_l_define_date_clicked();
+
+    void on_l_define_time_clicked();
+
+    void on_l_12_hours_clicked();
+    void on_l_24_hours_clicked();
+    void showBackMenu();
+    void hideBackMenu();
+private:
+    Ui::OptionDateTime *ui;
+};
+
+#endif // OPTIONDATETIME_H
+>>>>>>> 9090ceb909ef3c3f4473bedbfa53a0fa127bc4ed

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #ifndef GLOBALFUNCTIONS_H
 #define GLOBALFUNCTIONS_H
 
@@ -30,3 +31,42 @@ public slots:
 };
 
 #endif // GLOBALFUNCTIONS_H
+=======
+#ifndef GLOBALFUNCTIONS_H
+#define GLOBALFUNCTIONS_H
+
+#include <QWidget>
+#include <QDateTime>
+
+class GlobalFunctions : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit GlobalFunctions(QWidget *parent = nullptr);
+    static bool myanimationEnabled;
+    static bool checkIfFieldValid(QString);
+    static double getRealValue(double value);
+
+    static int configured_max_limit;
+    static int configured_min_limit;
+    static double lastSettedValue;
+
+    static double m_slope_value;
+    static double n_value;
+    static bool calibrated;
+
+    static QDateTime dateTime;
+
+    static bool saveData();
+    static bool loadData();
+    static bool readValues(QJsonObject);
+    static bool setErrorMessage(QWidget *parent, QString mess);
+    static QString setDateTimeInRaspi(QWidget *parent, QDateTime dt);
+
+signals:
+
+public slots:
+};
+
+#endif // GLOBALFUNCTIONS_H
+>>>>>>> 9090ceb909ef3c3f4473bedbfa53a0fa127bc4ed
