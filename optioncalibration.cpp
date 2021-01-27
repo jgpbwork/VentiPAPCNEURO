@@ -56,10 +56,10 @@ void OptionCalibration::incProgressMinCalibration(){
         if(minCalValue >= 0){
             double sum = minCalValue + GlobalFunctions::lastSettedValue;
             minCalValue = sum/2;
-            qDebug()<<"minCalValue"<<minCalValue;
+            qDebug()<<"minCalValue"<<minCalValue<<"******************************************";
         }else{
             minCalValue = GlobalFunctions::lastSettedValue;
-            qDebug()<<"minCalValue"<<minCalValue;
+            qDebug()<<"minCalValue"<<minCalValue<<"******************************************";
         }
     }
     if(minCalibrationProgress >= 100){
@@ -74,10 +74,10 @@ void OptionCalibration::incProgressMaxCalibration(){
         if(maxCalValue >= 0){
             double sum = maxCalValue + GlobalFunctions::lastSettedValue;
             maxCalValue = sum/2;
-            qDebug()<<"maxCalValue"<<maxCalValue;
+            qDebug()<<"maxCalValue"<<maxCalValue<<"******************************************";
         }else{
             maxCalValue = GlobalFunctions::lastSettedValue;
-            qDebug()<<"maxCalValue"<<maxCalValue;
+            qDebug()<<"maxCalValue"<<maxCalValue<<"******************************************";
         }
     }
     if(maxCalibrationProgress >= 100){
@@ -103,11 +103,25 @@ void OptionCalibration::on_l_calibration_state_button_clicked()
 void OptionCalibration::navigateNextState(){
     currentState++;
     if(currentState >= jsonArrayStates.size()){
-        GlobalFunctions::m_slope_value = (maxCalValue - minCalValue)/79.1;
-        GlobalFunctions::n_value = maxCalValue - 100*(GlobalFunctions::m_slope_value);
-        GlobalFunctions::calibrated = true;
-        GlobalFunctions::saveData();
-        on_l_calibration_back_clicked();
+
+        GlobalFunctions::m_slope_value = 79.1/(maxCalValue - minCalValue);
+        GlobalFunctions::n_value = 100 - (maxCalValue*(GlobalFunctions::m_slope_value));
+
+        if(GlobalFunctions::m_slope_value > 0
+                && (GlobalFunctions::n_value < 10
+                    && GlobalFunctions::n_value > -10)){
+            GlobalFunctions::calibrated = true;
+            GlobalFunctions::saveData();
+            on_l_calibration_back_clicked();
+        }
+        else{
+            QString mess = "Error de calibracion"
+                           ", reintente calibrar";
+            GlobalFunctions::setErrorMessage(this, mess);
+            QTimer::singleShot(4000, this, &OptionCalibration::
+                               on_l_calibration_back_clicked);
+        }
+
         return;
     }
     currentStateJsonObject = jsonArrayStates.at(currentState).toObject();

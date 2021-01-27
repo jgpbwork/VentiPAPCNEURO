@@ -3,6 +3,11 @@
 #include <QJsonObject>
 #include <QDataStream>
 #include <QJsonDocument>
+#include <QLabel>
+#include <QDebug>
+#include <QPlainTextEdit>
+#include <QGraphicsDropShadowEffect>
+
 
 bool GlobalFunctions::myanimationEnabled = true;
 int GlobalFunctions::configured_min_limit = 16;
@@ -17,6 +22,44 @@ GlobalFunctions::GlobalFunctions(QWidget *parent) : QWidget(parent)
 
 }
 
+bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess){
+    QWidget *widget = new QWidget(parent);
+    QWidget *widget_blur = new QWidget(parent);
+    widget_blur->setFixedSize(320, 480);
+    widget_blur->setStyleSheet("background-color: rgba(100, 100, 100, 100);");
+    widget->setFixedSize(300, 150);
+    widget->move(10, 165);
+    widget->setStyleSheet("border-radius: 10px");
+
+    QLabel *icon = new QLabel(widget);
+    icon->setPixmap(QPixmap(":icons/main_menu/calibration_menu/error.png"));
+    icon->setScaledContents(true);
+    icon->setFixedSize(30, 30);
+    icon->move(10,10);
+
+    QLabel *message = new QLabel(widget);
+    QFont f = parent->font();
+    message->setText("Error");
+    message->setFont(f);
+    message->move(120,10);
+
+    QPlainTextEdit *messageText = new QPlainTextEdit(widget);
+    messageText->setFixedSize(300, 85);
+    f.setPointSize(12);
+    messageText->setPlainText(mess);
+    messageText->setFont(f);
+    messageText->move(10,55);
+
+    QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(parent);
+    eff->setBlurRadius(20);
+    eff->setOffset(1);
+    eff->setColor(QColor(Qt::red));
+    widget->setGraphicsEffect(eff);
+
+    widget_blur->show();
+    widget->show();
+    widget->raise();
+}
 bool GlobalFunctions::saveData(){
     QFile file("save_config.dat");
     if(file.open(QIODevice::WriteOnly)){
@@ -55,10 +98,20 @@ bool GlobalFunctions::loadData(){
 
 bool GlobalFunctions::readValues(QJsonObject jsonObject)
 {
-    m_slope_value = jsonObject.value("m_slope_value").toDouble();
-    n_value = jsonObject.value("n_value").toDouble();
-    calibrated = jsonObject.value("calibrated").toBool();
-    return true;
+    double m = jsonObject.value("m_slope_value").toDouble();
+    double n = jsonObject.value("n_value").toDouble();
+    bool cal = jsonObject.value("calibrated").toBool();
+    if(cal){
+        if(m > 0){
+            if((n > -10) && (n < 10)){
+                n_value = n;
+                m_slope_value = m;
+                calibrated = cal;
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool GlobalFunctions::checkIfFieldValid(QString value)
@@ -72,7 +125,7 @@ bool GlobalFunctions::checkIfFieldValid(QString value)
 double GlobalFunctions::getRealValue(double value) //aplica la correcion de la calibracion
 {
     if(calibrated){
-        value = (value - n_value)/m_slope_value; //y = mx + n
+        value = (m_slope_value*value) + n_value; //y = mx + n
         return value;
     }else{
         return -1;

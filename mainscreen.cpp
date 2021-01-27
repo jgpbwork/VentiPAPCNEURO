@@ -41,44 +41,10 @@ MainScreen::MainScreen(QWidget *parent) :
         qDebug()<<"answer"<<answer;
     }
     else{
-        QWidget *widget = new QWidget(this);
-        QWidget *widget_blur = new QWidget(this);
-        widget_blur->setFixedSize(320, 480);
-        widget_blur->setStyleSheet("background-color: rgba(100, 100, 100, 100);");
-        widget->setFixedSize(300, 150);
-        widget->move(10, 165);
-        widget->setStyleSheet("border-radius: 10px");
-
-
         qDebug()<<"answer"<<answer;
-        QLabel *icon = new QLabel(widget);
-        icon->setPixmap(QPixmap(":icons/main_menu/calibration_menu/error.png"));
-        icon->setScaledContents(true);
-        icon->setFixedSize(30, 30);
-        icon->move(10,10);
-
-        QLabel *message = new QLabel(widget);
-        QFont f = this->font();
-        message->setText("Error");
-        message->setFont(f);
-        message->move(120,10);
-
-        QPlainTextEdit *messageText = new QPlainTextEdit(widget);
-        messageText->setFixedSize(300, 85);
-        f.setPointSize(12);
-        messageText->setPlainText("Reinicie el equipo. Si persiste el error, contacte a email@example.com");
-        messageText->setFont(f);
-        messageText->move(10,55);
-
-        QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(this);
-        eff->setBlurRadius(20);
-        eff->setOffset(1);
-        eff->setColor(QColor(Qt::red));
-        widget->setGraphicsEffect(eff);
-
-        widget_blur->show();
-        widget->show();
-        widget->raise();
+        QString mess = "Reinicie el equipo. Si persiste "
+                       "el error, contacte a email@example.com";
+        GlobalFunctions::setErrorMessage(this, mess);
     }
 }
 
@@ -94,15 +60,15 @@ void MainScreen::setAlarmLimits(){
 
 void MainScreen::setDate(QDate date){
     if(date.isValid()){
-    ///set label_2
-    ui->label_2->setText(date.toString());
+        ///set label_2
+        ui->label_2->setText(date.toString());
     }
 }
 
 void MainScreen::setTime(QTime time){
     if(time.isValid()){
-    ///set label
-    ui->label->setText(time.toString("hh:mm"));
+        ///set label
+        ui->label->setText(time.toString("hh:mm"));
     }
 }
 
@@ -111,8 +77,10 @@ void MainScreen::setOxygenValue(double value)
     GlobalFunctions::lastSettedValue = value;
     value = GlobalFunctions::getRealValue(value);
 
-    if(value < 0 ){
-        ui->l_oxygen_value->setText("--");
+    if(value < 0){
+        if(!blockedDisplayValue){
+            ui->l_oxygen_value->setText("--");
+        }
         return;
     }
 

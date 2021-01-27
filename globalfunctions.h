@@ -23,6 +23,7 @@ public:
     static bool saveData();
     static bool loadData();
     static bool readValues(QJsonObject);
+    static bool setErrorMessage(QWidget *parent, QString mess);
 signals:
 
 public slots:

@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&thrInput, &ThrInput::updateOxygenLevel, this, &MainWindow::setOxygenValue);
     connect(&thrInput, &ThrInput::updateRealTimeClock, this, &MainWindow::setDateTime);
+
+    qDebug()<<"Application changes ok" << "66" <<"********************************";
 }
 
 MainWindow::~MainWindow()
