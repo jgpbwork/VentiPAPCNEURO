@@ -30,6 +30,7 @@ void OptionSetTime::on_l_save_clicked()
 
 void OptionSetTime::on_l_define_time_back_clicked()
 {
+    emit closing();
     this->close();
 }
 

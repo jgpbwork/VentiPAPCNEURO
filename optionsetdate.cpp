@@ -114,5 +114,6 @@ void OptionSetDate::on_l_save_clicked()
 
 void OptionSetDate::on_l_define_date_back_clicked()
 {
+    emit closing();
     this->close();
 }

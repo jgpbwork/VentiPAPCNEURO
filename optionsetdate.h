@@ -17,6 +17,9 @@ public:
     explicit OptionSetDate(QWidget *parent = nullptr);
     ~OptionSetDate();
 
+signals:
+    void closing();
+
 private slots:
     void on_pb_day_down_clicked();
     void on_pb_day_up_clicked();

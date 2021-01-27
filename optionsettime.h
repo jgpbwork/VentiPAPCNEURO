@@ -16,6 +16,9 @@ public:
     explicit OptionSetTime(QWidget *parent = nullptr);
     ~OptionSetTime();
 
+signals:
+    void closing();
+
 private slots:
     void on_l_save_clicked();
 
