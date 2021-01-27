@@ -24,13 +24,13 @@ class Ui_OptionSetTime
 public:
     QWidget *widget;
     QPushButton *pb_minutes_up;
-    QLabel *l_hours_value;
+    QLabel *l_hour_value;
     MyLabelAnimated *l_save;
     QPushButton *pb_hours_up;
     MyLabelAnimated *l_define_time_back;
     QPushButton *pb_minutes_down;
     QPushButton *pb_hours_down;
-    QLabel *l_minutes_value;
+    QLabel *l_minute_value;
     QLabel *l_max_value_2;
 
     void setupUi(QWidget *OptionSetTime)
@@ -52,9 +52,9 @@ public:
         pb_minutes_up->setIcon(icon);
         pb_minutes_up->setIconSize(QSize(40, 40));
         pb_minutes_up->setFlat(true);
-        l_hours_value = new QLabel(widget);
-        l_hours_value->setObjectName(QStringLiteral("l_hours_value"));
-        l_hours_value->setGeometry(QRect(60, 120, 61, 61));
+        l_hour_value = new QLabel(widget);
+        l_hour_value->setObjectName(QStringLiteral("l_hour_value"));
+        l_hour_value->setGeometry(QRect(60, 120, 61, 61));
         QPalette palette;
         QBrush brush(QColor(62, 167, 132, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -63,15 +63,15 @@ public:
         QBrush brush1(QColor(164, 166, 168, 96));
         brush1.setStyle(Qt::SolidPattern);
         palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        l_hours_value->setPalette(palette);
+        l_hour_value->setPalette(palette);
         QFont font;
         font.setFamily(QStringLiteral("Swis721 Cn BT"));
         font.setPointSize(30);
         font.setBold(false);
         font.setWeight(50);
-        l_hours_value->setFont(font);
-        l_hours_value->setStyleSheet(QStringLiteral("border-image: url(:/icons/general/fondo_transparente.png);"));
-        l_hours_value->setAlignment(Qt::AlignCenter);
+        l_hour_value->setFont(font);
+        l_hour_value->setStyleSheet(QStringLiteral("border-image: url(:/icons/general/fondo_transparente.png);"));
+        l_hour_value->setAlignment(Qt::AlignCenter);
         l_save = new MyLabelAnimated(widget);
         l_save->setObjectName(QStringLiteral("l_save"));
         l_save->setGeometry(QRect(80, 240, 163, 71));
@@ -113,17 +113,17 @@ public:
         pb_hours_down->setIcon(icon1);
         pb_hours_down->setIconSize(QSize(40, 40));
         pb_hours_down->setFlat(true);
-        l_minutes_value = new QLabel(widget);
-        l_minutes_value->setObjectName(QStringLiteral("l_minutes_value"));
-        l_minutes_value->setGeometry(QRect(200, 120, 61, 61));
+        l_minute_value = new QLabel(widget);
+        l_minute_value->setObjectName(QStringLiteral("l_minute_value"));
+        l_minute_value->setGeometry(QRect(200, 120, 61, 61));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush);
         palette2.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
         palette2.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        l_minutes_value->setPalette(palette2);
-        l_minutes_value->setFont(font);
-        l_minutes_value->setStyleSheet(QStringLiteral("border-image: url(:/icons/general/fondo_transparente.png);"));
-        l_minutes_value->setAlignment(Qt::AlignCenter);
+        l_minute_value->setPalette(palette2);
+        l_minute_value->setFont(font);
+        l_minute_value->setStyleSheet(QStringLiteral("border-image: url(:/icons/general/fondo_transparente.png);"));
+        l_minute_value->setAlignment(Qt::AlignCenter);
         l_max_value_2 = new QLabel(widget);
         l_max_value_2->setObjectName(QStringLiteral("l_max_value_2"));
         l_max_value_2->setGeometry(QRect(140, 120, 41, 61));
@@ -145,13 +145,13 @@ public:
     {
         OptionSetTime->setWindowTitle(QApplication::translate("OptionSetTime", "Form", nullptr));
         pb_minutes_up->setText(QString());
-        l_hours_value->setText(QApplication::translate("OptionSetTime", "16", nullptr));
+        l_hour_value->setText(QApplication::translate("OptionSetTime", "16", nullptr));
         l_save->setText(QString());
         pb_hours_up->setText(QString());
         l_define_time_back->setText(QApplication::translate("OptionSetTime", "Definir Hora", nullptr));
         pb_minutes_down->setText(QString());
         pb_hours_down->setText(QString());
-        l_minutes_value->setText(QApplication::translate("OptionSetTime", "28", nullptr));
+        l_minute_value->setText(QApplication::translate("OptionSetTime", "28", nullptr));
         l_max_value_2->setText(QApplication::translate("OptionSetTime", ":", nullptr));
     } // retranslateUi
 

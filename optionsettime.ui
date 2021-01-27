@@ -55,7 +55,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="l_hours_value">
+   <widget class="QLabel" name="l_hour_value">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -259,7 +259,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="l_minutes_value">
+   <widget class="QLabel" name="l_minute_value">
     <property name="geometry">
      <rect>
       <x>200</x>
