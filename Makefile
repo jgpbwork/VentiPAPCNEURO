@@ -69,6 +69,8 @@ SOURCES       = main.cpp \
 		DrvRtc.cpp \
 		ThrInput.cpp \
 		Time.cpp \
+		optionsetdate.cpp \
+		optionsettime.cpp \
 		processesclass.cpp qrc_assets.cpp \
 		moc_mainmenu.cpp \
 		moc_mainscreen.cpp \
@@ -80,7 +82,9 @@ SOURCES       = main.cpp \
 		moc_globalfunctions.cpp \
 		moc_optionalarmlimit.cpp \
 		moc_optiongeneral.cpp \
-		moc_ThrInput.cpp
+		moc_ThrInput.cpp \
+		moc_optionsetdate.cpp \
+		moc_optionsettime.cpp
 OBJECTS       = main.o \
 		mainmenu.o \
 		mainscreen.o \
@@ -100,6 +104,8 @@ OBJECTS       = main.o \
 		DrvRtc.o \
 		ThrInput.o \
 		Time.o \
+		optionsetdate.o \
+		optionsettime.o \
 		processesclass.o \
 		qrc_assets.o \
 		moc_mainmenu.o \
@@ -112,7 +118,9 @@ OBJECTS       = main.o \
 		moc_globalfunctions.o \
 		moc_optionalarmlimit.o \
 		moc_optiongeneral.o \
-		moc_ThrInput.o
+		moc_ThrInput.o \
+		moc_optionsetdate.o \
+		moc_optionsettime.o
 DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/common/unix.conf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/common/linux.conf \
@@ -210,6 +218,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		QMath.h \
 		ThrInput.h \
 		Time.h \
+		optionsetdate.h \
+		optionsettime.h \
 		processesclass.h main.cpp \
 		mainmenu.cpp \
 		mainscreen.cpp \
@@ -229,6 +239,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		DrvRtc.cpp \
 		ThrInput.cpp \
 		Time.cpp \
+		optionsetdate.cpp \
+		optionsettime.cpp \
 		processesclass.cpp
 QMAKE_TARGET  = VentiApp
 DESTDIR       = 
@@ -238,7 +250,7 @@ TARGET        = VentiApp
 first: all
 ####### Build rules
 
-$(TARGET): ui_mainmenu.h ui_mainscreen.h ui_mainwindow.h ui_optiondatetime.h ui_optioncalibration.h ui_optionalarmlimit.h ui_optiongeneral.h $(OBJECTS)  
+$(TARGET): ui_mainmenu.h ui_mainscreen.h ui_mainwindow.h ui_optiondatetime.h ui_optioncalibration.h ui_optionalarmlimit.h ui_optiongeneral.h ui_optionsetdate.h ui_optionsettime.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: VentiApp.pro /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
@@ -420,9 +432,9 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents assets.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainmenu.h mainscreen.h mainwindow.h mylabelanimated.h mywidgetanimated.h optiondatetime.h optioncalibration.h globalfunctions.h optionalarmlimit.h optiongeneral.h DrvI2C.h DrvAdc.h IEEE754.h DrvGauge.h DrvGpio.h DrvRtc.h GMacros.h Singleton.h QMath.h ThrInput.h Time.h processesclass.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainmenu.cpp mainscreen.cpp mainwindow.cpp mylabelanimated.cpp mywidgetanimated.cpp optiondatetime.cpp optioncalibration.cpp globalfunctions.cpp optionalarmlimit.cpp optiongeneral.cpp DrvI2C.cpp DrvAdc.cpp IEEE754.cpp DrvGauge.cpp DrvGpio.cpp DrvRtc.cpp ThrInput.cpp Time.cpp processesclass.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainmenu.ui mainscreen.ui mainwindow.ui optiondatetime.ui optioncalibration.ui optionalarmlimit.ui optiongeneral.ui $(DISTDIR)/
+	$(COPY_FILE) --parents mainmenu.h mainscreen.h mainwindow.h mylabelanimated.h mywidgetanimated.h optiondatetime.h optioncalibration.h globalfunctions.h optionalarmlimit.h optiongeneral.h DrvI2C.h DrvAdc.h IEEE754.h DrvGauge.h DrvGpio.h DrvRtc.h GMacros.h Singleton.h QMath.h ThrInput.h Time.h optionsetdate.h optionsettime.h processesclass.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainmenu.cpp mainscreen.cpp mainwindow.cpp mylabelanimated.cpp mywidgetanimated.cpp optiondatetime.cpp optioncalibration.cpp globalfunctions.cpp optionalarmlimit.cpp optiongeneral.cpp DrvI2C.cpp DrvAdc.cpp IEEE754.cpp DrvGauge.cpp DrvGpio.cpp DrvRtc.cpp ThrInput.cpp Time.cpp optionsetdate.cpp optionsettime.cpp processesclass.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainmenu.ui mainscreen.ui mainwindow.ui optiondatetime.ui optioncalibration.ui optionalarmlimit.ui optiongeneral.ui optionsetdate.ui optionsettime.ui optionsetdate.ui optionsettime.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -508,9 +520,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainmenu.cpp moc_mainscreen.cpp moc_mainwindow.cpp moc_mylabelanimated.cpp moc_mywidgetanimated.cpp moc_optiondatetime.cpp moc_optioncalibration.cpp moc_globalfunctions.cpp moc_optionalarmlimit.cpp moc_optiongeneral.cpp moc_ThrInput.cpp
+compiler_moc_header_make_all: moc_mainmenu.cpp moc_mainscreen.cpp moc_mainwindow.cpp moc_mylabelanimated.cpp moc_mywidgetanimated.cpp moc_optiondatetime.cpp moc_optioncalibration.cpp moc_globalfunctions.cpp moc_optionalarmlimit.cpp moc_optiongeneral.cpp moc_ThrInput.cpp moc_optionsetdate.cpp moc_optionsettime.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainmenu.cpp moc_mainscreen.cpp moc_mainwindow.cpp moc_mylabelanimated.cpp moc_mywidgetanimated.cpp moc_optiondatetime.cpp moc_optioncalibration.cpp moc_globalfunctions.cpp moc_optionalarmlimit.cpp moc_optiongeneral.cpp moc_ThrInput.cpp
+	-$(DEL_FILE) moc_mainmenu.cpp moc_mainscreen.cpp moc_mainwindow.cpp moc_mylabelanimated.cpp moc_mywidgetanimated.cpp moc_optiondatetime.cpp moc_optioncalibration.cpp moc_globalfunctions.cpp moc_optionalarmlimit.cpp moc_optiongeneral.cpp moc_ThrInput.cpp moc_optionsetdate.cpp moc_optionsettime.cpp
 moc_mainmenu.cpp: mainmenu.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -582,13 +594,23 @@ moc_ThrInput.cpp: Singleton.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/VentiApp/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/VentiApp -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ThrInput.h -o moc_ThrInput.cpp
 
+moc_optionsetdate.cpp: optionsetdate.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/VentiApp/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/VentiApp -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include optionsetdate.h -o moc_optionsetdate.cpp
+
+moc_optionsettime.cpp: optionsettime.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/VentiApp/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/VentiApp -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include optionsettime.h -o moc_optionsettime.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainmenu.h ui_mainscreen.h ui_mainwindow.h ui_optiondatetime.h ui_optioncalibration.h ui_optionalarmlimit.h ui_optiongeneral.h
+compiler_uic_make_all: ui_mainmenu.h ui_mainscreen.h ui_mainwindow.h ui_optiondatetime.h ui_optioncalibration.h ui_optionalarmlimit.h ui_optiongeneral.h ui_optionsetdate.h ui_optionsettime.h ui_optionsetdate.h ui_optionsettime.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainmenu.h ui_mainscreen.h ui_mainwindow.h ui_optiondatetime.h ui_optioncalibration.h ui_optionalarmlimit.h ui_optiongeneral.h
+	-$(DEL_FILE) ui_mainmenu.h ui_mainscreen.h ui_mainwindow.h ui_optiondatetime.h ui_optioncalibration.h ui_optionalarmlimit.h ui_optiongeneral.h ui_optionsetdate.h ui_optionsettime.h ui_optionsetdate.h ui_optionsettime.h
 ui_mainmenu.h: mainmenu.ui \
 		/usr/lib/qt5/bin/uic \
 		mylabelanimated.h \
@@ -624,6 +646,26 @@ ui_optiongeneral.h: optiongeneral.ui \
 		mylabelanimated.h
 	/usr/lib/qt5/bin/uic optiongeneral.ui -o ui_optiongeneral.h
 
+ui_optionsetdate.h: optionsetdate.ui \
+		/usr/lib/qt5/bin/uic \
+		mylabelanimated.h
+	/usr/lib/qt5/bin/uic optionsetdate.ui -o ui_optionsetdate.h
+
+ui_optionsettime.h: optionsettime.ui \
+		/usr/lib/qt5/bin/uic \
+		mylabelanimated.h
+	/usr/lib/qt5/bin/uic optionsettime.ui -o ui_optionsettime.h
+
+ui_optionsetdate.h: optionsetdate.ui \
+		/usr/lib/qt5/bin/uic \
+		mylabelanimated.h
+	/usr/lib/qt5/bin/uic optionsetdate.ui -o ui_optionsetdate.h
+
+ui_optionsettime.h: optionsettime.ui \
+		/usr/lib/qt5/bin/uic \
+		mylabelanimated.h
+	/usr/lib/qt5/bin/uic optionsettime.ui -o ui_optionsettime.h
+
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
@@ -648,6 +690,8 @@ main.o: main.cpp mainwindow.h \
 
 mainmenu.o: mainmenu.cpp mainmenu.h \
 		ui_mainmenu.h \
+		mylabelanimated.h \
+		mywidgetanimated.h \
 		optiondatetime.h \
 		optioncalibration.h \
 		optionalarmlimit.h \
@@ -657,6 +701,7 @@ mainmenu.o: mainmenu.cpp mainmenu.h \
 mainscreen.o: mainscreen.cpp mainscreen.h \
 		mainmenu.h \
 		ui_mainscreen.h \
+		mywidgetanimated.h \
 		globalfunctions.h \
 		processesclass.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainscreen.o mainscreen.cpp
@@ -682,11 +727,13 @@ mywidgetanimated.o: mywidgetanimated.cpp mywidgetanimated.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mywidgetanimated.o mywidgetanimated.cpp
 
 optiondatetime.o: optiondatetime.cpp optiondatetime.h \
-		ui_optiondatetime.h
+		ui_optiondatetime.h \
+		mylabelanimated.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optiondatetime.o optiondatetime.cpp
 
 optioncalibration.o: optioncalibration.cpp optioncalibration.h \
 		ui_optioncalibration.h \
+		mylabelanimated.h \
 		globalfunctions.h \
 		mainscreen.h \
 		mainmenu.h
@@ -697,11 +744,13 @@ globalfunctions.o: globalfunctions.cpp globalfunctions.h
 
 optionalarmlimit.o: optionalarmlimit.cpp optionalarmlimit.h \
 		ui_optionalarmlimit.h \
+		mylabelanimated.h \
 		globalfunctions.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optionalarmlimit.o optionalarmlimit.cpp
 
 optiongeneral.o: optiongeneral.cpp optiongeneral.h \
-		ui_optiongeneral.h
+		ui_optiongeneral.h \
+		mylabelanimated.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optiongeneral.o optiongeneral.cpp
 
 DrvI2C.o: DrvI2C.cpp DrvI2C.h
@@ -729,7 +778,12 @@ DrvGpio.o: DrvGpio.cpp DrvGpio.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DrvGpio.o DrvGpio.cpp
 
 DrvRtc.o: DrvRtc.cpp DrvRtc.h \
-		DrvI2C.h
+		DrvI2C.h \
+		ThrInput.h \
+		Singleton.h \
+		GMacros.h \
+		DrvAdc.h \
+		DrvGauge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DrvRtc.o DrvRtc.cpp
 
 ThrInput.o: ThrInput.cpp ThrInput.h \
@@ -745,6 +799,14 @@ ThrInput.o: ThrInput.cpp ThrInput.h \
 Time.o: Time.cpp Time.h \
 		QMath.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Time.o Time.cpp
+
+optionsetdate.o: optionsetdate.cpp optionsetdate.h \
+		ui_optionsetdate.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optionsetdate.o optionsetdate.cpp
+
+optionsettime.o: optionsettime.cpp optionsettime.h \
+		ui_optionsettime.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optionsettime.o optionsettime.cpp
 
 processesclass.o: processesclass.cpp processesclass.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o processesclass.o processesclass.cpp
@@ -784,6 +846,12 @@ moc_optiongeneral.o: moc_optiongeneral.cpp
 
 moc_ThrInput.o: moc_ThrInput.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ThrInput.o moc_ThrInput.cpp
+
+moc_optionsetdate.o: moc_optionsetdate.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_optionsetdate.o moc_optionsetdate.cpp
+
+moc_optionsettime.o: moc_optionsettime.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_optionsettime.o moc_optionsettime.cpp
 
 ####### Install
 

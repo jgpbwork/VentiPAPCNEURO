@@ -18,8 +18,9 @@ public:
     bool powerDown();
     bool powerUp();
 
-    std::uint16_t readTemperature();
-    std::uint16_t readVoltage();
+    bool readTemperature(std::float_t &refValue);
+    bool readVoltage(std::float_t &refValue);
+    bool readCharge(std::uint16_t &refValue);
 
     std::float_t ToEngValue(std::uint16_t adcVoltVal);
 
@@ -103,6 +104,8 @@ public:
 private:
     std::uint16_t temperature_;
     std::uint16_t voltage_;
+    std::uint16_t charge_;
+
     std::uint8_t statusReg_;
 
     static const std::uint8_t VOLT_TO_ENG = 6;

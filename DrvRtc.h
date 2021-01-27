@@ -46,6 +46,7 @@ private:
 
     enum Settings{
         BASE_YEAR           = 0x07D0, ///Valid Leap year range from 2001 to 2100.
+        BASE_YEAR_OVF       = 0x64,   ///Year 2000 is to be casted to 2100.
         YEAR_MIN            = 0x00,
         YEAR_MAX            = 0x99,
         MONTH_MIN           = 0x01,

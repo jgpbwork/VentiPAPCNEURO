@@ -41,7 +41,8 @@ bool DS1307::Initialize() {
             else{
                 year_t = 1;
             }
-            //if()
+            if(!year_t) year_t = BASE_YEAR_OVF;   ///Fix this
+
             qDebug()<< "Setting year: " << static_cast<std::uint8_t>(year_t);
             qDebug() << "Set Year: " << this->writeDevice(YEAR_REG,
                                                           DS1307::formatToBCD(static_cast<std::uint8_t>
@@ -131,14 +132,12 @@ std::uint8_t DS1307::formatFromBCD(std::uint8_t value) {
 std::uint8_t DS1307::formatToBCD(std::uint8_t value){
     std::uint8_t shift = 0;
     std::uint8_t retVal = 0;
-
-    qDebug() << "Input Val : " << value;
-
+//    qDebug() << "Input Val : " << value;
     while(value){
         retVal |= (value % 10) << (shift++ << 2);
         value /= 10;
     }
-    qDebug() << "Ouput Value: " << retVal;
+//    qDebug() << "Ouput Value: " << retVal;
     return retVal;
 }
 
@@ -165,7 +164,8 @@ bool DS1307::start() {
 }
 
 bool DS1307::update(){
-    std:uint8_t sec = 0, min = 0, hour = 0, wday = 1, day = 0, month = 0, year = 0;
+    std:uint8_t sec = 0, min = 0, hour = 0, wday = 1,
+                day = 0, month = 0, year = 0;
     if(this->isRunning()){
         ThrInput::instance().getThreadInstance().msleep(100);
         this->getYear(year);
@@ -225,40 +225,41 @@ bool DS1307::writeDevice(int regAdd, int data) {
 
 bool DS1307::getSeconds(std::uint8_t &refValue){
     int seconds = 0;
-    if(this->state_ == INACTIVE || !readDevice(SECONDS_REG, seconds)){
-        return false;
-    }
+    if(this->state_ == INACTIVE || !readDevice(SECONDS_REG, seconds)) return false;
     std::uint8_t secondFromBCD = DS1307::formatFromBCD(static_cast<std::uint8_t>(seconds) &
                                                        SEC_BCD_FORMAT_MASK);
-//    qDebug()<< "Seconds (BCD): " << seconds;
-//    qDebug()<< "Seconds (binnary): " << secondFromBCD;
     if(!(secondFromBCD >=  SEC_MIN && secondFromBCD <= SEC_MAX)){
-//        refValue = SEC_MIN;
+        refValue = SEC_MIN;
         return false;
     }
     refValue = secondFromBCD;
+//    qDebug()<< "Seconds (BCD): " << seconds;
+//    qDebug()<< "Seconds (binnary): " << secondFromBCD;
     return true;
 }
 
 bool DS1307::getMinutes(std::uint8_t &refValue) {
     int minutes = 0;
-    if(this->state_ == INACTIVE || !readDevice(MINUTES_REG, minutes)) {
-        return false;
-    }
+    if(this->state_ == INACTIVE || !readDevice(MINUTES_REG, minutes)) return false;
     std::uint8_t minutesFromBCD = DS1307::formatFromBCD(static_cast<std::uint8_t>(minutes) &
                                                         MIN_BCD_FORMAT_MASK);
-    if(!(minutesFromBCD >= MINUTES_MIN && minutesFromBCD <= MINUTES_MAX)) return false;
+    if(!(minutesFromBCD >= MINUTES_MIN && minutesFromBCD <= MINUTES_MAX)){
+        refValue = MINUTES_MIN;
+        return false;
+    }
     refValue = minutesFromBCD;
     return true;
 }
 
 bool DS1307::getHours(std::uint8_t &refValue) {
     int hours = 0;
-    if(this->state_ == INACTIVE || !readDevice(HOURS_REG, hours))
-        return false;
+    if(this->state_ == INACTIVE || !readDevice(HOURS_REG, hours)) return false;
     std::uint8_t hoursFromBCD = DS1307::formatFromBCD(static_cast<std::uint8_t>(hours) &
                                                       HOUR24_BCD_FORMAT_MASK);
-    if(!(hoursFromBCD >= HOUR_MIN && hoursFromBCD <= HOUR_MAX)) return false;
+    if(!(hoursFromBCD >= HOUR_MIN && hoursFromBCD <= HOUR_MAX)){
+        refValue = HOUR_MIN;
+        return false;
+    }
     refValue = hoursFromBCD;
     return true;
 }
@@ -275,7 +276,10 @@ bool DS1307::getDay(std::uint8_t &refValue){
     if(this->state_ == INACTIVE || !readDevice(DAY_REG, day)) return false;
     std::uint8_t dayFromBCD = DS1307::formatFromBCD(static_cast<std::uint8_t>(day) &
                                                     DAY_BCD_FORMAT_MASK);
-    if(!(dayFromBCD >= DAY_MIN && dayFromBCD <= DAY_MAX)) return false;
+    if(!(dayFromBCD >= DAY_MIN && dayFromBCD <= DAY_MAX)){
+        refValue = DAY_MIN;
+        return false;
+    }
     refValue = dayFromBCD;
     return true;
 }
@@ -285,12 +289,10 @@ bool DS1307::getMonth(std::uint8_t &refValue){
     if(this->state_ == INACTIVE || !readDevice(MONTH_REG, month)) return false;
     std::uint8_t monthFromBCD = DS1307::formatFromBCD(static_cast<std::uint8_t>(month) &
                                                       MONTH_BCD_FORMAT_MASK);
-    if(!(monthFromBCD >= MONTH_MIN && monthFromBCD <= MONTH_MAX))
-    {
+    if(!(monthFromBCD >= MONTH_MIN && monthFromBCD <= MONTH_MAX)){
         refValue = MONTH_MIN;
         return false;
     }
-
     refValue = monthFromBCD;
     return true;
 }
@@ -301,9 +303,12 @@ bool DS1307::getYear(std::uint8_t &refValue){
     std::uint8_t yearFromBCD = DS1307::formatFromBCD(static_cast<std::uint8_t>(year) &
                                                      YEAR_BCD_FORMAT_MASK);
 
-    if(!(yearFromBCD >= YEAR_MIN && yearFromBCD <= YEAR_MAX)) return false;
-//    qDebug()<< "Year (BCD): " << year;
-//    qDebug() << "Year: " << yearFromBCD;
+    if(!(yearFromBCD >= YEAR_MIN && yearFromBCD <= YEAR_MAX)){
+        refValue = YEAR_MIN;
+        return false;
+    }
+//    qDebug()<< "Year (BCD): " << year
+//            << "Year: " << yearFromBCD;
     refValue = yearFromBCD;
     return true;
 }

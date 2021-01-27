@@ -53,33 +53,47 @@ bool LTC2942::powerUp() {
     return this->writeDevice(CONTROL_REG, *reinterpret_cast<int*>(&this->controlReg));
 }
 
-std::uint16_t LTC2942::readTemperature() {
-    std::uint8_t lowByte, highByte;
-    int data = 0;
-    if(this->readDevice(TEMPERATURE_L, data)) {
-        lowByte = static_cast<std::uint8_t>(data);
+bool LTC2942::readTemperature(std::float_t &refValue) {
+    int dataL = 0, dataH = 0;
+    if(this->readDevice(TEMPERATURE_H, dataH) &&
+       this->readDevice(TEMPERATURE_L, dataL)) {
+        this->temperature_ = ((static_cast<std::uint16_t>(dataH) << 8) |
+                               static_cast<std::uint16_t>(dataL));
+        refValue = (((static_cast<std::float_t>(this->temperature_) /
+                      static_cast<std::float_t>(UINT16_MAX)) *
+                      static_cast<std::float_t>(TEMP_TO_ENG)) -
+                      static_cast<std::float_t>(KELVIN_TO_CELSIUS));
+        return true;
     }
-    if(this->readDevice(TEMPERATURE_H, data)) {
-        highByte = static_cast<std::uint8_t>(data);
-    }
-    this->temperature_ = (static_cast<std::uint16_t>(highByte) << 8) |
-                         (static_cast<std::uint16_t>(lowByte));
-    return this->temperature_;
+    refValue = 0.0f;
+    return false;
 }
 
-std::uint16_t LTC2942::readVoltage() {
-    std::uint8_t lowByte = 0, highByte = 0;
-    int data = 0;
-    if(this->readDevice(VOLTAGE_L, data)) {
-        lowByte = static_cast<std::uint8_t>(data);
+bool LTC2942::readVoltage(std::float_t &refValue) {
+    int dataL = 0, dataH = 0;
+    if(this->readDevice(VOLTAGE_H, dataH) &&
+       this->readDevice(VOLTAGE_L, dataL)) {
+        this->voltage_ = ((static_cast<std::uint16_t>(dataH) << 8) |
+                           static_cast<std::uint16_t>(dataL));
+        refValue = ((static_cast<std::float_t>(this->voltage_) /
+                     static_cast<std::float_t>(UINT16_MAX)) *
+                     static_cast<std::float_t>(LTC2942::VOLT_TO_ENG));
+        return true;
     }
-    if(this->readDevice(VOLTAGE_H, data)) {
-        highByte = static_cast<std::uint8_t>(data);
+    refValue = -1.0f;
+    return false;
+}
+
+bool LTC2942::readCharge(std::uint16_t &refValue){
+    int dataL = 0, dataH = 0;
+    if(this->readDevice(CHARGE_CUMUL_H, dataH) &&
+       this->readDevice(CHARGE_CUMUL_L, dataL)){
+        this->charge_ = ((static_cast<std::uint16_t>(dataH) << 8) |
+                         static_cast<std::uint16_t>(dataL));
+        refValue = this->charge_;
+        return true;
     }
-    this->voltage_ = (static_cast<std::uint16_t>(highByte) <<
-                      static_cast<std::uint16_t>(8)) |
-                     (static_cast<std::uint16_t>(lowByte));
-    return this->voltage_;
+    return false;
 }
 
 std::float_t LTC2942::ToEngValue(std::uint16_t adcVoltVal) {

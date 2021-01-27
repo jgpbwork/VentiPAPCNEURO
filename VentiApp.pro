@@ -74,6 +74,8 @@ FORMS += \
     optionalarmlimit.ui \
     optiongeneral.ui \
     optionsetdate.ui \
+    optionsettime.ui \
+    optionsetdate.ui \
     optionsettime.ui
 
 LIBS += -L/usr/local/include -lwiringPi \

@@ -20,10 +20,6 @@ ThrInput::ThrInput(QObject *parent) : QObject(),
     this->drvRtc.Initialize();    
     this->drvBattGauge.Initialize();
 
-//    timeval curTime;
-//    gettimeofday(&curTime, NULL);
-//    qDebug() << curTime.tv_sec;
-
     /// Instance Variables Initialization and Synchronization Sequence...
 //    int seconds = this->drvRtc.getSeconds();
 //    int minutes = this->drvRtc.getMinutes();
@@ -79,17 +75,15 @@ void ThrInput::ThrInputRun() {
 //    qDebug() << "ThrInput's QserialPort: " << ThrInput::instance().sensor->thread();
 //    qDebug() << "ThrInput's inner thraed: " << ThrInput::instance().qThrInput_->thread();
 //    ThrInput::instance().thread()->wait();
-    std::uint16_t lastDataADC = 0, battVoltage = 0, battTemp = 0;
+    std::uint16_t lastDataADC = 0, battCharge = 0;
     float val = 0.0f;
-    float engValue = 0.0f, battEngValue = 0.0f;
+    float engValue = 0.0f, battVoltage = 0.0f, battTemp = 0.0f;
     ThrInput::instance().drvRtc.start();
 
     qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
 
     time_t rawTime;
     struct tm *timeInfo;
-
-
 
     while(true)
     {
@@ -107,16 +101,21 @@ void ThrInput::ThrInputRun() {
         /// data validation...
         val = ThrInput::instance().drvAdc.ToEngValue(lastDataADC);
         engValue = (val * 1000.0f) * 20.9f / 11.5f;
-//        qDebug() << "Sensor Voltage: " << val << " (" << engValue << ") % O2.";
+        qDebug() << "Sensor Voltage: " << val << " (" << engValue << ") % O2.";
         ThrInput::instance().lastReading = val;
 
-        /// Continue to read RTC
-        //ThrInput::instance().drvRtc.getDateTime();
         /// Continue to read Battery Gauge Value
-        battVoltage = ThrInput::instance().drvBattGauge.readVoltage();
-        battTemp = ThrInput::instance().drvBattGauge.readTemperature();
-        battEngValue = ThrInput::instance().drvBattGauge.ToEngValue(battVoltage);
+        if(ThrInput::instance().drvBattGauge.readVoltage(battVoltage)){
+            qDebug() << "BattVoltage: " << battVoltage;
+        }
+        if(ThrInput::instance().drvBattGauge.readTemperature(battTemp)){
+            qDebug() << "BattTemperature: " << battTemp;
+        }
+        if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
+            qDebug() << "BattCharge: " << battCharge;
+        }
 
+        /// Continue to read RTC
         if(ThrInput::instance().drvRtc.update()){
             qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
             time(&rawTime);
@@ -125,8 +124,7 @@ void ThrInput::ThrInputRun() {
             ThrInput::instance().updateRealTimeClock(ThrInput::instance().drvRtc.getDateTime());
         }
         /// emit UI signal...
-        ThrInput::instance().updateReadings(val, battEngValue);
-
+        ThrInput::instance().updateReadings(val, battVoltage);
     }
 }
 
