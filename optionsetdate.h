@@ -2,6 +2,8 @@
 #define OPTIONSETDATE_H
 
 #include <QWidget>
+#include <QMap>
+#include <QDateTime>
 
 namespace Ui {
 class OptionSetDate;
@@ -15,8 +17,23 @@ public:
     explicit OptionSetDate(QWidget *parent = nullptr);
     ~OptionSetDate();
 
+private slots:
+    void on_pb_day_down_clicked();
+    void on_pb_day_up_clicked();
+    void on_pb_month_down_clicked();
+    void on_pb_month_up_clicked();
+    void on_pb_year_down_clicked();
+    void on_pb_year_up_clicked();
+
+    void on_l_save_clicked();
+
+    void on_l_define_date_back_clicked();
+
 private:
     Ui::OptionSetDate *ui;
+    QMap<QString, int> mapMonth;
+    void fillJsonDate();
+    QDateTime currentDateTime;
 };
 
 #endif // OPTIONSETDATE_H

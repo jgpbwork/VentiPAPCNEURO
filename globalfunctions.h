@@ -2,6 +2,7 @@
 #define GLOBALFUNCTIONS_H
 
 #include <QWidget>
+#include <QDateTime>
 
 class GlobalFunctions : public QWidget
 {
@@ -20,10 +21,14 @@ public:
     static double n_value;
     static bool calibrated;
 
+    static QDateTime dateTime;
+
     static bool saveData();
     static bool loadData();
     static bool readValues(QJsonObject);
     static bool setErrorMessage(QWidget *parent, QString mess);
+    static QString setDateTimeInRaspi(QWidget *parent, QDateTime dt);
+
 signals:
 
 public slots:

@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QPlainTextEdit>
 #include <QGraphicsDropShadowEffect>
-
+#include <QProcess>
 
 bool GlobalFunctions::myanimationEnabled = true;
 int GlobalFunctions::configured_min_limit = 16;
@@ -16,10 +16,51 @@ double GlobalFunctions::lastSettedValue = -1;
 double GlobalFunctions::m_slope_value = -1;
 double GlobalFunctions::n_value = -1;
 bool GlobalFunctions::calibrated = false;
+QDateTime GlobalFunctions::dateTime = QDateTime::currentDateTime();
 
 GlobalFunctions::GlobalFunctions(QWidget *parent) : QWidget(parent)
 {
 
+}
+
+
+QString GlobalFunctions::setDateTimeInRaspi(QWidget *parent, QDateTime dt){
+    dateTime = dt;
+    //sudo date -s "21 APR 2020 19:45:00"
+    QMap<QString, int> mapMonthEnglish;
+    mapMonthEnglish.insert("JANUARY", 1);
+    mapMonthEnglish.insert("FEBRUARY" , 2);
+    mapMonthEnglish.insert("MARCH", 3);
+    mapMonthEnglish.insert("APRIL", 4);
+    mapMonthEnglish.insert("MAY", 5);
+    mapMonthEnglish.insert("JUNE", 6);
+    mapMonthEnglish.insert("JULY", 7);
+    mapMonthEnglish.insert("AUGUST", 8);
+    mapMonthEnglish.insert("SEPTEMBER", 9);
+    mapMonthEnglish.insert("OCTOBER", 10);
+    mapMonthEnglish.insert("NOVEMBER", 11);
+    mapMonthEnglish.insert("DECEMBER", 12);
+
+    QString day =  " \"" + QString::number(dt.date().day());
+    QString month = " " + mapMonthEnglish.key(dt.date().month()).left(3);
+    QString year = " " + QString::number(dt.date().year());
+
+    QString date_string = "sudo date -s" + day + month + year;
+    QString time_string = " " + dt.time().toString("HH:mm:ss") + "\"";
+    QProcess *proc_ovpn = new QProcess(parent);
+    proc_ovpn->setProcessChannelMode(QProcess::MergedChannels);
+
+    proc_ovpn->start("sh",QStringList() << "-c" << date_string + time_string);
+
+    if(!proc_ovpn->waitForStarted()) //default wait time 30 sec
+        qDebug() << " cannot start process ";
+
+    int waitTime = 500 ; //60 sec
+    if (!proc_ovpn->waitForFinished(waitTime))
+        qDebug() << "timeout .. ";
+
+    QString str(proc_ovpn->readAllStandardOutput());
+    return str;
 }
 
 bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess){

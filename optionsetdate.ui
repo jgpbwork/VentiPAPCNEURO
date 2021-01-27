@@ -26,7 +26,7 @@
     <string notr="true">border-image: url(:/icons/main_menu/alarm_limit_menu/background_alarm_limit_menu.png);
 background-image: url(:/icons/general/fondo_transparente.png);</string>
    </property>
-   <widget class="QPushButton" name="pb_minutes_up">
+   <widget class="QPushButton" name="pb_month_up">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -55,7 +55,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="l_hours_value">
+   <widget class="QLabel" name="l_day_value">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -136,7 +136,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="pb_hours_up">
+   <widget class="QPushButton" name="pb_day_up">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -165,7 +165,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="MyLabelAnimated" name="l_define_time_back">
+   <widget class="MyLabelAnimated" name="l_define_date_back">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -231,7 +231,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <number>6</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="pb_minutes_down">
+   <widget class="QPushButton" name="pb_month_down">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -260,7 +260,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pb_hours_down">
+   <widget class="QPushButton" name="pb_day_down">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -289,7 +289,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="l_minutes_value">
+   <widget class="QLabel" name="l_month_value">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -353,7 +353,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="pb_minutes_up_2">
+   <widget class="QPushButton" name="pb_year_up">
     <property name="geometry">
      <rect>
       <x>230</x>
@@ -382,7 +382,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pb_minutes_down_2">
+   <widget class="QPushButton" name="pb_year_down">
     <property name="geometry">
      <rect>
       <x>230</x>
@@ -411,7 +411,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="l_minutes_value_2">
+   <widget class="QLabel" name="l_year_value">
     <property name="geometry">
      <rect>
       <x>220</x>

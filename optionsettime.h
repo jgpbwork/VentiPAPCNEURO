@@ -2,6 +2,7 @@
 #define OPTIONSETTIME_H
 
 #include <QWidget>
+#include <QDateTime>
 
 namespace Ui {
 class OptionSetTime;
@@ -30,6 +31,8 @@ private slots:
 
 private:
     Ui::OptionSetTime *ui;
+    QDateTime currentDateTime;
+    QString dateTimeProcessInRaspi(QDateTime dt);
 };
 
 #endif // OPTIONSETTIME_H
