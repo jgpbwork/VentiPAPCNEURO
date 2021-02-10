@@ -30,12 +30,19 @@ MainScreen::MainScreen(QWidget *parent) :
 
     ui->widget_o2_porcentile_mini->hide();
 
-    GlobalFunctions::loadData();
+    QString answer_shutdown = ProcessesClass::
+            executeProcess(this,"sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
+                                                    ProcessesClass::LINUX, 1000, true);
+    if(!GlobalFunctions::loadData()){
+        QString mess = "Error"
+                       "Calibracion no encontrada. Reintente calibracion";
+        GlobalFunctions::setWarningMessage(this, mess);
+    }
 
     QString answer = ProcessesClass::executeProcess(this, "sudo i2cdetect -y 1",
                                                     ProcessesClass::LINUX, 1000, true);
 
-    if( ((answer.contains("48")) || (answer.contains("49"))) && answer.contains("64")
+    if( ((answer.contains("48")) || (answer.contains("49"))) /*&& answer.contains("64")*/
             && answer.contains("68")){
 
         qDebug()<<"answer"<<answer;

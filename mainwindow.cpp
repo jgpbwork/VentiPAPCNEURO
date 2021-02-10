@@ -3,12 +3,16 @@
 #include <QTimer>
 #include <QRandomGenerator>
 #include <QDebug>
+#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    if(QApplication::desktop()->width() < 1000){
+        this->setCursor(Qt::BlankCursor);
+    }
     setWindowFlags(Qt::CustomizeWindowHint);
     this->move(0,0);
 

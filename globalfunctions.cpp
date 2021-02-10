@@ -4,10 +4,13 @@
 #include <QDataStream>
 #include <QJsonDocument>
 #include <QLabel>
+#include <QPushButton>
+#include <QIcon>
 #include <QDebug>
 #include <QPlainTextEdit>
 #include <QGraphicsDropShadowEffect>
 #include <QProcess>
+#include <QDir>
 
 bool GlobalFunctions::myanimationEnabled = true;
 int GlobalFunctions::configured_min_limit = 16;
@@ -100,9 +103,71 @@ bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess){
     widget_blur->show();
     widget->show();
     widget->raise();
+
+
+    return true;
 }
+bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess){
+    QWidget *widget = new QWidget(parent);
+    QWidget *widget_blur = new QWidget(parent);
+    widget->setAttribute(Qt::WA_DeleteOnClose);
+    widget_blur->setAttribute(Qt::WA_DeleteOnClose);
+    widget_blur->setFixedSize(320, 480);
+    widget_blur->setStyleSheet("background-color: rgba(100, 100, 100, 100);");
+    widget->setFixedSize(300, 150);
+    widget->move(10, 165);
+    widget->setStyleSheet("border-radius: 10px");
+
+    QLabel *icon = new QLabel(widget);
+    icon->setPixmap(QPixmap(":icons/main_menu/calibration_menu/error.png"));
+    icon->setScaledContents(true);
+    icon->setFixedSize(30, 30);
+    icon->move(10,10);
+
+    QLabel *message = new QLabel(widget);
+    QFont f = parent->font();
+    message->setText("Error");
+    message->setFont(f);
+    message->move(120,10);
+
+    QPlainTextEdit *messageText = new QPlainTextEdit(widget);
+    messageText->setFixedSize(300, 85);
+    f.setPointSize(12);
+    messageText->setPlainText(mess);
+    messageText->setFont(f);
+    messageText->move(10,55);
+
+    QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(parent);
+    eff->setBlurRadius(20);
+    eff->setOffset(1);
+    eff->setColor(QColor(Qt::red));
+    widget->setGraphicsEffect(eff);
+
+    widget_blur->show();
+    widget->show();
+    widget->raise();
+
+    QPushButton *accept_button = new QPushButton(widget);
+    QIcon icon_accept(":icons/main_menu/calibration_menu/ok.png");
+    accept_button->setIcon(icon_accept);
+    accept_button->setIconSize(QSize(25,25));
+
+    accept_button->setText("ACEPTAR");
+    accept_button->setFixedSize(100, 30);
+    accept_button->move(190,110);
+
+    connect(accept_button, &QPushButton::clicked, widget, &QWidget::close);
+    connect(accept_button, &QPushButton::clicked, widget_blur, &QWidget::close);
+
+    return true;
+}
+
 bool GlobalFunctions::saveData(){
-    QFile file("save_config.dat");
+    QDir dir("/home/pi/VentiApp/");
+    if(!dir.exists()){
+        dir.mkpath("/home/pi/VentiApp/");
+    }
+    QFile file("/home/pi/VentiApp/save_config.dat");
     if(file.open(QIODevice::WriteOnly)){
         QJsonObject jsonObject;
         jsonObject.insert("m_slope_value", m_slope_value);
@@ -119,7 +184,12 @@ bool GlobalFunctions::saveData(){
 }
 
 bool GlobalFunctions::loadData(){
-    QFile file("save_config.dat");
+    QDir dir("/home/pi/VentiApp/");
+    if(!dir.exists()){
+        dir.mkpath("/home/pi/VentiApp/");
+        return false;
+    }
+    QFile file("/home/pi/VentiApp/save_config.dat");
     if(file.open(QIODevice::ReadOnly)){
         QJsonObject jsonObject;
         QJsonDocument d;
@@ -130,9 +200,9 @@ bool GlobalFunctions::loadData(){
         if(d.isObject()){
             jsonObject = d.object();
         }
-        readValues(jsonObject);
         file.close();
-        return true;
+
+        return readValues(jsonObject);
     }
     return false;
 }
