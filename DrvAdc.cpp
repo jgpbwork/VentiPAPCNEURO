@@ -13,8 +13,8 @@ ADS1115::~ADS1115(){}
 
 bool ADS1115::Initialize() {
     volatile int configReg = 0;
-    volatile qint16 data;
     std::uint16_t regValue = 0;
+
     this->resetDevice();
     this->identifier_ = wiringPiI2CSetup(DEVICE_ID);
     this->state_ = (this->identifier_ == -1) ? INACTIVE : ACTIVE;
@@ -23,6 +23,7 @@ bool ADS1115::Initialize() {
         regValue = static_cast<std::uint16_t>(configReg);
         IEEE_754::changeEndianess(reinterpret_cast<std::uint8_t*>(&regValue), sizeof (regValue));
         this->regValue_.OpStatusSingleStart = ~START_SINGLE_CONVERSION;
+//            regValue_.OpStatusSingleStart = static_cast<std::bit_not<uint8_t>>(1);
         this->regValue_.Gain = FULL_SCALE_4V;
         this->regValue_.Multiplexer = SINGLE_ENDED_CH0;
         this->regValue_.DataRate = SPS_860;

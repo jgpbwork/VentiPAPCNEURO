@@ -141,8 +141,7 @@ void ThrInput::validateReading(){
 
 bool ThrInput::setDateTime(QDateTime currentDate)
 {
-    if(currentDate.isValid()){
-        ///TODO check time regretion
+    if(currentDate.isValid()) { ///TODO check time regretion
         return this->drvRtc.setDate(currentDate);
     }
     return false;

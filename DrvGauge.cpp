@@ -88,7 +88,7 @@ bool LTC2942::readCharge(std::uint16_t &refValue){
     int dataL = 0, dataH = 0;
     if(this->readDevice(CHARGE_CUMUL_H, dataH) &&
        this->readDevice(CHARGE_CUMUL_L, dataL)){
-        this->charge_ = ((static_cast<std::uint16_t>(dataH) << 8) |
+        this->charge_ = ((static_cast<std::uint16_t>(dataH) << static_cast<uint16_t>(8)) |
                          static_cast<std::uint16_t>(dataL));
         refValue = this->charge_;
         return true;

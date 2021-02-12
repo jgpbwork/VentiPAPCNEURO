@@ -22,12 +22,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&timer, &QTimer::timeout, this, &MainWindow::setRandomValue);
     timer.setInterval(1000);
+    ///TODO Set timer to Turn On and Off Screen every 5 sec. !!!10 Sec off --> 5 Sec on
+    /// Set On/Off Time setting adjustable from menu.
 //    timer.start();
 
     connect(&thrInput, &ThrInput::updateOxygenLevel, this, &MainWindow::setOxygenValue);
     connect(&thrInput, &ThrInput::updateRealTimeClock, this, &MainWindow::setDateTime);
 
-    qDebug()<<"Application changes ok" << "66" <<"********************************";
+//    qDebug()<<"Application changes ok" << "66" <<"********************************";
 }
 
 MainWindow::~MainWindow()
@@ -49,9 +51,9 @@ void MainWindow::setOxygenValue(double value){
     }
 }
 
-void MainWindow::setDateTimeToThread(QDateTime dateTime){
-    thrInput.setDateTime(dateTime);
+void MainWindow::setDateTimeToThread(QDateTime dateTime) {
     qDebug()<<"setDateTimeToThread" + dateTime.toString();
+    thrInput.setDateTime(dateTime);
 }
 
 void MainWindow::setDateTime(QDateTime dateTime){

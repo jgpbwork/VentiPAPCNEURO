@@ -283,6 +283,7 @@ QJsonObject OptionCalibration::getJsonObjectStateInitInformation(){
     jsonObject.insert("calibration_state_progress_value", "");
     jsonObject.insert("calibration_state_button", "general/next_button.png");
     jsonObject.insert("calibration_state_footer_text_1", "Última calibración");
+    ///TODO Set Real Calibration Date...
     jsonObject.insert("calibration_state_footer_text_2", "12 dic. 2020 17:52");
     return jsonObject;
 }

@@ -100,6 +100,8 @@ void MainScreen::setOxygenValue(double value)
         return;
     }
 
+    ///TODO if Value is out or Range, start alarm process
+    /// if Value is in Range, stop alarm process
     if(value < GlobalFunctions::configured_min_limit
             || value > GlobalFunctions::configured_max_limit){
         QString style = ui->l_oxygen_value->styleSheet();

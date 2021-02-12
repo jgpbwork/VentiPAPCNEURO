@@ -81,7 +81,7 @@ bool DS1307::Initialize() {
                                         << this->getMinutes(min) << min;
         }
 
-        qDebug() << "System tiem at boot: " << this->dateTime_.toString("ddd MMM dd hh:mm:ss yyyy")
+        qDebug() << "System time at boot: " << this->dateTime_.toString("ddd MMM dd hh:mm:ss yyyy")
                  << "After casted: " << systemDateTime.toString("ddd MMM dd hh:mm:ss yyyy");
 
         int val1;
@@ -137,12 +137,10 @@ std::uint8_t DS1307::formatFromBCD(std::uint8_t value) {
 std::uint8_t DS1307::formatToBCD(std::uint8_t value){
     std::uint8_t shift = 0;
     std::uint8_t retVal = 0;
-//    qDebug() << "Input Val : " << value;
     while(value){
         retVal |= (value % 10) << (shift++ << 2);
         value /= 10;
     }
-//    qDebug() << "Ouput Value: " << retVal;
     return retVal;
 }
 
@@ -171,6 +169,9 @@ bool DS1307::start() {
 bool DS1307::update(){
     std:uint8_t sec = 0, min = 0, hour = 0, wday = 1,
                 day = 0, month = 0, year = 0;
+
+    Q_UNUSED(wday);
+
     if(this->isRunning()){
         ThrInput::instance().getThreadInstance().msleep(100);
         this->getYear(year);
@@ -198,8 +199,6 @@ bool DS1307::update(){
         ///check dateTime overflow
         //qDebug() << "DateTime after: " << this->dateTime_.toString();
         return true;
-
-//        return true;
     }
     return false;
 }
@@ -207,6 +206,8 @@ bool DS1307::update(){
 bool DS1307::setDate(QDateTime currentDate)
 {
     std:uint8_t sec, min, hour, day, month, year;
+
+    Q_UNUSED(sec);
 
     if(currentDate.isValid()){
         int year_t = currentDate.date().year();
@@ -219,9 +220,9 @@ bool DS1307::setDate(QDateTime currentDate)
         }
         if(!year_t) year_t = BASE_YEAR_OVF;   ///Fix this
 
-        ///////
-        qDebug() << "Set Time at: " << currentDate.time().toString("hh:mm");
-        qDebug() << "Set Date at: " << currentDate.date().toString("dd/MM/yyyy");
+        ///////TODO update System time...
+        qDebug() << "Setting Time at: " << currentDate.time().toString("hh:mm");
+        qDebug() << "Setting Date at: " << currentDate.date().toString("dd/MM/yyyy");
 
         qDebug()<< "Setting year: " << static_cast<std::uint8_t>(year_t);
         qDebug() << "Set Year: " << this->writeDevice(YEAR_REG,
@@ -288,8 +289,6 @@ bool DS1307::getSeconds(std::uint8_t &refValue){
         return false;
     }
     refValue = secondFromBCD;
-//    qDebug()<< "Seconds (BCD): " << seconds;
-//    qDebug()<< "Seconds (binnary): " << secondFromBCD;
     return true;
 }
 
@@ -362,8 +361,6 @@ bool DS1307::getYear(std::uint8_t &refValue){
         refValue = YEAR_MIN;
         return false;
     }
-//    qDebug()<< "Year (BCD): " << year
-//            << "Year: " << yearFromBCD;
     refValue = yearFromBCD;
     return true;
 }
