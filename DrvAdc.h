@@ -138,7 +138,7 @@ private:
     ConfigureReg regValue_;
     std::float_t gain;
 
-    static const std::uint8_t ADC_RESOLUTION = 65536;
+    static const std::uint32_t ADC_RESOLUTION = 65536;
     static const std::float_t HARDWARE_GAIN;
 
     virtual bool readDevice(int regAdd, int &data);

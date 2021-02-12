@@ -18,7 +18,7 @@ public:
 
 signals:
     void closing();
-
+    void dateSetted(QDateTime);
 private slots:
     void on_l_save_clicked();
 

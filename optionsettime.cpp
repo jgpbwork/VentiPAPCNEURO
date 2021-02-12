@@ -3,6 +3,8 @@
 #include "globalfunctions.h"
 #include <QDebug>
 #include <QProcess>
+#include "mainwindow.h"
+
 
 OptionSetTime::OptionSetTime(QWidget *parent) :
     QWidget(parent),
@@ -30,6 +32,13 @@ void OptionSetTime::updateTimeInfo(){
 void OptionSetTime::on_l_save_clicked()
 {
     GlobalFunctions::setDateTimeInRaspi(this, currentDateTime);
+    MainWindow *w = static_cast<MainWindow *>
+            (this->parentWidget()->parentWidget()
+             ->parentWidget()->parentWidget());
+    if(w){
+        w->setDateTimeToThread(currentDateTime);
+    }
+    emit dateSetted(currentDateTime);
     on_l_define_time_back_clicked();
 }
 

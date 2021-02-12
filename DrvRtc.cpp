@@ -204,6 +204,56 @@ bool DS1307::update(){
     return false;
 }
 
+bool DS1307::setDate(QDateTime currentDate)
+{
+    std:uint8_t sec, min, hour, day, month, year;
+
+    if(currentDate.isValid()){
+        int year_t = currentDate.date().year();
+
+        if(year_t >= BASE_YEAR){
+            year_t -= BASE_YEAR;
+        }
+        else{
+            year_t = BASE_YEAR + 1;
+        }
+        if(!year_t) year_t = BASE_YEAR_OVF;   ///Fix this
+
+        ///////
+        qDebug() << "Set Time at: " << currentDate.time().toString("hh:mm");
+        qDebug() << "Set Date at: " << currentDate.date().toString("dd/MM/yyyy");
+
+        qDebug()<< "Setting year: " << static_cast<std::uint8_t>(year_t);
+        qDebug() << "Set Year: " << this->writeDevice(YEAR_REG,
+                                                      DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                          (year_t)))
+                                  << this->getYear(year) << year;
+        ThrInput::instance().getThreadInstance().msleep(10);
+        qDebug() << "Set Month: " << this->writeDevice(MONTH_REG,
+                                                       DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                           (currentDate.date().month())))
+                                  << this->getMonth(month) << month;
+        ThrInput::instance().getThreadInstance().msleep(10);
+        qDebug() << "Set Day: " << this->writeDevice(DAY_REG,
+                                                     DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                         (currentDate.date().day())))
+                                << this->getDay(day) << day;
+        ThrInput::instance().getThreadInstance().msleep(10);
+        qDebug() << "Set Hour: " << this->writeDevice(HOURS_REG,
+                                                      DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                          (currentDate.time().hour())))
+                                 << this->getHours(hour) << hour;
+        ThrInput::instance().getThreadInstance().msleep(10);
+        qDebug() << "Set Minutes: " << this->writeDevice(MINUTES_REG,
+                                                         DS1307::formatToBCD(static_cast<std::uint8_t>
+                                                                             (currentDate.time().minute())))
+                                    << this->getMinutes(min) << min;
+        this->dateTime_ = currentDate;
+        return true;
+    }
+    return false;
+}
+
 bool DS1307::isRunning(){
     int isHalt;
     if(this->readDevice(HALT_REG, isHalt)){

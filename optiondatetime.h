@@ -2,6 +2,7 @@
 #define OPTIONDATETIME_H
 
 #include <QWidget>
+#include <QDateTime>
 
 namespace Ui {
 class OptionDateTime;
@@ -15,8 +16,12 @@ public:
     explicit OptionDateTime(QWidget *parent = nullptr);
     ~OptionDateTime();
 
+public slots:
+    void setDate(QDateTime currentDateTime);
 signals:
     void closing();
+
+
 private slots:
     void on_l_date_time_back_clicked();
     void on_l_define_date_clicked();

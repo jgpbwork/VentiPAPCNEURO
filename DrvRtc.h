@@ -22,6 +22,8 @@ public:
 
     bool update();
 
+    bool setDate(QDateTime);
+
     bool isRunning();
 private:
     enum RegisterAddress{

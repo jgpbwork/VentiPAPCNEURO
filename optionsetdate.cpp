@@ -1,6 +1,7 @@
 #include "optionsetdate.h"
 #include "ui_optionsetdate.h"
 #include "globalfunctions.h"
+#include "mainwindow.h"
 
 #include <QDebug>
 
@@ -27,7 +28,7 @@ void OptionSetDate::updateDateInfo(){
     ui->l_day_value->setText(QString::number(d));
 
     int m = currentDateTime.date().month();
-    QString m_display = mapMonth.key(m+1);
+    QString m_display = mapMonth.key(m);
     ui->l_month_value->setText( m_display);
 
     int y = currentDateTime.date().year();
@@ -117,6 +118,12 @@ void OptionSetDate::on_pb_year_up_clicked()
 void OptionSetDate::on_l_save_clicked()
 {
     GlobalFunctions::setDateTimeInRaspi(this, currentDateTime);
+    MainWindow *w = static_cast<MainWindow *>
+            (this->parentWidget()->parentWidget()
+             ->parentWidget()->parentWidget());
+    if(w){
+        w->setDateTimeToThread(currentDateTime);
+    }
     on_l_define_date_back_clicked();
 }
 

@@ -49,6 +49,11 @@ void MainWindow::setOxygenValue(double value){
     }
 }
 
+void MainWindow::setDateTimeToThread(QDateTime dateTime){
+    thrInput.setDateTime(dateTime);
+    qDebug()<<"setDateTimeToThread" + dateTime.toString();
+}
+
 void MainWindow::setDateTime(QDateTime dateTime){
     if(main_screen){
         main_screen->setDate(dateTime.date());

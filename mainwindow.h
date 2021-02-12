@@ -21,7 +21,8 @@ public:
 
 public slots:
     void setOxygenValue(double value);
-    void setDateTime(QDateTime dateTime);
+    void setDateTime(QDateTime dateTime);    
+    void setDateTimeToThread(QDateTime dateTime);
 
 private slots:
     void initApp();

@@ -42,11 +42,20 @@ MainScreen::MainScreen(QWidget *parent) :
     QString answer = ProcessesClass::executeProcess(this, "sudo i2cdetect -y 1",
                                                     ProcessesClass::LINUX, 1000, true);
 
-    if( ((answer.contains("48")) || (answer.contains("49"))) /*&& answer.contains("64")*/
-            && answer.contains("68")){
-
-        qDebug()<<"answer"<<answer;
+#ifdef NDEBUG
+#warning "Release target.
+    if((answer.contains("48")) || (answer.contains("49")))
+                               && answer.contains("64")
+                               && answer.contains("68")){
+        qDebug() << " Release answer" << answer;
     }
+#else
+    if( ((answer.contains("48")) || (answer.contains("49"))) ///Target debug doesn't have Gause Battery management
+                                 && answer.contains("68")) {
+
+        qDebug()<<"Debug answer"<<answer;
+    }
+#endif
     else{
         qDebug()<<"answer"<<answer;
         QString mess = "Reinicie el equipo. Si persiste "
@@ -84,7 +93,7 @@ void MainScreen::setOxygenValue(double value)
     GlobalFunctions::lastSettedValue = value;
     value = GlobalFunctions::getRealValue(value);
 
-    if(value < 0){
+    if(value < 0 || value > 100){
         if(!blockedDisplayValue){
             ui->l_oxygen_value->setText("--");
         }

@@ -40,6 +40,10 @@ void OptionDateTime::on_l_define_time_clicked()
     connect(screen, SIGNAL(closing()), this, SLOT(showBackMenu()));
 }
 
+void OptionDateTime::setDate(QDateTime currentDateTime)
+{
+
+}
 void OptionDateTime::on_l_12_hours_clicked()
 {
 

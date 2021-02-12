@@ -139,6 +139,15 @@ void ThrInput::validateReading(){
 
 }
 
+bool ThrInput::setDateTime(QDateTime currentDate)
+{
+    if(currentDate.isValid()){
+        ///TODO check time regretion
+        return this->drvRtc.setDate(currentDate);
+    }
+    return false;
+}
+
 void ThrInput::updateReadings(std::float_t oxygenVal, std::float_t battVal) {
     emit updateOxygenLevel(static_cast<double>(oxygenVal));
 //    emit updateOxygenLevel(QString::number(static_cast<double>(oxygenVal), 'f', 1));
