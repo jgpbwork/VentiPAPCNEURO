@@ -21,14 +21,6 @@ ThrInput::ThrInput(QObject *parent) : QObject(),
     this->drvBattGauge.Initialize();
 
     /// Instance Variables Initialization and Synchronization Sequence...
-//    int seconds = this->drvRtc.getSeconds();
-//    int minutes = this->drvRtc.getMinutes();
-//    int hours = this->drvRtc.getHours();
-
-//    int dayOfWeek = this->drvRtc.getWeekDay();
-//    int day = this->drvRtc.getDay();
-//    int month = this->drvRtc.getMonth();
-//    int year = this->drvRtc.getYear();
 
     qThrInput_ = QThread::create(&ThrInput::ThrInputRun);
     if(qThrInput_ != nullptr /*&& this->sensor != nullptr*/){

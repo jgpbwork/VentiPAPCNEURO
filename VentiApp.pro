@@ -37,7 +37,8 @@ SOURCES += \
     Time.cpp \
     optionsetdate.cpp \
     optionsettime.cpp \
-    processesclass.cpp
+    processesclass.cpp \
+    ThrAlarm.cpp
 
 HEADERS += \
     mainmenu.h \
@@ -63,7 +64,8 @@ HEADERS += \
     Time.h \
     optionsetdate.h \
     optionsettime.h \
-    processesclass.h
+    processesclass.h \
+    ThrAlarm.h
 
 FORMS += \
     mainmenu.ui \

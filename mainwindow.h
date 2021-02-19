@@ -6,6 +6,7 @@
 #include "mainscreen.h"
 #include <QTimer>
 #include "ThrInput.h"
+#include "ThrAlarm.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,5 +34,6 @@ private:
     QTimer timer;
 
     ThrInput thrInput;
+    ThrAlarm thrAlarm;
 };
 #endif // MAINWINDOW_H

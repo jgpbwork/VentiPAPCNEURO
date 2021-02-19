@@ -30,6 +30,10 @@ MainScreen::MainScreen(QWidget *parent) :
 
     ui->widget_o2_porcentile_mini->hide();
 
+    QString backlight = ProcessesClass::executeProcess(this,
+                                                       "sudo python /home/pi/VentiApp/scripts/display_backlight_on.py &",
+                                                       ProcessesClass::LINUX, 1000, true);
+
     QString answer_shutdown = ProcessesClass::
             executeProcess(this,"sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
                                                     ProcessesClass::LINUX, 1000, true);
@@ -104,11 +108,13 @@ void MainScreen::setOxygenValue(double value)
     /// if Value is in Range, stop alarm process
     if(value < GlobalFunctions::configured_min_limit
             || value > GlobalFunctions::configured_max_limit){
+        ///TODO emit signal Alarm Off
         QString style = ui->l_oxygen_value->styleSheet();
         style += "color: rgb(255, 0, 0);";
         ui->l_oxygen_value->setStyleSheet(style);
     }
     else{
+        ///TODO emit signal Alarm On
         QString style = ui->l_oxygen_value->styleSheet();
         style.remove("color: rgb(255, 0, 0);");
         ui->l_oxygen_value->setStyleSheet(style);
