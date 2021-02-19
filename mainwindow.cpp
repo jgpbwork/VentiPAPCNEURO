@@ -28,6 +28,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&thrInput, &ThrInput::updateOxygenLevel, this, &MainWindow::setOxygenValue);
     connect(&thrInput, &ThrInput::updateRealTimeClock, this, &MainWindow::setDateTime);
+    connect(main_screen, &MainScreen::alarmOn, this, &MainWindow::alarmOn);
+    connect(main_screen, &MainScreen::alarmOff, this, &MainWindow::alarmOff);
+
+//    connect(this, &MainWindow::alarmOn, &thrAlarm, &ThrAlarm::alarmOn);
+//    connect(this, &MainWindow::alarmOff, &thrAlarm, &ThrAlarm::alarmOff);
 
 //    qDebug()<<"Application changes ok" << "66" <<"********************************";
 }
@@ -43,6 +48,14 @@ void MainWindow::initApp(){
         main_screen->show();
     }
     setOxygenValue(20);
+}
+
+void MainWindow::alarmOn() {
+    this->thrAlarm.alarmOn();
+}
+
+void MainWindow::alarmOff() {
+    this->thrAlarm.alarmOff();
 }
 
 void MainWindow::setOxygenValue(double value){

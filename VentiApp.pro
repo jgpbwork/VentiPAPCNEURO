@@ -38,7 +38,8 @@ SOURCES += \
     optionsetdate.cpp \
     optionsettime.cpp \
     processesclass.cpp \
-    ThrAlarm.cpp
+    ThrAlarm.cpp \
+    customeventfilter.cpp
 
 HEADERS += \
     mainmenu.h \
@@ -65,7 +66,8 @@ HEADERS += \
     optionsetdate.h \
     optionsettime.h \
     processesclass.h \
-    ThrAlarm.h
+    ThrAlarm.h \
+    customeventfilter.h
 
 FORMS += \
     mainmenu.ui \

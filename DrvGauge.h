@@ -15,12 +15,17 @@ public:
     virtual bool writeDevice(int regAdd, int data);
 
 
+    void setCharge(std::float_t charge);
+    std::float_t getBattLvl();
+
     bool powerDown();
     bool powerUp();
 
     bool readTemperature(std::float_t &refValue);
     bool readVoltage(std::float_t &refValue);
     bool readCharge(std::uint16_t &refValue);
+
+    bool setChargeRegister(std::uint16_t charge);
 
     std::float_t ToEngValue(std::uint16_t adcVoltVal);
 
@@ -111,6 +116,10 @@ private:
     static const std::uint8_t VOLT_TO_ENG = 6;
     static const std::uint16_t TEMP_TO_ENG = 600;
     static const std::uint16_t KELVIN_TO_CELSIUS = 273;
+
+    static std::float_t load_;
+    static std::float_t limitLoad_;
+    static std::float_t loadDt_;
 
     bool state_;
     int identifier_;

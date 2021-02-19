@@ -2,6 +2,10 @@
 #include "IEEE754.h"
 #include <wiringPiI2C.h>
 
+std::float_t LTC2942::load_ = 100.0f;
+std::float_t LTC2942::limitLoad_ = 100.0f;
+std::float_t LTC2942::loadDt_;
+
 LTC2942::LTC2942() : controlReg(), temperature_(0),
                      voltage_(0), statusReg_(0),
                      state_(INACTIVE), identifier_(0)
@@ -33,6 +37,11 @@ bool LTC2942::Initialize()
         }
     }
 
+    std::float_t currentLoad = (this->readVoltage(currentLoad)) ? currentLoad * 0.153f : 0.0f;
+
+    if (currentLoad > LTC2942::limitLoad_)
+       LTC2942::limitLoad_ = currentLoad;
+
     return true;
 }
 
@@ -41,6 +50,26 @@ void LTC2942::setCtrlReg(std::uint8_t data) {
     this->controlReg.Prescaler = ((data & PRESCALER_MASK) >> PRESCALER_SHIFF);
     this->controlReg.AlertCharge = ((data & ALERT_CHARGE_MASK) >> ALERT_CHARGE_SHIFF);
     this->controlReg.Shutdown = (data & SHUTDOWN);
+}
+
+void LTC2942::setCharge(std::float_t charge) {
+     std::uint16_t chargeReg = (charge / 0.153f);
+     this->powerDown();
+     this->setChargeRegister(chargeReg);
+     this->powerUp();
+}
+
+std::float_t LTC2942::getBattLvl() {
+    std::float_t retVal =  0.0f;
+    retVal = ((LTC2942::load_ - LTC2942::limitLoad_) / (10026.855f - LTC2942::limitLoad_)) * 100.0f;
+    LTC2942::loadDt_ = retVal;
+    if(retVal > 100.0f)
+        return 100.0f;
+    else if (retVal < 0.0f)
+        return 0.0f;
+    else {
+        return retVal;
+    }
 }
 
 bool LTC2942::powerDown() {
@@ -91,6 +120,13 @@ bool LTC2942::readCharge(std::uint16_t &refValue){
         this->charge_ = ((static_cast<std::uint16_t>(dataH) << static_cast<uint16_t>(8)) |
                          static_cast<std::uint16_t>(dataL));
         refValue = this->charge_;
+        return true;
+    }
+    return false;
+}
+
+bool LTC2942::setChargeRegister(std::uint16_t charge) {
+    if(this->writeDevice(CHARGE_CUMUL_H, charge)){
         return true;
     }
     return false;

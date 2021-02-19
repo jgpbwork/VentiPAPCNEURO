@@ -18,6 +18,7 @@ public:
     ~MainScreen();
 
     void setOxygenImage(QString image);
+
 public slots:
     void setOxygenValue(double value);
     void setDate(QDate date);
@@ -25,8 +26,11 @@ public slots:
 
     void setBlockedDisplayValue(bool b){ blockedDisplayValue = b; }
     bool getBlockedDisplayValue(){ return blockedDisplayValue; }
+
 signals:
     void menu_clicked();
+    void alarmOn();
+    void alarmOff();
 
 private slots:
     void emitMenuClicked();

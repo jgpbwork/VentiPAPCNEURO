@@ -24,6 +24,8 @@ public slots:
     void setOxygenValue(double value);
     void setDateTime(QDateTime dateTime);    
     void setDateTimeToThread(QDateTime dateTime);
+    void alarmOn();
+    void alarmOff();
 
 private slots:
     void initApp();
@@ -33,7 +35,7 @@ private:
     MainScreen *main_screen = nullptr;
     QTimer timer;
 
-    ThrInput thrInput;
     ThrAlarm thrAlarm;
+    ThrInput thrInput;
 };
 #endif // MAINWINDOW_H

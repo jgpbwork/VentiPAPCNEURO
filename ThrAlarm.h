@@ -23,7 +23,7 @@ public:
 
     float_t buzzerFreq() const;
 
-    std::uint8_t buzzAt(std::float_t freq, std::float_t duration);
+    std::uint16_t buzzAt(std::float_t freq, std::float_t duration);
 
     void buzzOn(std::float_t duration);
     void buzzOff(std::float_t duration);
@@ -64,6 +64,14 @@ private:
     float_t pulseLow_;
     std::uint32_t onTime_;
     std::uint32_t offTime_;
+
+    static const std::float_t T1;
+    static const std::float_t T2;
+    static const std::float_t T3;
+    static const std::float_t C4;
+    static const std::float_t A4;
+    static const std::float_t F4;
+    static const std::float_t FR;
 
     static bool alarm_;
 

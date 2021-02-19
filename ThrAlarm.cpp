@@ -11,6 +11,15 @@
 
 bool ThrAlarm::alarm_;
 
+const std::float_t ThrAlarm::T1 = 150e-3f;
+const std::float_t ThrAlarm::T2 = 120e-3f;
+const std::float_t ThrAlarm::T3 = 390e-3f;
+
+const std::float_t ThrAlarm::C4 = 262.0f;
+const std::float_t ThrAlarm::A4 = 440.0f;
+const std::float_t ThrAlarm::F4 = 349.0f;
+const std::float_t ThrAlarm::FR = 2400.0f;
+
 ThrAlarm::ThrAlarm(QObject *parent) : QObject (),
                                       Singleton(this),
                                       Time() {
@@ -39,6 +48,7 @@ ThrAlarm::ThrAlarm(QObject *parent) : QObject (),
     if(qThrAlarm_ != nullptr) {
         qThrAlarm_->setParent(this);
         qThrAlarm_->setObjectName("ThrAlarm");
+        qThrAlarm_->setPriority(QThread::TimeCriticalPriority);
         this->moveToThread(qThrAlarm_);
         connect(qThrAlarm_, &QThread::started, this, &ThrAlarm::onInit);
         connect(qThrAlarm_, &QThread::finished, this, &QObject::deleteLater);
@@ -76,44 +86,29 @@ void ThrAlarm::ThrAlarmRun() {
      while (true) {
          if(ThrAlarm::alarmIsSet()) {
 //               qDebug() << "Beeping on 29!!!...";
-             ///TODO Initiate Alarm sequence
+             ///Initiate Alarm sequence
              /// 1st Pulse C4 = 262Hz for 150ms
-             if(ThrAlarm::alarmIsSet())
-                 ThrAlarm::instance().buzzOn(150e-3f);
-             /// 120ms of Silence
-             ThrAlarm::instance().buzzOff(120e-3f);
+             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
+             ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
              /// 2nd Pulse A4 = 440Hz for 150ms
-             if(ThrAlarm::alarmIsSet())
-                 ThrAlarm::instance().buzzOn(150e-3f);
-             /// 120ms of Silence
-             ThrAlarm::instance().buzzOff(120e-3f);
+             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
+             ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
              /// 3rd Pulse F4 = 349Hz for 150ms
-             if(ThrAlarm::alarmIsSet())
-                 ThrAlarm::instance().buzzOn(150e-3f);
-             /// 390ms of Silence
-             ThrAlarm::instance().buzzOff(390e-3f);
-             ///--------------------------------
+             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
+             ThrAlarm::instance().buzzOff(ThrAlarm::T3); /// 390ms of Silence
+             ///--------------------------------             
              /// 2nd Pulse A4 = 440Hz for 150ms
-             if(ThrAlarm::alarmIsSet())
-                 ThrAlarm::instance().buzzOn(150e-3f);
-             /// 120ms of Silence
-             ThrAlarm::instance().buzzOff(120e-3f);
+             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
+             ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
              /// 3rd Pulse F4 = 349Hz for 150ms
-             if(ThrAlarm::alarmIsSet())
-                 ThrAlarm::instance().buzzOn(150e-3f);
-             /// 390ms of Silence
-             ThrAlarm::instance().buzzOff(390e-3f);
-         }
-         /// Blocks on outside signal
-         /// when income signal if set launch Qtimer OnTime
-         /// blocks on qtimer on
-         /// if incomes signal not set launch QtimerOffTime
-         /// blocks on qtimer off
-         ///
+             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
+             ThrAlarm::instance().buzzOff(ThrAlarm::T3); /// 390ms of Silence
+         }         
          else {
-             qDebug() << "Not Beeping...";
+//             qDebug() << "Not Beeping...";
              ThrAlarm::instance().gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);             
          }
+         ThrAlarm::instance().qThrAlarm_->usleep(500);
      }
 }
 
@@ -138,22 +133,22 @@ bool ThrAlarm::configureSignal()
     return true;
 }
 
-std::uint8_t ThrAlarm::buzzAt(std::float_t freq, std::float_t duration) {
+std::uint16_t ThrAlarm::buzzAt(std::float_t freq, std::float_t duration) {
     if(freq <= 0.0f || isnanf(freq) ||
        duration <= 0.0f || isnanf(duration)) {
         return 0;
     }
-    std::float_t pulse = 0.5f * (1.0f / freq);
-    std::uint8_t cycles = static_cast<std::uint8_t>(freq * duration);
+    std::float_t pulse = (0.5f * (1.0f / freq) * 1000000.0f) - 65;
+    std::uint16_t cycles = static_cast<std::uint16_t>(freq * duration);
 
-    std::uint8_t index;
+    std::uint16_t index;
     for(index = 0; index < cycles; index++) {
         this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_HIGH);
-//       ThrAlarm::instance().qThrAlarm_->sleep(pulse);
-        delay(static_cast<unsigned int>(pulse));
+        ThrAlarm::instance().qThrAlarm_->usleep(static_cast<unsigned int>(pulse));//140));//pulse * 1000000.0f));
+//        delay(static_cast<unsigned int>(pulse));
         this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);
-//        ThrAlarm::instance().qThrAlarm_->sleep(pulse);
-        delay(static_cast<unsigned int>(pulse));
+        ThrAlarm::instance().qThrAlarm_->usleep(static_cast<unsigned int>(pulse));//140));//pulse * 1000000.0f));
+//        delay(static_cast<unsigned int>(pulse));
     }
     return index;
 }
