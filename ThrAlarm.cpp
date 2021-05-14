@@ -10,6 +10,7 @@
 #define ALARM_PERIODS 1000
 
 bool ThrAlarm::alarm_;
+std::uint8_t ThrAlarm::alarmPriority_;
 
 const std::float_t ThrAlarm::T1 = 150e-3f;
 const std::float_t ThrAlarm::T2 = 120e-3f;
@@ -25,20 +26,11 @@ ThrAlarm::ThrAlarm(QObject *parent) : QObject (),
                                       Time() {
     Q_UNUSED(parent)
     ThrAlarm::alarm_ = false;
+    ThrAlarm::alarmPriority_ = static_cast<std::uint8_t>(ThrAlarm::P_HIGH);
 
     this->gpioBuzzer.setup(BUZZER_PIN, DrvGpio::GPIO_OUT);
     this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_HIGH);
     this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_HIGH);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_HIGH);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_HIGH);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_HIGH);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_HIGH);
-//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);
 
 
 //    this->setBuzzerFreq(static_cast<float_t>(BUZZER_FREQ));
@@ -83,8 +75,15 @@ void ThrAlarm::onInit()
 
 void ThrAlarm::ThrAlarmRun() {
 
+    static std::uint8_t loop = 0;
      while (true) {
          if(ThrAlarm::alarmIsSet()) {
+             loop = (ThrAlarm::getAlarmPriority() == ThrAlarm::P_HIGH) ? 2 : 1;
+             do
+             {
+
+             }
+             while(loop > 0);
 //               qDebug() << "Beeping on 29!!!...";
              ///Initiate Alarm sequence
              /// 1st Pulse C4 = 262Hz for 150ms
@@ -195,4 +194,9 @@ void ThrAlarm::alarmOff()
 
 void ThrAlarm::setAlarm(const bool value){
     return (value) ? this->alarmOn() : this->alarmOff();
+}
+
+ThrAlarm::AlarmPriority ThrAlarm::getAlarmPriority()
+{
+    return static_cast<ThrAlarm::AlarmPriority>(ThrAlarm::alarmPriority_);
 }

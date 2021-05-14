@@ -37,6 +37,13 @@ public:
 
     bool static alarmIsSet();
 
+    enum AlarmPriority
+    {
+        P_LOW = 0,
+        P_MIDIUM = 1,
+        P_HIGH = 2
+    };
+
 signals:
     void finished();
     void valueChanged(int);
@@ -74,8 +81,11 @@ private:
     static const std::float_t FR;
 
     static bool alarm_;
+    static std::uint8_t alarmPriority_;
 
     [[noreturn]] static void ThrAlarmRun();
+
+    static AlarmPriority getAlarmPriority();
 };
 
 inline bool ThrAlarm::alarmIsSet() {

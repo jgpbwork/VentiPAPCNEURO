@@ -107,14 +107,14 @@ void MainScreen::setOxygenValue(double value)
         ///TODO emit signal Alarm On
         emit alarmOn();
         QString style = ui->l_oxygen_value->styleSheet();
-        style += "color: rgb(255, 0, 0);";
+        style += "color: rgb(239, 169, 3);";
         ui->l_oxygen_value->setStyleSheet(style);
     }
     else{
         ///TODO emit signal Alarm Off
         emit alarmOff();
         QString style = ui->l_oxygen_value->styleSheet();
-        style.remove("color: rgb(255, 0, 0);");
+        style.remove("color: rgb(239, 169, 3);");
         ui->l_oxygen_value->setStyleSheet(style);
     }
     if(value >= 100){

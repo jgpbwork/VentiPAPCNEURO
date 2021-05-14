@@ -17,3 +17,8 @@ void OptionGeneral::on_l_general_back_clicked(){
     this->close();
     emit closing();
 }
+
+void OptionGeneral::on_l_about_clicked(){
+    this->close();
+    emit closing();
+}

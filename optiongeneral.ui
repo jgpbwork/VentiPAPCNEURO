@@ -60,6 +60,9 @@ border-image: url(:/icons/main_menu/general_menu/header_general_menu.png);</stri
     </property>
    </widget>
    <widget class="MyLabelAnimated" name="label_3">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -77,6 +80,9 @@ border-image: url(:/icons/main_menu/general_menu/lenguage_button.png);</string>
     </property>
    </widget>
    <widget class="MyLabelAnimated" name="label_4">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -94,7 +100,7 @@ border-image: url(:/icons/main_menu/general_menu/battery_state_button.png);
      <string/>
     </property>
    </widget>
-   <widget class="MyLabelAnimated" name="label_5">
+   <widget class="MyLabelAnimated" name="l_about">
     <property name="geometry">
      <rect>
       <x>0</x>

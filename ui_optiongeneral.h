@@ -25,7 +25,7 @@ public:
     MyLabelAnimated *l_general_back;
     MyLabelAnimated *label_3;
     MyLabelAnimated *label_4;
-    MyLabelAnimated *label_5;
+    MyLabelAnimated *l_about;
 
     void setupUi(QWidget *OptionGeneral)
     {
@@ -48,19 +48,21 @@ public:
 "border-image: url(:/icons/main_menu/general_menu/header_general_menu.png);"));
         label_3 = new MyLabelAnimated(widget);
         label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setEnabled(false);
         label_3->setGeometry(QRect(0, 56, 320, 84));
         label_3->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
 "border-image: url(:/icons/main_menu/general_menu/lenguage_button.png);"));
         label_4 = new MyLabelAnimated(widget);
         label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setEnabled(false);
         label_4->setGeometry(QRect(0, 120, 320, 84));
         label_4->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
 "border-image: url(:/icons/main_menu/general_menu/battery_state_button.png);\n"
 ""));
-        label_5 = new MyLabelAnimated(widget);
-        label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setGeometry(QRect(0, 183, 320, 84));
-        label_5->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+        l_about = new MyLabelAnimated(widget);
+        l_about->setObjectName(QStringLiteral("l_about"));
+        l_about->setGeometry(QRect(0, 183, 320, 84));
+        l_about->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
 "border-image: url(:/icons/main_menu/general_menu/about_button.png);"));
 
         retranslateUi(OptionGeneral);
@@ -75,7 +77,7 @@ public:
         l_general_back->setText(QString());
         label_3->setText(QString());
         label_4->setText(QString());
-        label_5->setText(QString());
+        l_about->setText(QString());
     } // retranslateUi
 
 };

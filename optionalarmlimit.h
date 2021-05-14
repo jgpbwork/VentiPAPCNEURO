@@ -31,7 +31,7 @@ private slots:
 private:
     Ui::OptionAlarmLimit *ui;
     int max_limit = 28;
-    int min_limit = 16;
+    int min_limit = 21; //TODO: change min limit
 };
 
 #endif // OPTIONALARMLIMIT_H

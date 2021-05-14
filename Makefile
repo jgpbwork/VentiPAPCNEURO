@@ -725,6 +725,8 @@ main.o: main.cpp mainwindow.h \
 
 mainmenu.o: mainmenu.cpp mainmenu.h \
 		ui_mainmenu.h \
+		mylabelanimated.h \
+		mywidgetanimated.h \
 		optiondatetime.h \
 		optioncalibration.h \
 		optionalarmlimit.h \
@@ -734,6 +736,7 @@ mainmenu.o: mainmenu.cpp mainmenu.h \
 mainscreen.o: mainscreen.cpp mainscreen.h \
 		mainmenu.h \
 		ui_mainscreen.h \
+		mywidgetanimated.h \
 		globalfunctions.h \
 		processesclass.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainscreen.o mainscreen.cpp
@@ -764,12 +767,14 @@ mywidgetanimated.o: mywidgetanimated.cpp mywidgetanimated.h
 
 optiondatetime.o: optiondatetime.cpp optiondatetime.h \
 		ui_optiondatetime.h \
+		mylabelanimated.h \
 		optionsettime.h \
 		optionsetdate.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optiondatetime.o optiondatetime.cpp
 
 optioncalibration.o: optioncalibration.cpp optioncalibration.h \
 		ui_optioncalibration.h \
+		mylabelanimated.h \
 		globalfunctions.h \
 		mainscreen.h \
 		mainmenu.h
@@ -780,11 +785,13 @@ globalfunctions.o: globalfunctions.cpp globalfunctions.h
 
 optionalarmlimit.o: optionalarmlimit.cpp optionalarmlimit.h \
 		ui_optionalarmlimit.h \
+		mylabelanimated.h \
 		globalfunctions.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optionalarmlimit.o optionalarmlimit.cpp
 
 optiongeneral.o: optiongeneral.cpp optiongeneral.h \
-		ui_optiongeneral.h
+		ui_optiongeneral.h \
+		mylabelanimated.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optiongeneral.o optiongeneral.cpp
 
 DrvI2C.o: DrvI2C.cpp DrvI2C.h
@@ -836,6 +843,7 @@ Time.o: Time.cpp Time.h \
 
 optionsetdate.o: optionsetdate.cpp optionsetdate.h \
 		ui_optionsetdate.h \
+		mylabelanimated.h \
 		globalfunctions.h \
 		mainwindow.h \
 		mainscreen.h \
@@ -855,6 +863,7 @@ optionsetdate.o: optionsetdate.cpp optionsetdate.h \
 
 optionsettime.o: optionsettime.cpp optionsettime.h \
 		ui_optionsettime.h \
+		mylabelanimated.h \
 		globalfunctions.h \
 		mainwindow.h \
 		mainscreen.h \

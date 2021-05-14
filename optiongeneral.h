@@ -18,6 +18,7 @@ signals:
     void closing();
 private slots:
     void on_l_general_back_clicked();
+    void on_l_about_clicked();
 private:
     Ui::OptionGeneral *ui;
 };

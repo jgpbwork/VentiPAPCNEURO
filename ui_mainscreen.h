@@ -230,7 +230,7 @@ public:
         label_8->setAlignment(Qt::AlignCenter);
         label_9 = new QLabel(widget_o2_porcentile);
         label_9->setObjectName(QStringLiteral("label_9"));
-        label_9->setGeometry(QRect(30, 20, 16, 20));
+        label_9->setGeometry(QRect(40, 20, 16, 20));
         QPalette palette10;
         palette10.setBrush(QPalette::Active, QPalette::WindowText, brush2);
         palette10.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
@@ -261,7 +261,7 @@ public:
         label_10->setAlignment(Qt::AlignCenter);
         label_12 = new QLabel(widget_o2_porcentile_mini);
         label_12->setObjectName(QStringLiteral("label_12"));
-        label_12->setGeometry(QRect(32, 16, 16, 20));
+        label_12->setGeometry(QRect(37, 16, 16, 20));
         QPalette palette12;
         palette12.setBrush(QPalette::Active, QPalette::WindowText, brush2);
         palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
@@ -293,14 +293,14 @@ public:
         label_2->setText(QApplication::translate("MainScreen", "mi\303\251 06/01/2021", nullptr));
         label_3->setText(QApplication::translate("MainScreen", "5h 12m", nullptr));
         label_4->setText(QString());
-        l_oxygen_value->setText(QString());
+        l_oxygen_value->setText(QApplication::translate("MainScreen", "...", nullptr));
         l_max_value->setText(QApplication::translate("MainScreen", "28", nullptr));
         label_11->setText(QApplication::translate("MainScreen", "max", nullptr));
         l_min_value->setText(QApplication::translate("MainScreen", "16", nullptr));
         label_13->setText(QApplication::translate("MainScreen", "min", nullptr));
-        label_8->setText(QApplication::translate("MainScreen", "O  %", nullptr));
+        label_8->setText(QApplication::translate("MainScreen", "FiO  %", nullptr));
         label_9->setText(QApplication::translate("MainScreen", "2", nullptr));
-        label_10->setText(QApplication::translate("MainScreen", "O  %", nullptr));
+        label_10->setText(QApplication::translate("MainScreen", "FiO  %", nullptr));
         label_12->setText(QApplication::translate("MainScreen", "2", nullptr));
     } // retranslateUi
 
