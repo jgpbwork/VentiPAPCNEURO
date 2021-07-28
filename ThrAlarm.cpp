@@ -81,33 +81,37 @@ void ThrAlarm::ThrAlarmRun() {
              loop = (ThrAlarm::getAlarmPriority() == ThrAlarm::P_HIGH) ? 2 : 1;
              do
              {
+                ///High Priority alarm
+                /// 1sr
+                /// Pulse C4 = 262Hz for 150ms
+                ThrAlarm::instance().buzzOn(ThrAlarm::T1);
+                ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
+                /// 2nd Pulse A4 = 440Hz for 150ms
+                ThrAlarm::instance().buzzOn(ThrAlarm::T1);
+                ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
+                /// 3rd Pulse F4 = 349Hz for 150ms
+                ThrAlarm::instance().buzzOn(ThrAlarm::T1);
+                ThrAlarm::instance().buzzOff(ThrAlarm::T3); /// 390ms of Silence
 
+                if(ThrAlarm::getAlarmPriority() == ThrAlarm::P_HIGH) {
+                    /// 1st Pulse A4 = 440Hz for 150ms
+                    ThrAlarm::instance().buzzOn(ThrAlarm::T1);
+                    ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
+                    /// 2nd Pulse F4 = 349Hz for 150ms
+                    ThrAlarm::instance().buzzOn(ThrAlarm::T1);
+                    ThrAlarm::instance().buzzOff(ThrAlarm::T3); /// 390ms of Silence
+                }
+                loop--;
              }
              while(loop > 0);
-//               qDebug() << "Beeping on 29!!!...";
-             ///Initiate Alarm sequence
-             /// 1st Pulse C4 = 262Hz for 150ms
-             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
-             ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
-             /// 2nd Pulse A4 = 440Hz for 150ms
-             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
-             ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
-             /// 3rd Pulse F4 = 349Hz for 150ms
-             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
-             ThrAlarm::instance().buzzOff(ThrAlarm::T3); /// 390ms of Silence
-             ///--------------------------------             
-             /// 2nd Pulse A4 = 440Hz for 150ms
-             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
-             ThrAlarm::instance().buzzOff(ThrAlarm::T2); /// 120ms of Silence
-             /// 3rd Pulse F4 = 349Hz for 150ms
-             ThrAlarm::instance().buzzAt(ThrAlarm::FR, ThrAlarm::T1);
-             ThrAlarm::instance().buzzOff(ThrAlarm::T3); /// 390ms of Silence
          }         
          else {
 //             qDebug() << "Not Beeping...";
              ThrAlarm::instance().gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);             
          }
-         ThrAlarm::instance().qThrAlarm_->usleep(500);
+         ThrAlarm::instance().qThrAlarm_->msleep((ThrAlarm::getAlarmPriority() == ThrAlarm::P_HIGH)
+                                                 ? ThrAlarm::DELAY_HIGH_PRIORITY
+                                                 : ThrAlarm::DELAY_MIDIUM_PRIORITY);
      }
 }
 

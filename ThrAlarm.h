@@ -80,6 +80,9 @@ private:
     static const std::float_t F4;
     static const std::float_t FR;
 
+    static const std::size_t DELAY_HIGH_PRIORITY = 7500;
+    static const std::size_t DELAY_MIDIUM_PRIORITY = 20000;
+
     static bool alarm_;
     static std::uint8_t alarmPriority_;
 
