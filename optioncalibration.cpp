@@ -171,6 +171,7 @@ void OptionCalibration::setCurrentState(QJsonObject jsonObjectState){
 
     if(GlobalFunctions::checkIfFieldValid(jsonObjectState.value("calibration_state_text").toString())){
         ui->pt_calibration_state_text->setPlainText(jsonObjectState.value("calibration_state_text").toString());
+        ui->pt_calibration_state_text->setAlignment(Qt::AlignHCenter);
         ui->pt_calibration_state_text->show();
     }
     else{
