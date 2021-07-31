@@ -59,7 +59,7 @@ MainScreen::MainScreen(QWidget *parent) :
     else{
         qDebug()<<"answer"<<answer;
         QString mess = "Reinicie el equipo. Si persiste "
-                       "el error, contacte a email@example.com";
+                       "el error, contacte a soportetecnico@cneuro.cu";
         GlobalFunctions::setErrorMessage(this, mess);
     }
 }
