@@ -240,6 +240,9 @@ border-image: url(:/icons/main_menu/date_time_menu/define_hour_button.png);</str
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -273,6 +276,9 @@ border-image: url(:/icons/main_menu/date_time_menu/24_hours_on.png);</string>
    </property>
   </widget>
   <widget class="MyLabelAnimated" name="l_12_hours">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -282,11 +288,13 @@ border-image: url(:/icons/main_menu/date_time_menu/24_hours_on.png);</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-image: url(:/icons/main_menu/date_time_menu/12_hours_off.png);
-background-image: url(:/icons/general/fondo_transparente.png);</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="assets.qrc">:/icons/main_menu/date_time_menu/12_hours_off.png</pixmap>
    </property>
   </widget>
   <zorder>l_date_time_back</zorder>
@@ -303,6 +311,8 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
    <header location="global">mylabelanimated.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="assets.qrc"/>
+ </resources>
  <connections/>
 </ui>

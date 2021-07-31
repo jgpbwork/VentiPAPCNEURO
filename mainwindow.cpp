@@ -5,6 +5,21 @@
 #include <QDebug>
 #include <QDesktopWidget>
 
+// TODO:
+// ** General screnn **
+// Disable de lenguage button and battery state
+// Add about equipment screen
+
+// Define alarm limit, min and mas
+// Default Date and time July, 31 2021 15:00
+// Disable am/pm button
+//
+
+// Define signals
+// Turn off/on
+// Alarm Type (high, medium)
+//
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
