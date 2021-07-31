@@ -2,8 +2,8 @@
 #define OPTIONALARMLIMIT_H
 
 #include <QWidget>
-#define MAX_ALARM_CONFIG 100
-#define MIN_ALARM_CONFIG 0
+#define MAX_ALARM_CONFIG 28
+#define MIN_ALARM_CONFIG 21
 
 namespace Ui {
 class OptionAlarmLimit;
