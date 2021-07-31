@@ -111,8 +111,13 @@ void MainScreen::setOxygenValue(double value)
         ui->l_error_text->hide();
         ui->widget_min_value->show();
         ui->widget_max_value->show();
-//        ui->widget_o2_porcentile_mini->show();
-        ui->widget_o2_porcentile->show();
+        if(shownMenu) {
+            ui->widget_o2_porcentile_mini->show();
+        }
+        else {
+            ui->widget_o2_porcentile->show();
+        }
+
     }
 
     ///TODO if Value is out or Range, start alarm process
