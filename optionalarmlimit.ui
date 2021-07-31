@@ -180,7 +180,7 @@ background-image: url(:/icons/general/fondo_transparente.png);</string>
      <string notr="true">border-image: url(:/icons/general/fondo_transparente.png);</string>
     </property>
     <property name="text">
-     <string>16</string>
+     <string>21</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
