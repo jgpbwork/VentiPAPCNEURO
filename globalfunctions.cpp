@@ -13,7 +13,7 @@
 #include <QDir>
 
 bool GlobalFunctions::myanimationEnabled = true;
-int GlobalFunctions::configured_min_limit = 16;
+int GlobalFunctions::configured_min_limit = 21;
 int GlobalFunctions::configured_max_limit = 28;
 double GlobalFunctions::lastSettedValue = -1;
 double GlobalFunctions::m_slope_value = -1;
