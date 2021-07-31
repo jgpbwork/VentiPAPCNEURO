@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&thrInput, &ThrInput::updateRealTimeClock, this, &MainWindow::setDateTime);
     connect(main_screen, &MainScreen::alarmOn, this, &MainWindow::alarmOn);
     connect(main_screen, &MainScreen::alarmOff, this, &MainWindow::alarmOff);
+    connect(main_screen, &MainScreen::alarmType, this, &MainWindow::alarmType);
 
 //    connect(this, &MainWindow::alarmOn, &thrAlarm, &ThrAlarm::alarmOn);
 //    connect(this, &MainWindow::alarmOff, &thrAlarm, &ThrAlarm::alarmOff);
@@ -63,6 +64,10 @@ void MainWindow::initApp(){
         main_screen->show();
     }
     setOxygenValue(20);
+}
+
+void MainWindow::alarmType(ThrAlarm::AlarmPriority type) {
+    this->thrAlarm.setAlarmType(type);
 }
 
 void MainWindow::alarmOn() {

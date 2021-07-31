@@ -102,7 +102,8 @@ void MainScreen::setOxygenValue(double value)
             ui->widget_max_value->hide();
             ui->widget_o2_porcentile_mini->hide();
             ui->widget_o2_porcentile->hide();
-
+            emit alarmOn();
+            emit alarmType(ThrAlarm::P_HIGH);
         }
         return;
     }
@@ -111,6 +112,7 @@ void MainScreen::setOxygenValue(double value)
         ui->l_error_text->hide();
         ui->widget_min_value->show();
         ui->widget_max_value->show();
+        emit alarmOff();
         if(shownMenu) {
             ui->widget_o2_porcentile_mini->show();
         }
@@ -125,7 +127,8 @@ void MainScreen::setOxygenValue(double value)
     if(value < GlobalFunctions::configured_min_limit
             || value > GlobalFunctions::configured_max_limit){
         ///TODO emit signal Alarm On
-        emit alarmOn();
+        emit alarmOn();        
+        emit alarmType(ThrAlarm::P_MIDIUM);
         QString style = ui->l_oxygen_value->styleSheet();
         style += "color: rgb(239, 169, 3);";
         ui->l_oxygen_value->setStyleSheet(style);

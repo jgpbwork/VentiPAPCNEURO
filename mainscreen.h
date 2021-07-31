@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QDateTime>
 #include "mainmenu.h"
+#include "ThrAlarm.h"
 
 #define MIX_OXY_ALLOWED 17
 #define MAX_OXY_ALLOWED 105
@@ -34,6 +35,7 @@ signals:
     void menu_clicked();
     void alarmOn();
     void alarmOff();
+    void alarmType(ThrAlarm::AlarmPriority);
 
 private slots:
     void emitMenuClicked();

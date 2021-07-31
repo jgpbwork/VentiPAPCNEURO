@@ -26,6 +26,7 @@ public slots:
     void setDateTimeToThread(QDateTime dateTime);
     void alarmOn();
     void alarmOff();
+    void alarmType(ThrAlarm::AlarmPriority);
 
 private slots:
     void initApp();

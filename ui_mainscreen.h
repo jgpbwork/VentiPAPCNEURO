@@ -255,7 +255,7 @@ public:
         label_9->setAlignment(Qt::AlignCenter);
         widget_o2_porcentile_mini = new QWidget(MainScreen);
         widget_o2_porcentile_mini->setObjectName(QStringLiteral("widget_o2_porcentile_mini"));
-        widget_o2_porcentile_mini->setGeometry(QRect(170, 70, 81, 41));
+        widget_o2_porcentile_mini->setGeometry(QRect(180, 70, 81, 41));
         widget_o2_porcentile_mini->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         label_10 = new QLabel(widget_o2_porcentile_mini);
         label_10->setObjectName(QStringLiteral("label_10"));

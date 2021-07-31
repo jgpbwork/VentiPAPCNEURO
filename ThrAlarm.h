@@ -44,6 +44,8 @@ public:
         P_HIGH = 2
     };
 
+    inline void setAlarmType(ThrAlarm::AlarmPriority type);
+
 signals:
     void finished();
     void valueChanged(int);
@@ -95,4 +97,7 @@ inline bool ThrAlarm::alarmIsSet() {
     return ThrAlarm::alarm_;
 }
 
+inline void ThrAlarm::setAlarmType(ThrAlarm::AlarmPriority type) {
+    ThrAlarm::alarmPriority_ = static_cast<std::uint8_t>(type);
+}
 #endif // THRALARM_H

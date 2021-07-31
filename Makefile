@@ -554,6 +554,12 @@ moc_mainmenu.cpp: mainmenu.h \
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/VentiApp/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/VentiApp -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include mainmenu.h -o moc_mainmenu.cpp
 
 moc_mainscreen.cpp: mainmenu.h \
+		ThrAlarm.h \
+		Singleton.h \
+		GMacros.h \
+		Time.h \
+		QMath.h \
+		DrvGpio.h \
 		mainscreen.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -561,17 +567,17 @@ moc_mainscreen.cpp: mainmenu.h \
 
 moc_mainwindow.cpp: mainscreen.h \
 		mainmenu.h \
-		ThrInput.h \
+		ThrAlarm.h \
 		Singleton.h \
 		GMacros.h \
+		Time.h \
+		QMath.h \
+		DrvGpio.h \
+		ThrInput.h \
 		DrvAdc.h \
 		DrvI2C.h \
 		DrvRtc.h \
 		DrvGauge.h \
-		ThrAlarm.h \
-		Time.h \
-		QMath.h \
-		DrvGpio.h \
 		mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -726,30 +732,27 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 aboutscreen.o: aboutscreen.cpp aboutscreen.h \
-		ui_aboutscreen.h \
-		mylabelanimated.h
+		ui_aboutscreen.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o aboutscreen.o aboutscreen.cpp
 
 main.o: main.cpp mainwindow.h \
 		mainscreen.h \
 		mainmenu.h \
-		ThrInput.h \
+		ThrAlarm.h \
 		Singleton.h \
 		GMacros.h \
+		Time.h \
+		QMath.h \
+		DrvGpio.h \
+		ThrInput.h \
 		DrvAdc.h \
 		DrvI2C.h \
 		DrvRtc.h \
-		DrvGauge.h \
-		ThrAlarm.h \
-		Time.h \
-		QMath.h \
-		DrvGpio.h
+		DrvGauge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainmenu.o: mainmenu.cpp mainmenu.h \
 		ui_mainmenu.h \
-		mylabelanimated.h \
-		mywidgetanimated.h \
 		optiondatetime.h \
 		optioncalibration.h \
 		optionalarmlimit.h \
@@ -758,8 +761,13 @@ mainmenu.o: mainmenu.cpp mainmenu.h \
 
 mainscreen.o: mainscreen.cpp mainscreen.h \
 		mainmenu.h \
+		ThrAlarm.h \
+		Singleton.h \
+		GMacros.h \
+		Time.h \
+		QMath.h \
+		DrvGpio.h \
 		ui_mainscreen.h \
-		mywidgetanimated.h \
 		globalfunctions.h \
 		processesclass.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainscreen.o mainscreen.cpp
@@ -767,17 +775,17 @@ mainscreen.o: mainscreen.cpp mainscreen.h \
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		mainscreen.h \
 		mainmenu.h \
-		ThrInput.h \
+		ThrAlarm.h \
 		Singleton.h \
 		GMacros.h \
+		Time.h \
+		QMath.h \
+		DrvGpio.h \
+		ThrInput.h \
 		DrvAdc.h \
 		DrvI2C.h \
 		DrvRtc.h \
 		DrvGauge.h \
-		ThrAlarm.h \
-		Time.h \
-		QMath.h \
-		DrvGpio.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
@@ -790,17 +798,21 @@ mywidgetanimated.o: mywidgetanimated.cpp mywidgetanimated.h
 
 optiondatetime.o: optiondatetime.cpp optiondatetime.h \
 		ui_optiondatetime.h \
-		mylabelanimated.h \
 		optionsettime.h \
 		optionsetdate.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optiondatetime.o optiondatetime.cpp
 
 optioncalibration.o: optioncalibration.cpp optioncalibration.h \
 		ui_optioncalibration.h \
-		mylabelanimated.h \
 		globalfunctions.h \
 		mainscreen.h \
-		mainmenu.h
+		mainmenu.h \
+		ThrAlarm.h \
+		Singleton.h \
+		GMacros.h \
+		Time.h \
+		QMath.h \
+		DrvGpio.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optioncalibration.o optioncalibration.cpp
 
 globalfunctions.o: globalfunctions.cpp globalfunctions.h
@@ -808,13 +820,11 @@ globalfunctions.o: globalfunctions.cpp globalfunctions.h
 
 optionalarmlimit.o: optionalarmlimit.cpp optionalarmlimit.h \
 		ui_optionalarmlimit.h \
-		mylabelanimated.h \
 		globalfunctions.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optionalarmlimit.o optionalarmlimit.cpp
 
 optiongeneral.o: optiongeneral.cpp optiongeneral.h \
 		ui_optiongeneral.h \
-		mylabelanimated.h \
 		aboutscreen.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optiongeneral.o optiongeneral.cpp
 
@@ -867,42 +877,40 @@ Time.o: Time.cpp Time.h \
 
 optionsetdate.o: optionsetdate.cpp optionsetdate.h \
 		ui_optionsetdate.h \
-		mylabelanimated.h \
 		globalfunctions.h \
 		mainwindow.h \
 		mainscreen.h \
 		mainmenu.h \
-		ThrInput.h \
+		ThrAlarm.h \
 		Singleton.h \
 		GMacros.h \
+		Time.h \
+		QMath.h \
+		DrvGpio.h \
+		ThrInput.h \
 		DrvAdc.h \
 		DrvI2C.h \
 		DrvRtc.h \
-		DrvGauge.h \
-		ThrAlarm.h \
-		Time.h \
-		QMath.h \
-		DrvGpio.h
+		DrvGauge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optionsetdate.o optionsetdate.cpp
 
 optionsettime.o: optionsettime.cpp optionsettime.h \
 		ui_optionsettime.h \
-		mylabelanimated.h \
 		globalfunctions.h \
 		mainwindow.h \
 		mainscreen.h \
 		mainmenu.h \
-		ThrInput.h \
+		ThrAlarm.h \
 		Singleton.h \
 		GMacros.h \
+		Time.h \
+		QMath.h \
+		DrvGpio.h \
+		ThrInput.h \
 		DrvAdc.h \
 		DrvI2C.h \
 		DrvRtc.h \
-		DrvGauge.h \
-		ThrAlarm.h \
-		Time.h \
-		QMath.h \
-		DrvGpio.h
+		DrvGauge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o optionsettime.o optionsettime.cpp
 
 processesclass.o: processesclass.cpp processesclass.h
