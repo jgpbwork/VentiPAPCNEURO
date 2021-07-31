@@ -26,6 +26,7 @@ public:
     QLabel *l_date;
     QLabel *l_battery_text;
     QLabel *l_battery_icon;
+    QLabel *l_lightning;
     QLabel *l_oxygen_value;
     QWidget *widget_max_value;
     QVBoxLayout *verticalLayout;
@@ -42,6 +43,7 @@ public:
     QLabel *label_10;
     QLabel *label_12;
     MyWidgetAnimated *widget_menu_off;
+    QLabel *l_error_text;
 
     void setupUi(QWidget *MainScreen)
     {
@@ -115,16 +117,28 @@ public:
         l_battery_icon->setPixmap(QPixmap(QString::fromUtf8(":/icons/general/battery_75.png")));
         l_battery_icon->setScaledContents(true);
         l_battery_icon->setAlignment(Qt::AlignCenter);
+        l_lightning = new QLabel(widget_2);
+        l_lightning->setObjectName(QStringLiteral("l_lightning"));
+        l_lightning->setGeometry(QRect(225, 5, 14, 26));
+        QPalette palette4;
+        palette4.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette4.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette4.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        l_lightning->setPalette(palette4);
+        l_lightning->setFont(font3);
+        l_lightning->setPixmap(QPixmap(QString::fromUtf8(":/icons/general/lightning.png")));
+        l_lightning->setScaledContents(true);
+        l_lightning->setAlignment(Qt::AlignCenter);
         l_oxygen_value = new QLabel(MainScreen);
         l_oxygen_value->setObjectName(QStringLiteral("l_oxygen_value"));
         l_oxygen_value->setGeometry(QRect(10, 130, 291, 221));
-        QPalette palette4;
+        QPalette palette5;
         QBrush brush2(QColor(62, 167, 132, 255));
         brush2.setStyle(Qt::SolidPattern);
-        palette4.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette4.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette4.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        l_oxygen_value->setPalette(palette4);
+        palette5.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette5.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette5.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        l_oxygen_value->setPalette(palette5);
         QFont font4;
         font4.setFamily(QStringLiteral("Swis721 Cn BT"));
         font4.setPointSize(150);
@@ -134,8 +148,8 @@ public:
         l_oxygen_value->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
 "\n"
 ""));
-        l_oxygen_value->setPixmap(QPixmap(QString::fromUtf8(":/icons/main_menu/calibration_menu/ok.png")));
-        l_oxygen_value->setScaledContents(true);
+        l_oxygen_value->setPixmap(QPixmap(QString::fromUtf8(":/icons/general/alarm_icon.png")));
+        l_oxygen_value->setScaledContents(false);
         l_oxygen_value->setAlignment(Qt::AlignCenter);
         widget_max_value = new QWidget(MainScreen);
         widget_max_value->setObjectName(QStringLiteral("widget_max_value"));
@@ -146,11 +160,11 @@ public:
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         l_max_value = new QLabel(widget_max_value);
         l_max_value->setObjectName(QStringLiteral("l_max_value"));
-        QPalette palette5;
-        palette5.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette5.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette5.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        l_max_value->setPalette(palette5);
+        QPalette palette6;
+        palette6.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette6.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette6.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        l_max_value->setPalette(palette6);
         QFont font5;
         font5.setFamily(QStringLiteral("Swis721 Cn BT"));
         font5.setPointSize(24);
@@ -164,11 +178,11 @@ public:
 
         label_11 = new QLabel(widget_max_value);
         label_11->setObjectName(QStringLiteral("label_11"));
-        QPalette palette6;
-        palette6.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette6.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette6.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_11->setPalette(palette6);
+        QPalette palette7;
+        palette7.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette7.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette7.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_11->setPalette(palette7);
         QFont font6;
         font6.setFamily(QStringLiteral("Swis721 Cn BT"));
         font6.setPointSize(14);
@@ -189,11 +203,11 @@ public:
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         l_min_value = new QLabel(widget_min_value);
         l_min_value->setObjectName(QStringLiteral("l_min_value"));
-        QPalette palette7;
-        palette7.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette7.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette7.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        l_min_value->setPalette(palette7);
+        QPalette palette8;
+        palette8.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette8.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette8.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        l_min_value->setPalette(palette8);
         l_min_value->setFont(font5);
         l_min_value->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         l_min_value->setAlignment(Qt::AlignCenter);
@@ -202,11 +216,11 @@ public:
 
         label_13 = new QLabel(widget_min_value);
         label_13->setObjectName(QStringLiteral("label_13"));
-        QPalette palette8;
-        palette8.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette8.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette8.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_13->setPalette(palette8);
+        QPalette palette9;
+        palette9.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_13->setPalette(palette9);
         label_13->setFont(font6);
         label_13->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         label_13->setAlignment(Qt::AlignCenter);
@@ -220,22 +234,22 @@ public:
         label_8 = new QLabel(widget_o2_porcentile);
         label_8->setObjectName(QStringLiteral("label_8"));
         label_8->setGeometry(QRect(0, 0, 81, 30));
-        QPalette palette9;
-        palette9.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_8->setPalette(palette9);
+        QPalette palette10;
+        palette10.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette10.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette10.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_8->setPalette(palette10);
         label_8->setFont(font5);
         label_8->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         label_8->setAlignment(Qt::AlignCenter);
         label_9 = new QLabel(widget_o2_porcentile);
         label_9->setObjectName(QStringLiteral("label_9"));
         label_9->setGeometry(QRect(40, 20, 16, 20));
-        QPalette palette10;
-        palette10.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette10.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette10.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_9->setPalette(palette10);
+        QPalette palette11;
+        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_9->setPalette(palette11);
         label_9->setFont(font6);
         label_9->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         label_9->setAlignment(Qt::AlignCenter);
@@ -246,11 +260,11 @@ public:
         label_10 = new QLabel(widget_o2_porcentile_mini);
         label_10->setObjectName(QStringLiteral("label_10"));
         label_10->setGeometry(QRect(0, 0, 81, 30));
-        QPalette palette11;
-        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_10->setPalette(palette11);
+        QPalette palette12;
+        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_10->setPalette(palette12);
         QFont font7;
         font7.setFamily(QStringLiteral("Swis721 Cn BT"));
         font7.setPointSize(16);
@@ -262,11 +276,11 @@ public:
         label_12 = new QLabel(widget_o2_porcentile_mini);
         label_12->setObjectName(QStringLiteral("label_12"));
         label_12->setGeometry(QRect(37, 16, 16, 20));
-        QPalette palette12;
-        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_12->setPalette(palette12);
+        QPalette palette13;
+        palette13.setBrush(QPalette::Active, QPalette::WindowText, brush2);
+        palette13.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
+        palette13.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_12->setPalette(palette13);
         QFont font8;
         font8.setFamily(QStringLiteral("Swis721 Cn BT"));
         font8.setPointSize(11);
@@ -280,6 +294,39 @@ public:
         widget_menu_off->setGeometry(QRect(0, 403, 320, 77));
         widget_menu_off->setStyleSheet(QLatin1String("border-image: url(:/icons/main_screen/widget_settings_off.png);\n"
 "background-image: url(:/icons/general/fondo_transparente.png);"));
+        l_error_text = new QLabel(MainScreen);
+        l_error_text->setObjectName(QStringLiteral("l_error_text"));
+        l_error_text->setGeometry(QRect(10, 350, 301, 30));
+        QPalette palette14;
+        QBrush brush3(QColor(220, 0, 0, 255));
+        brush3.setStyle(Qt::SolidPattern);
+        palette14.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette14.setBrush(QPalette::Active, QPalette::Text, brush3);
+        palette14.setBrush(QPalette::Active, QPalette::ButtonText, brush3);
+        palette14.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette14.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette14.setBrush(QPalette::Inactive, QPalette::ButtonText, brush3);
+        palette14.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
+        palette14.setBrush(QPalette::Disabled, QPalette::Text, brush3);
+        palette14.setBrush(QPalette::Disabled, QPalette::ButtonText, brush3);
+        l_error_text->setPalette(palette14);
+        QFont font9;
+        font9.setFamily(QStringLiteral("Swis721 Cn BT"));
+        font9.setPointSize(18);
+        font9.setBold(false);
+        font9.setWeight(50);
+        l_error_text->setFont(font9);
+        l_error_text->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"color: rgb(220, 0, 0);"));
+        l_error_text->setAlignment(Qt::AlignCenter);
+        widget_2->raise();
+        l_oxygen_value->raise();
+        widget_max_value->raise();
+        widget_o2_porcentile->raise();
+        widget_o2_porcentile_mini->raise();
+        widget_menu_off->raise();
+        l_error_text->raise();
+        widget_min_value->raise();
 
         retranslateUi(MainScreen);
 
@@ -289,10 +336,11 @@ public:
     void retranslateUi(QWidget *MainScreen)
     {
         MainScreen->setWindowTitle(QApplication::translate("MainScreen", "Form", nullptr));
-        l_time->setText(QApplication::translate("MainScreen", "12:00", nullptr));
-        l_date->setText(QApplication::translate("MainScreen", "mi\303\251 06/01/2021", nullptr));
+        l_time->setText(QApplication::translate("MainScreen", "15:00", nullptr));
+        l_date->setText(QApplication::translate("MainScreen", "mi\303\251 31/07/2021", nullptr));
         l_battery_text->setText(QApplication::translate("MainScreen", "5h 12m", nullptr));
         l_battery_icon->setText(QString());
+        l_lightning->setText(QString());
         l_oxygen_value->setText(QString());
         l_max_value->setText(QApplication::translate("MainScreen", "28", nullptr));
         label_11->setText(QApplication::translate("MainScreen", "max", nullptr));
@@ -302,6 +350,7 @@ public:
         label_9->setText(QApplication::translate("MainScreen", "2", nullptr));
         label_10->setText(QApplication::translate("MainScreen", "FiO  %", nullptr));
         label_12->setText(QApplication::translate("MainScreen", "2", nullptr));
+        l_error_text->setText(QApplication::translate("MainScreen", "!!!Fallo en el sensor de ox\303\255geno", nullptr));
     } // retranslateUi
 
 };

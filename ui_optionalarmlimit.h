@@ -156,7 +156,7 @@ public:
         OptionAlarmLimit->setWindowTitle(QApplication::translate("OptionAlarmLimit", "Form", nullptr));
         l_min_value_4->setText(QApplication::translate("OptionAlarmLimit", "m\303\241x", nullptr));
         pb_max_limit_up->setText(QString());
-        l_min_value->setText(QApplication::translate("OptionAlarmLimit", "16", nullptr));
+        l_min_value->setText(QApplication::translate("OptionAlarmLimit", "21", nullptr));
         l_save->setText(QString());
         pb_min_limit_up->setText(QString());
         l_alarm_limit_back->setText(QString());

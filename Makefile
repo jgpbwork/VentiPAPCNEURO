@@ -509,23 +509,25 @@ qrc_assets.cpp: assets.qrc \
 		icons/main_menu/calibration_menu/background_calibration_menu.png \
 		icons/main_menu/calibration_menu/footer_menu_calibration.png \
 		icons/main_menu/lenguage_menu/header_lenguage_menu.png \
-		icons/general/battery_50.png \
-		icons/general/empty_button.png \
-		icons/general/down_arrow.png \
-		icons/general/next_button.png \
-		icons/general/battery_75.png \
-		icons/general/battery_100.png \
-		icons/general/battery_low.png \
-		icons/general/left_arrow.png \
-		icons/general/logo.png \
-		icons/general/save_button.png \
-		icons/general/start_button.png \
-		icons/general/cancel_button.png \
-		icons/general/battery_25.png \
-		icons/general/exit_button.png \
 		icons/general/repeat_button.png \
-		icons/general/fondo_transparente.png \
+		icons/general/down_arrow.png \
+		icons/general/start_button.png \
+		icons/general/save_button.png \
+		icons/general/lightning.png \
+		icons/general/exit_button.png \
+		icons/general/empty_button.png \
 		icons/general/up_arrow.png \
+		icons/general/battery_25.png \
+		icons/general/alarm_icon.png \
+		icons/general/next_button.png \
+		icons/general/battery_low.png \
+		icons/general/fondo_transparente.png \
+		icons/general/battery_75.png \
+		icons/general/left_arrow.png \
+		icons/general/cancel_button.png \
+		icons/general/battery_100.png \
+		icons/general/logo.png \
+		icons/general/battery_50.png \
 		icons/main_screen/widget_settings_off.png \
 		icons/main_screen/background.png \
 		icons/main_screen/widget_settings_on.png \
@@ -724,7 +726,8 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 aboutscreen.o: aboutscreen.cpp aboutscreen.h \
-		ui_aboutscreen.h
+		ui_aboutscreen.h \
+		mylabelanimated.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o aboutscreen.o aboutscreen.cpp
 
 main.o: main.cpp mainwindow.h \
