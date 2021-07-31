@@ -25,7 +25,7 @@ public:
     QWidget *widget;
     MyLabelAnimated *l_calibration_back;
     MyLabelAnimated *l_calibration_state_button;
-    QPlainTextEdit *pt_calibration_state_text;
+    QTextEdit *pt_calibration_state_text;
     QLabel *l_calibration_state_footer_text_1;
     QLabel *l_calibration_state_footer_text_2;
     QLabel *l_calibration_state;
@@ -57,7 +57,7 @@ public:
         l_calibration_state_button->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
 "border-image: url(:/icons/general/next_button.png);"));
         l_calibration_state_button->setScaledContents(true);
-        pt_calibration_state_text = new QPlainTextEdit(widget);
+        pt_calibration_state_text = new QTextEdit(widget);
         pt_calibration_state_text->setObjectName(QStringLiteral("pt_calibration_state_text"));
         pt_calibration_state_text->setGeometry(QRect(20, 130, 281, 91));
         QFont font;

@@ -49,5 +49,6 @@
         <file>icons/main_menu/general_menu/about_button.png</file>
         <file>icons/main_menu/general_menu/lenguage_button.png</file>
         <file>icons/general/empty_button.png</file>
+        <file>icons/general/lightning.png</file>
     </qresource>
 </RCC>

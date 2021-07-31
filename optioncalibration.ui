@@ -65,7 +65,7 @@ border-image: url(:/icons/general/next_button.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="pt_calibration_state_text">
+   <widget class="QTextEdit" name="pt_calibration_state_text">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -84,16 +84,22 @@ border-image: url(:/icons/general/next_button.png);</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);
-color: rgb(28, 28, 28);
-border-radius: 3px;
-text-align: center;</string>
+     <string notr="true">QTextEdit { 
+	background-image: url(:/icons/general/fondo_transparente.png);
+	color: rgb(28, 28, 28);
+	border-radius: 3px;
+	text-align: center;
+}</string>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Plain</enum>
     </property>
-    <property name="plainText">
-     <string>El dispositivo deberá realizar una medición máxima y mínima. Para ello siga las instruciones durante el progreso una vez iniciado</string>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Swis721 Lt BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;El dispositivo deberá realizar una medición máxima y mínima. Para ello siga las instruciones durante el progreso una vez iniciado&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="l_calibration_state_footer_text_1">

@@ -22,7 +22,7 @@ void OptionGeneral::on_l_general_back_clicked(){
 
 void OptionGeneral::on_l_about_clicked(){
     AboutScreen *screen = new AboutScreen(this);
-    screen->move(0, 345 - screen->height());
+    screen->move(0, 0);
     screen->show();
     screen->raise();
 }
