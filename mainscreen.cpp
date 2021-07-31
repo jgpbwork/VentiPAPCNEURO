@@ -93,11 +93,26 @@ void MainScreen::setOxygenValue(double value)
     GlobalFunctions::lastSettedValue = value;
     value = GlobalFunctions::getRealValue(value);
 
-    if(value < 0 || value > 100){
+    if(value < MIX_OXY_ALLOWED || value > MAX_OXY_ALLOWED){
         if(!blockedDisplayValue){
-            ui->l_oxygen_value->setText("--");
+            ui->l_oxygen_value->setPixmap(QPixmap(":icons/general/alarm_icon.png"));
+            ui->l_oxygen_value->setScaledContents(false);
+            ui->l_error_text->show();
+            ui->widget_min_value->hide();
+            ui->widget_max_value->hide();
+            ui->widget_o2_porcentile_mini->hide();
+            ui->widget_o2_porcentile->hide();
+
         }
         return;
+    }
+    else{
+        ui->l_oxygen_value->setScaledContents(true);
+        ui->l_error_text->hide();
+        ui->widget_min_value->show();
+        ui->widget_max_value->show();
+//        ui->widget_o2_porcentile_mini->show();
+        ui->widget_o2_porcentile->show();
     }
 
     ///TODO if Value is out or Range, start alarm process
