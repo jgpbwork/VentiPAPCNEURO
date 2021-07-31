@@ -49,21 +49,32 @@ public:
         label_3 = new MyLabelAnimated(widget);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setEnabled(false);
-        label_3->setGeometry(QRect(0, 56, 320, 84));
-        label_3->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
-"border-image: url(:/icons/main_menu/general_menu/lenguage_button.png);"));
+        label_3->setGeometry(QRect(0, 59, 320, 81));
+        QFont font;
+        font.setFamily(QStringLiteral("Swis721 Lt BT"));
+        font.setPointSize(24);
+        label_3->setFont(font);
+        label_3->setStyleSheet(QLatin1String("background-color: rgb(200, 200, 200);\n"
+"color: rgb(77, 77, 77);"));
+        label_3->setAlignment(Qt::AlignCenter);
         label_4 = new MyLabelAnimated(widget);
         label_4->setObjectName(QStringLiteral("label_4"));
         label_4->setEnabled(false);
-        label_4->setGeometry(QRect(0, 120, 320, 84));
-        label_4->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
-"border-image: url(:/icons/main_menu/general_menu/battery_state_button.png);\n"
-""));
+        label_4->setGeometry(QRect(0, 120, 320, 75));
+        label_4->setFont(font);
+        label_4->setStyleSheet(QLatin1String("background-color: rgb(200, 200, 200);\n"
+"color: rgb(77, 77, 77);"));
+        label_4->setAlignment(Qt::AlignCenter);
         l_about = new MyLabelAnimated(widget);
         l_about->setObjectName(QStringLiteral("l_about"));
         l_about->setGeometry(QRect(0, 183, 320, 84));
         l_about->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
 "border-image: url(:/icons/main_menu/general_menu/about_button.png);"));
+        label->raise();
+        label_3->raise();
+        label_4->raise();
+        l_about->raise();
+        l_general_back->raise();
 
         retranslateUi(OptionGeneral);
 
@@ -75,8 +86,8 @@ public:
         OptionGeneral->setWindowTitle(QApplication::translate("OptionGeneral", "Form", nullptr));
         label->setText(QString());
         l_general_back->setText(QString());
-        label_3->setText(QString());
-        label_4->setText(QString());
+        label_3->setText(QApplication::translate("OptionGeneral", "Idioma", nullptr));
+        label_4->setText(QApplication::translate("OptionGeneral", "Estado de Bater\303\255a", nullptr));
         l_about->setText(QString());
     } // retranslateUi
 

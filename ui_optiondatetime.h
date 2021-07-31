@@ -81,6 +81,7 @@ public:
         l_define_time->setAlignment(Qt::AlignCenter);
         label_2 = new QLabel(OptionDateTime);
         label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setEnabled(false);
         label_2->setGeometry(QRect(0, 172, 320, 148));
         label_2->setStyleSheet(QStringLiteral("border-image: url(:/icons/main_menu/date_time_menu/date_format_button.png);"));
         l_24_hours = new MyLabelAnimated(OptionDateTime);
@@ -90,9 +91,10 @@ public:
 "border-image: url(:/icons/main_menu/date_time_menu/24_hours_on.png);"));
         l_12_hours = new MyLabelAnimated(OptionDateTime);
         l_12_hours->setObjectName(QStringLiteral("l_12_hours"));
+        l_12_hours->setEnabled(false);
         l_12_hours->setGeometry(QRect(160, 250, 163, 71));
-        l_12_hours->setStyleSheet(QLatin1String("border-image: url(:/icons/main_menu/date_time_menu/12_hours_off.png);\n"
-"background-image: url(:/icons/general/fondo_transparente.png);"));
+        l_12_hours->setStyleSheet(QStringLiteral(""));
+        l_12_hours->setPixmap(QPixmap(QString::fromUtf8(":/icons/main_menu/date_time_menu/12_hours_off.png")));
         l_date_time_back->raise();
         l_define_date->raise();
         label_2->raise();

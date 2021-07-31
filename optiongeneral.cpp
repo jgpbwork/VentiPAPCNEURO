@@ -1,6 +1,8 @@
 #include "optiongeneral.h"
 #include "ui_optiongeneral.h"
 
+#include "aboutscreen.h"
+
 OptionGeneral::OptionGeneral(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OptionGeneral)
@@ -19,6 +21,8 @@ void OptionGeneral::on_l_general_back_clicked(){
 }
 
 void OptionGeneral::on_l_about_clicked(){
-    this->close();
-    emit closing();
+    AboutScreen *screen = new AboutScreen(this);
+    screen->move(0, 345 - screen->height());
+    screen->show();
+    screen->raise();
 }

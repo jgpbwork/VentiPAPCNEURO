@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    aboutscreen.cpp \
     main.cpp \
     mainmenu.cpp \
     mainscreen.cpp \
@@ -42,6 +43,7 @@ SOURCES += \
     customeventfilter.cpp
 
 HEADERS += \
+    aboutscreen.h \
     mainmenu.h \
     mainscreen.h \
     mainwindow.h \
@@ -70,6 +72,7 @@ HEADERS += \
     customeventfilter.h
 
 FORMS += \
+    aboutscreen.ui \
     mainmenu.ui \
     mainscreen.ui \
     mainwindow.ui \

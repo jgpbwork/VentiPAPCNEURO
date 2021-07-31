@@ -66,17 +66,26 @@ border-image: url(:/icons/main_menu/general_menu/header_general_menu.png);</stri
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>56</y>
+      <y>59</y>
       <width>320</width>
-      <height>84</height>
+      <height>81</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Swis721 Lt BT</family>
+      <pointsize>24</pointsize>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);
-border-image: url(:/icons/main_menu/general_menu/lenguage_button.png);</string>
+     <string notr="true">background-color: rgb(200, 200, 200);
+color: rgb(77, 77, 77);</string>
     </property>
     <property name="text">
-     <string/>
+     <string>Idioma</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="MyLabelAnimated" name="label_4">
@@ -88,16 +97,24 @@ border-image: url(:/icons/main_menu/general_menu/lenguage_button.png);</string>
       <x>0</x>
       <y>120</y>
       <width>320</width>
-      <height>84</height>
+      <height>75</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Swis721 Lt BT</family>
+      <pointsize>24</pointsize>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);
-border-image: url(:/icons/main_menu/general_menu/battery_state_button.png);
-</string>
+     <string notr="true">background-color: rgb(200, 200, 200);
+color: rgb(77, 77, 77);</string>
     </property>
     <property name="text">
-     <string/>
+     <string>Estado de Batería</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="MyLabelAnimated" name="l_about">
@@ -117,6 +134,11 @@ border-image: url(:/icons/main_menu/general_menu/about_button.png);</string>
      <string/>
     </property>
    </widget>
+   <zorder>label</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label_4</zorder>
+   <zorder>l_about</zorder>
+   <zorder>l_general_back</zorder>
   </widget>
  </widget>
  <customwidgets>

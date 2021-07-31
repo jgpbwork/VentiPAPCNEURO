@@ -77,14 +77,14 @@ void MainScreen::setAlarmLimits(){
 void MainScreen::setDate(QDate date){
     if(date.isValid()){
         ///set label_2
-        ui->label_2->setText(date.toString());
+        ui->l_date->setText(date.toString());
     }
 }
 
 void MainScreen::setTime(QTime time){
     if(time.isValid()){
         ///set label
-        ui->label->setText(time.toString("hh:mm"));
+        ui->l_time->setText(time.toString("hh:mm"));
     }
 }
 
