@@ -51,5 +51,6 @@
         <file>icons/general/empty_button.png</file>
         <file>icons/general/lightning.png</file>
         <file>icons/general/alarm_icon.png</file>
+        <file>icons/main_menu/general_menu/about_back_button.png</file>
     </qresource>
 </RCC>

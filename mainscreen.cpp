@@ -75,9 +75,48 @@ void MainScreen::setAlarmLimits(){
 }
 
 void MainScreen::setDate(QDate date){
+    QMap<QString, QString> mapMonth;
+    QMap<QString, QString> mapDays;
+
+    QString dateString = date.toString();
+
+    mapMonth.insert("JAN", "ENERO");
+    mapMonth.insert("FEB", "FEBRERO");
+    mapMonth.insert("MAR", "MARZO");
+    mapMonth.insert("APR", "ABRIL");
+    mapMonth.insert("MAY", "MAYO");
+    mapMonth.insert("JUN", "JUNIO");
+    mapMonth.insert("JUL", "JULIO");
+    mapMonth.insert("AUG", "AGOSTO");
+    mapMonth.insert("SEP", "SEPTIEMBRE");
+    mapMonth.insert("OCT", "OCTUBRE");
+    mapMonth.insert("NOV", "NOVIEMBRE");
+    mapMonth.insert("DEC", "DICIEMBRE");
+
+    mapDays.insert("MON", "LUN");
+    mapDays.insert("TUE", "MAR");
+    mapDays.insert("WED", "MIE");
+    mapDays.insert("THU", "JUE");
+    mapDays.insert("FRI", "VIE");
+    mapDays.insert("SAT", "SÁB");
+    mapDays.insert("SUN", "DOM");
+
+    for (int i = 0; i < mapDays.size(); i++) {
+        QString key = mapDays.keys().at(i);
+        if(dateString.contains(key, Qt::CaseInsensitive)) {
+           dateString = dateString.toUpper().replace(key, mapDays.value(key));
+        }
+    }
+    for (int i = 0; i < mapMonth.size(); i++) {
+       QString key = mapMonth.keys().at(i);
+       if(dateString.contains(key, Qt::CaseInsensitive)) {
+          dateString = dateString.toUpper().replace(key, mapMonth.value(key));
+       }
+    }
+
     if(date.isValid()){
         ///set label_2
-        ui->l_date->setText(date.toString());
+        ui->l_date->setText(dateString);
     }
 }
 
@@ -96,7 +135,8 @@ void MainScreen::setOxygenValue(double value)
     if(value < MIX_OXY_ALLOWED || value > MAX_OXY_ALLOWED){
         if(!blockedDisplayValue){
             ui->l_oxygen_value->setPixmap(QPixmap(":icons/general/alarm_icon.png"));
-            ui->l_oxygen_value->setScaledContents(false);
+            ui->l_oxygen_value->setScaledContents(true);
+
             ui->l_error_text->show();
             ui->widget_min_value->hide();
             ui->widget_max_value->hide();
@@ -146,7 +186,7 @@ void MainScreen::setOxygenValue(double value)
             f.setPointSize(24);
         }
         else{
-            f.setPointSize(150);
+            f.setPointSize(118);
         }
         ui->l_oxygen_value->setFont(f);
     }
@@ -156,7 +196,7 @@ void MainScreen::setOxygenValue(double value)
             f.setPointSize(50);
         }
         else{
-            f.setPointSize(200);
+            f.setPointSize(180);
         }
         ui->l_oxygen_value->setFont(f);
     }
@@ -202,10 +242,10 @@ void MainScreen::hideWidgetMenu(){
         main_menu->hideMenu();
 
         shownMenu = false;
-        ui->l_oxygen_value->move(10, 130);
-        ui->l_oxygen_value->setFixedSize(291, 221);
+        ui->l_oxygen_value->move(50, 130);
+        ui->l_oxygen_value->setFixedSize(221, 221);
         QFont f = ui->l_oxygen_value->font();
-        f.setPointSize(200);
+        f.setPointSize(180);
         ui->l_oxygen_value->setFont(f);
         ui->widget_o2_porcentile_mini->hide();
         ui->widget_max_value->show();
