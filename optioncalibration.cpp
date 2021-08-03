@@ -107,6 +107,8 @@ void OptionCalibration::navigateNextState(){
         GlobalFunctions::m_slope_value = 79.1/(maxCalValue - minCalValue);
         GlobalFunctions::n_value = 100 - (maxCalValue*(GlobalFunctions::m_slope_value));
         
+         qDebug()<<"calibration m_slope_value" << GlobalFunctions::m_slope_value;
+         qDebug()<<"calibration n_value" << GlobalFunctions::n_value;
         if(GlobalFunctions::m_slope_value > 0
                 && (GlobalFunctions::n_value < 10
                     && GlobalFunctions::n_value > -10)){
