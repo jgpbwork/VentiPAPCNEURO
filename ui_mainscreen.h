@@ -149,7 +149,7 @@ public:
 "\n"
 ""));
         l_oxygen_value->setPixmap(QPixmap(QString::fromUtf8(":/icons/general/alarm_icon.png")));
-        l_oxygen_value->setScaledContents(false);
+        l_oxygen_value->setScaledContents(true);
         l_oxygen_value->setAlignment(Qt::AlignCenter);
         widget_max_value = new QWidget(MainScreen);
         widget_max_value->setObjectName(QStringLiteral("widget_max_value"));
@@ -341,7 +341,7 @@ public:
         l_battery_text->setText(QApplication::translate("MainScreen", "5h 12m", nullptr));
         l_battery_icon->setText(QString());
         l_lightning->setText(QString());
-        l_oxygen_value->setText(QString());
+        l_oxygen_value->setText(QApplication::translate("MainScreen", "21", nullptr));
         l_max_value->setText(QApplication::translate("MainScreen", "28", nullptr));
         label_11->setText(QApplication::translate("MainScreen", "max", nullptr));
         l_min_value->setText(QApplication::translate("MainScreen", "21", nullptr));
