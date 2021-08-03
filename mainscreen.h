@@ -6,8 +6,8 @@
 #include "mainmenu.h"
 #include "ThrAlarm.h"
 
-#define MIX_OXY_ALLOWED -20
-#define MAX_OXY_ALLOWED 200
+#define MIX_OXY_ALLOWED 17
+#define MAX_OXY_ALLOWED 105
 
 namespace Ui {
 class MainScreen;
@@ -24,6 +24,7 @@ public:
     void setOxygenImage(QString image);
 
 public slots:
+    void checkColorOfDisplay(double value);
     void setOxygenValue(double value);
     void setDate(QDate date);
     void setTime(QTime time);

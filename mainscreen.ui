@@ -411,13 +411,13 @@
 </string>
    </property>
    <property name="text">
-    <string/>
+    <string>21</string>
    </property>
    <property name="pixmap">
     <pixmap resource="assets.qrc">:/icons/general/alarm_icon.png</pixmap>
    </property>
    <property name="scaledContents">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

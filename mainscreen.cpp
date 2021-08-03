@@ -15,6 +15,8 @@ MainScreen::MainScreen(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(Qt::CustomizeWindowHint);
 
+    ui->l_error_text->hide();
+
     main_menu = new MainMenu(this);
     main_menu->hide();
     shownMenu = false;
@@ -31,7 +33,7 @@ MainScreen::MainScreen(QWidget *parent) :
 
     QString answer_shutdown = ProcessesClass::
             executeProcess(this,"sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
-                                                    ProcessesClass::LINUX, 1000, true);
+                           ProcessesClass::LINUX, 1000, true);
     if(!GlobalFunctions::loadData()){
         QString mess = "Error"
                        "Calibracion no encontrada. Reintente calibracion";
@@ -44,14 +46,14 @@ MainScreen::MainScreen(QWidget *parent) :
 #ifdef NDEBUG
 #warning "Release target.
     if((answer.contains("48")) || (answer.contains("49")))
-                               && answer.contains("64")
-                               && answer.contains("68")){
+        && answer.contains("64")
+            && answer.contains("68")){
         qDebug() << " Release answer" << answer;
     }
 #else
     if(   (answer.contains("48") || answer.contains("49"))
-                                 && answer.contains("64") ///Target debug doesn't have Gause Battery management
-                                 && answer.contains("68")) {
+          && answer.contains("64") ///Target debug doesn't have Gause Battery management
+          && answer.contains("68")) {
 
         qDebug()<<"Debug answer"<<answer;
     }
@@ -80,18 +82,18 @@ void MainScreen::setDate(QDate date){
 
     QString dateString = date.toString();
 
-    mapMonth.insert("JAN", "ENERO");
-    mapMonth.insert("FEB", "FEBRERO");
-    mapMonth.insert("MAR", "MARZO");
-    mapMonth.insert("APR", "ABRIL");
-    mapMonth.insert("MAY", "MAYO");
-    mapMonth.insert("JUN", "JUNIO");
-    mapMonth.insert("JUL", "JULIO");
-    mapMonth.insert("AUG", "AGOSTO");
-    mapMonth.insert("SEP", "SEPTIEMBRE");
-    mapMonth.insert("OCT", "OCTUBRE");
-    mapMonth.insert("NOV", "NOVIEMBRE");
-    mapMonth.insert("DEC", "DICIEMBRE");
+    mapMonth.insert("JAN", "ENE");
+    mapMonth.insert("FEB", "FEB");
+    mapMonth.insert("MAR", "MAR");
+    mapMonth.insert("APR", "ABR");
+    mapMonth.insert("MAY", "MAY");
+    mapMonth.insert("JUN", "JUN");
+    mapMonth.insert("JUL", "JUL");
+    mapMonth.insert("AUG", "AGO");
+    mapMonth.insert("SEP", "SEP");
+    mapMonth.insert("OCT", "OCT");
+    mapMonth.insert("NOV", "NOV");
+    mapMonth.insert("DEC", "DIC");
 
     mapDays.insert("MON", "LUN");
     mapDays.insert("TUE", "MAR");
@@ -104,14 +106,14 @@ void MainScreen::setDate(QDate date){
     for (int i = 0; i < mapDays.size(); i++) {
         QString key = mapDays.keys().at(i);
         if(dateString.contains(key, Qt::CaseInsensitive)) {
-           dateString = dateString.toUpper().replace(key, mapDays.value(key));
+            dateString = dateString.toUpper().replace(key, mapDays.value(key));
         }
     }
     for (int i = 0; i < mapMonth.size(); i++) {
-       QString key = mapMonth.keys().at(i);
-       if(dateString.contains(key, Qt::CaseInsensitive)) {
-          dateString = dateString.toUpper().replace(key, mapMonth.value(key));
-       }
+        QString key = mapMonth.keys().at(i);
+        if(dateString.contains(key, Qt::CaseInsensitive)) {
+            dateString = dateString.toUpper().replace(key, mapMonth.value(key));
+        }
     }
 
     if(date.isValid()){
@@ -132,10 +134,16 @@ void MainScreen::setOxygenValue(double value)
     GlobalFunctions::lastSettedValue = value;
     value = GlobalFunctions::getRealValue(value);
 
+    value = static_cast<int>(value);
+
     if(value < MIX_OXY_ALLOWED || value > MAX_OXY_ALLOWED){
         if(!blockedDisplayValue){
-            ui->l_oxygen_value->setPixmap(QPixmap(":icons/general/alarm_icon.png"));
+            //            ui->l_oxygen_value->setPixmap(QPixmap(":icons/general/alarm_icon.png"));
             ui->l_oxygen_value->setScaledContents(true);
+
+            QString style = ui->l_oxygen_value->styleSheet();
+            style += "color: rgb(239, 50, 50);";
+            ui->l_oxygen_value->setStyleSheet(style);
 
             ui->l_error_text->show();
             ui->widget_min_value->hide();
@@ -144,6 +152,9 @@ void MainScreen::setOxygenValue(double value)
             ui->widget_o2_porcentile->hide();
             emit alarmOn();
             emit alarmType(ThrAlarm::P_HIGH);
+            checkColorOfDisplay(value);
+
+            ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
         }
         return;
     }
@@ -159,16 +170,20 @@ void MainScreen::setOxygenValue(double value)
         else {
             ui->widget_o2_porcentile->show();
         }
+        QString style = ui->l_oxygen_value->styleSheet();
+        style.remove("color: rgb(239, 50, 50);");
+        ui->l_oxygen_value->setStyleSheet(style);
 
     }
 
     ///TODO if Value is out or Range, start alarm process
     /// if Value is in Range, stop alarm process
+
     if(value < GlobalFunctions::configured_min_limit
             || value > GlobalFunctions::configured_max_limit){
         ///TODO emit signal Alarm On
-        emit alarmOn();        
-        emit alarmType(ThrAlarm::P_MIDIUM);
+        emit alarmOn();
+        emit alarmType(ThrAlarm::P_MEDIUM);
         QString style = ui->l_oxygen_value->styleSheet();
         style += "color: rgb(239, 169, 3);";
         ui->l_oxygen_value->setStyleSheet(style);
@@ -180,7 +195,17 @@ void MainScreen::setOxygenValue(double value)
         style.remove("color: rgb(239, 169, 3);");
         ui->l_oxygen_value->setStyleSheet(style);
     }
-    if(value >= 100){
+
+    checkColorOfDisplay(value);
+
+    if(!blockedDisplayValue){
+        ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
+    }
+    GlobalFunctions::lastSettedValue = value;
+}
+
+void MainScreen::checkColorOfDisplay(double value){
+    if(QString::number(value, 'f', 0).size() >= 3){
         QFont f = ui->l_oxygen_value->font();
         if(shownMenu){
             f.setPointSize(24);
@@ -200,10 +225,6 @@ void MainScreen::setOxygenValue(double value)
         }
         ui->l_oxygen_value->setFont(f);
     }
-    if(!blockedDisplayValue){
-        ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
-    }
-    GlobalFunctions::lastSettedValue = value;
 }
 
 void MainScreen::setOxygenImage(QString image)
