@@ -40,7 +40,7 @@ public:
     enum AlarmPriority
     {
         P_LOW = 0,
-        P_MIDIUM = 1,
+        P_MEDIUM = 1,
         P_HIGH = 2
     };
 
