@@ -6,8 +6,8 @@
 #include "mainmenu.h"
 #include "ThrAlarm.h"
 
-#define MIX_OXY_ALLOWED 17
-#define MAX_OXY_ALLOWED 105
+#define MIX_OXY_ALLOWED -20
+#define MAX_OXY_ALLOWED 200
 
 namespace Ui {
 class MainScreen;

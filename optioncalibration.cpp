@@ -106,7 +106,7 @@ void OptionCalibration::navigateNextState(){
 
         GlobalFunctions::m_slope_value = 79.1/(maxCalValue - minCalValue);
         GlobalFunctions::n_value = 100 - (maxCalValue*(GlobalFunctions::m_slope_value));
-
+        
         if(GlobalFunctions::m_slope_value > 0
                 && (GlobalFunctions::n_value < 10
                     && GlobalFunctions::n_value > -10)){
@@ -117,7 +117,8 @@ void OptionCalibration::navigateNextState(){
         else{
             QString mess = "Error de calibracion"
                            ", reintente calibrar";
-            GlobalFunctions::setErrorMessage(this, mess);
+            GlobalFunctions::setErrorMessage(this, mess + "\n m = " 
+            + QString::number(GlobalFunctions::m_slope_value) + "\n n = " + QString::number(GlobalFunctions::n_value));
             QTimer::singleShot(4000, this, &OptionCalibration::
                                on_l_calibration_back_clicked);
         }
