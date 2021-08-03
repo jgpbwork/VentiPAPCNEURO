@@ -41,7 +41,7 @@ public:
         if (OptionCalibration->objectName().isEmpty())
             OptionCalibration->setObjectName(QStringLiteral("OptionCalibration"));
         OptionCalibration->resize(320, 359);
-        OptionCalibration->setStyleSheet(QStringLiteral(""));
+        OptionCalibration->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(OptionCalibration);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 359));

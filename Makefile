@@ -485,6 +485,7 @@ qrc_assets.cpp: assets.qrc \
 		icons/main_menu/general_menu/general_back_button.png \
 		icons/main_menu/general_menu/general_button.png \
 		icons/main_menu/general_menu/battery_state_button.png \
+		icons/main_menu/general_menu/about_back_button.png \
 		icons/main_menu/general_menu/header_general_menu.png \
 		icons/main_menu/general_menu/lenguage_button.png \
 		icons/main_menu/general_menu/about_button.png \

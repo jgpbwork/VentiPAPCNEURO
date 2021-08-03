@@ -79,6 +79,7 @@ void ThrAlarm::ThrAlarmRun() {
      while (true) {
          if(ThrAlarm::alarmIsSet()) {
              loop = (ThrAlarm::getAlarmPriority() == ThrAlarm::P_HIGH) ? 2 : 1;
+             qDebug() << "Beeping...";
              do
              {
                 ///High Priority alarm

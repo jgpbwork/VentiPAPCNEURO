@@ -33,18 +33,18 @@ public:
     QPushButton *pb_min_limit_down;
     QLabel *l_min_value_3;
     QLabel *l_max_value;
+    QLabel *l_min_value_2;
 
     void setupUi(QWidget *OptionAlarmLimit)
     {
         if (OptionAlarmLimit->objectName().isEmpty())
             OptionAlarmLimit->setObjectName(QStringLiteral("OptionAlarmLimit"));
         OptionAlarmLimit->resize(320, 314);
-        OptionAlarmLimit->setStyleSheet(QStringLiteral(""));
+        OptionAlarmLimit->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(OptionAlarmLimit);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 314));
-        widget->setStyleSheet(QLatin1String("border-image: url(:/icons/main_menu/alarm_limit_menu/background_alarm_limit_menu.png);\n"
-"background-image: url(:/icons/general/fondo_transparente.png);"));
+        widget->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         l_min_value_4 = new QLabel(widget);
         l_min_value_4->setObjectName(QStringLiteral("l_min_value_4"));
         l_min_value_4->setGeometry(QRect(170, 130, 61, 41));
@@ -145,6 +145,40 @@ public:
         l_max_value->setFont(font1);
         l_max_value->setStyleSheet(QStringLiteral("border-image: url(:/icons/general/fondo_transparente.png);"));
         l_max_value->setAlignment(Qt::AlignCenter);
+        l_min_value_2 = new QLabel(widget);
+        l_min_value_2->setObjectName(QStringLiteral("l_min_value_2"));
+        l_min_value_2->setGeometry(QRect(0, 60, 321, 261));
+        QPalette palette4;
+        palette4.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        QBrush brush2(QColor(255, 255, 255, 255));
+        brush2.setStyle(Qt::SolidPattern);
+        palette4.setBrush(QPalette::Active, QPalette::Button, brush2);
+        palette4.setBrush(QPalette::Active, QPalette::Base, brush2);
+        palette4.setBrush(QPalette::Active, QPalette::Window, brush2);
+        palette4.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette4.setBrush(QPalette::Inactive, QPalette::Button, brush2);
+        palette4.setBrush(QPalette::Inactive, QPalette::Base, brush2);
+        palette4.setBrush(QPalette::Inactive, QPalette::Window, brush2);
+        palette4.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        palette4.setBrush(QPalette::Disabled, QPalette::Button, brush2);
+        palette4.setBrush(QPalette::Disabled, QPalette::Base, brush2);
+        palette4.setBrush(QPalette::Disabled, QPalette::Window, brush2);
+        l_min_value_2->setPalette(palette4);
+        l_min_value_2->setFont(font1);
+        l_min_value_2->setStyleSheet(QLatin1String("border-image: url(:/icons/general/fondo_transparente.png);\n"
+"background-color: rgb(255, 255, 255);"));
+        l_min_value_2->setAlignment(Qt::AlignCenter);
+        l_min_value_2->raise();
+        l_min_value_4->raise();
+        pb_max_limit_up->raise();
+        l_min_value->raise();
+        l_save->raise();
+        pb_min_limit_up->raise();
+        l_alarm_limit_back->raise();
+        pb_max_limit_down->raise();
+        pb_min_limit_down->raise();
+        l_min_value_3->raise();
+        l_max_value->raise();
 
         retranslateUi(OptionAlarmLimit);
 
@@ -164,6 +198,7 @@ public:
         pb_min_limit_down->setText(QString());
         l_min_value_3->setText(QApplication::translate("OptionAlarmLimit", "m\303\255n", nullptr));
         l_max_value->setText(QApplication::translate("OptionAlarmLimit", "28", nullptr));
+        l_min_value_2->setText(QString());
     } // retranslateUi
 
 };

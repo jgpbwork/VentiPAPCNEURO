@@ -131,7 +131,7 @@ public:
         l_lightning->setAlignment(Qt::AlignCenter);
         l_oxygen_value = new QLabel(MainScreen);
         l_oxygen_value->setObjectName(QStringLiteral("l_oxygen_value"));
-        l_oxygen_value->setGeometry(QRect(10, 130, 291, 221));
+        l_oxygen_value->setGeometry(QRect(50, 130, 221, 221));
         QPalette palette5;
         QBrush brush2(QColor(62, 167, 132, 255));
         brush2.setStyle(Qt::SolidPattern);
@@ -141,7 +141,7 @@ public:
         l_oxygen_value->setPalette(palette5);
         QFont font4;
         font4.setFamily(QStringLiteral("Swis721 Cn BT"));
-        font4.setPointSize(150);
+        font4.setPointSize(180);
         font4.setBold(false);
         font4.setWeight(50);
         l_oxygen_value->setFont(font4);

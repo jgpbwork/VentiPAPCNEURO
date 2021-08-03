@@ -80,9 +80,7 @@ void ThrInput::ThrInputRun() {
     while(true)
     {
         //ThrInput::instance().sensor->waitForReadyRead(Q_WAIT_FOREVER);  ///wait forever
-        //ThrInput::instance().validateReading();
-
-        ThrInput::instance().qThrInput_->msleep(1000);   ///Wait a second to update readings...        
+        //ThrInput::instance().validateReading();      
         lastDataADC = 0;
         val = 0.0f;
         engValue = 0.0f;
@@ -117,6 +115,7 @@ void ThrInput::ThrInputRun() {
         }
         /// emit UI signal...
         ThrInput::instance().updateReadings(val, battVoltage);
+        ThrInput::instance().qThrInput_->msleep(1000);   ///Wait a second to update next readings...
     }
 }
 

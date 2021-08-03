@@ -6,8 +6,12 @@ std::float_t LTC2942::load_ = 100.0f;
 std::float_t LTC2942::limitLoad_ = 100.0f;
 std::float_t LTC2942::loadDt_;
 
-LTC2942::LTC2942() : controlReg(), temperature_(0),
-                     voltage_(0), statusReg_(0),
+const std::float_t LTC2942::BATT_CAPACITY = 1900.0f;
+const std::float_t LTC2942::COULOMBS_CAPACITY_RATE = 3.6f;
+const std::float_t LTC2942::BATT_CHARGE_REG_RESOLUTION = 0.104371f;
+
+LTC2942::LTC2942() : controlReg(), status(BATT_CAPACITY * COULOMBS_CAPACITY_RATE / 20.0f), ///Assumes battery is at 5% -> (Full charge / 20)
+                     temperature_(0), voltage_(0), statusReg_(0),
                      state_(INACTIVE), identifier_(0)
 {}
 
@@ -24,11 +28,13 @@ bool LTC2942::Initialize()
             this->setCtrlReg(static_cast<std::uint8_t>(data));
             if(this->controlReg.AlertCharge != CHARGE_CMP_IN) {
                 this->controlReg.AlertCharge = CHARGE_CMP_IN;
+                this->controlReg.Prescaler = Prescaler::M64;
                 this->controlReg.AdcMode = AUTO_MODE;
                 std::uint8_t val = this->controlReg.value();
-                this->writeDevice(CONTROL_REG, val);
+                this->writeDevice(CONTROL_REG, this->controlReg.value());
             }
         }
+        this->setCharge(this->status.load);
         if(readDevice(STATUS_REG, data)){
             this->statusReg_ = static_cast<std::uint8_t>(data);
         }
@@ -37,7 +43,7 @@ bool LTC2942::Initialize()
         }
     }
 
-    std::float_t currentLoad = (this->readVoltage(currentLoad)) ? currentLoad * 0.153f : 0.0f;
+    std::float_t currentLoad = (this->readVoltage(currentLoad)) ? currentLoad * BATT_CHARGE_REG_RESOLUTION : 0.0f;
 
     if (currentLoad > LTC2942::limitLoad_)
        LTC2942::limitLoad_ = currentLoad;
@@ -53,15 +59,20 @@ void LTC2942::setCtrlReg(std::uint8_t data) {
 }
 
 void LTC2942::setCharge(std::float_t charge) {
-     std::uint16_t chargeReg = (charge / 0.153f);
+     std::uint16_t chargeReg = static_cast<std::uint16_t>((charge / BATT_CHARGE_REG_RESOLUTION));
      this->powerDown();
      this->setChargeRegister(chargeReg);
      this->powerUp();
+     std::uint16_t chargeRegBack = 0;
+     if(this->readCharge(chargeRegBack))
+         return;
+         ///TODO signal error
+
 }
 
 std::float_t LTC2942::getBattLvl() {
     std::float_t retVal =  0.0f;
-    retVal = ((LTC2942::load_ - LTC2942::limitLoad_) / (10026.855f - LTC2942::limitLoad_)) * 100.0f;
+    retVal = ((LTC2942::load_ - LTC2942::limitLoad_) / ((LTC2942::BATT_CAPACITY * LTC2942::COULOMBS_CAPACITY_RATE) - LTC2942::limitLoad_)) * 100.0f;
     LTC2942::loadDt_ = retVal;
     if(retVal > 100.0f)
         return 100.0f;
@@ -70,6 +81,14 @@ std::float_t LTC2942::getBattLvl() {
     else {
         return retVal;
     }
+}
+
+std::float_t LTC2942::getLoad() {
+    return this->status.load;
+}
+
+std::float_t LTC2942::getIntensityCurrent() {
+    return this->status.current;
 }
 
 bool LTC2942::powerDown() {
@@ -117,7 +136,7 @@ bool LTC2942::readCharge(std::uint16_t &refValue){
     int dataL = 0, dataH = 0;
     if(this->readDevice(CHARGE_CUMUL_H, dataH) &&
        this->readDevice(CHARGE_CUMUL_L, dataL)){
-        this->charge_ = ((static_cast<std::uint16_t>(dataH) << static_cast<uint16_t>(8)) |
+        this->charge_ = ((static_cast<std::uint16_t>(dataH) << 8) |
                          static_cast<std::uint16_t>(dataL));
         refValue = this->charge_;
         return true;
@@ -126,7 +145,11 @@ bool LTC2942::readCharge(std::uint16_t &refValue){
 }
 
 bool LTC2942::setChargeRegister(std::uint16_t charge) {
-    if(this->writeDevice(CHARGE_CUMUL_H, charge)){
+    std::uint8_t regLow, regHigh;
+    regLow = static_cast<std::uint8_t>(charge);
+    regHigh = static_cast<std::uint8_t>(charge >> 8);
+    if(this->writeDevice(CHARGE_CUMUL_H, regHigh) &&
+       this->writeDevice(CHARGE_CUMUL_L, regLow)) {
         return true;
     }
     return false;

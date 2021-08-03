@@ -40,6 +40,7 @@ public:
         if (OptionSetDate->objectName().isEmpty())
             OptionSetDate->setObjectName(QStringLiteral("OptionSetDate"));
         OptionSetDate->resize(320, 314);
+        OptionSetDate->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(OptionSetDate);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 314));
@@ -68,7 +69,7 @@ public:
         l_day_value->setPalette(palette);
         QFont font;
         font.setFamily(QStringLiteral("Swis721 Cn BT"));
-        font.setPointSize(30);
+        font.setPointSize(24);
         font.setBold(false);
         font.setWeight(50);
         l_day_value->setFont(font);
@@ -120,13 +121,18 @@ public:
         pb_day_down->setFlat(true);
         l_month_value = new QLabel(widget);
         l_month_value->setObjectName(QStringLiteral("l_month_value"));
-        l_month_value->setGeometry(QRect(100, 120, 121, 61));
+        l_month_value->setGeometry(QRect(80, 120, 161, 61));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush);
         palette2.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
         palette2.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         l_month_value->setPalette(palette2);
-        l_month_value->setFont(font);
+        QFont font2;
+        font2.setFamily(QStringLiteral("Swis721 Cn BT"));
+        font2.setPointSize(20);
+        font2.setBold(false);
+        font2.setWeight(50);
+        l_month_value->setFont(font2);
         l_month_value->setStyleSheet(QStringLiteral("border-image: url(:/icons/general/fondo_transparente.png);"));
         l_month_value->setAlignment(Qt::AlignCenter);
         pb_year_up = new QPushButton(widget);
@@ -170,7 +176,7 @@ public:
         l_define_date_back->setText(QApplication::translate("OptionSetDate", "Definir Fecha", nullptr));
         pb_month_down->setText(QString());
         pb_day_down->setText(QString());
-        l_month_value->setText(QApplication::translate("OptionSetDate", "Enero", nullptr));
+        l_month_value->setText(QApplication::translate("OptionSetDate", "ENERO", nullptr));
         pb_year_up->setText(QString());
         pb_year_down->setText(QString());
         l_year_value->setText(QApplication::translate("OptionSetDate", "2021", nullptr));

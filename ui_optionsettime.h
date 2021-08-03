@@ -38,6 +38,7 @@ public:
         if (OptionSetTime->objectName().isEmpty())
             OptionSetTime->setObjectName(QStringLiteral("OptionSetTime"));
         OptionSetTime->resize(320, 314);
+        OptionSetTime->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(OptionSetTime);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 314));
@@ -88,12 +89,22 @@ public:
         l_define_time_back->setObjectName(QStringLiteral("l_define_time_back"));
         l_define_time_back->setGeometry(QRect(0, 0, 320, 73));
         QPalette palette1;
+        palette1.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette1.setBrush(QPalette::Active, QPalette::Text, brush);
+        palette1.setBrush(QPalette::Active, QPalette::ButtonText, brush);
+        palette1.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette1.setBrush(QPalette::Inactive, QPalette::Text, brush);
+        palette1.setBrush(QPalette::Inactive, QPalette::ButtonText, brush);
+        palette1.setBrush(QPalette::Disabled, QPalette::WindowText, brush);
+        palette1.setBrush(QPalette::Disabled, QPalette::Text, brush);
+        palette1.setBrush(QPalette::Disabled, QPalette::ButtonText, brush);
         l_define_time_back->setPalette(palette1);
         QFont font1;
         font1.setFamily(QStringLiteral("Segoe UI"));
         font1.setPointSize(20);
         l_define_time_back->setFont(font1);
         l_define_time_back->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"color: rgb(62, 167, 132);\n"
 ""));
         l_define_time_back->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
         l_define_time_back->setMargin(6);

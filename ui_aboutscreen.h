@@ -29,18 +29,19 @@ public:
         if (AboutScreen->objectName().isEmpty())
             AboutScreen->setObjectName(QStringLiteral("AboutScreen"));
         AboutScreen->resize(320, 322);
+        AboutScreen->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(AboutScreen);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 322));
         widget->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         l_about_back = new MyLabelAnimated(widget);
         l_about_back->setObjectName(QStringLiteral("l_about_back"));
-        l_about_back->setGeometry(QRect(0, 0, 320, 84));
+        l_about_back->setGeometry(QRect(0, 2, 320, 74));
         l_about_back->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
-"border-image: url(:/icons/main_menu/general_menu/about_button.png);"));
+"border-image: url(:/icons/main_menu/general_menu/about_back_button.png);"));
         label = new QLabel(widget);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(0, 70, 320, 251));
+        label->setGeometry(QRect(0, 60, 320, 261));
         QFont font;
         font.setFamily(QStringLiteral("Swis721 Lt BT"));
         font.setPointSize(10);

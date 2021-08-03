@@ -16,7 +16,9 @@ public:
 
 
     void setCharge(std::float_t charge);
-    std::float_t getBattLvl();
+
+
+
 
     bool powerDown();
     bool powerUp();
@@ -106,6 +108,28 @@ public:
         }
     }controlReg;
 
+    struct BatteryStatus{
+        std::float_t load;
+        std::float_t voltage;
+        std::float_t current;
+        std::float_t limitLoad;
+
+        BatteryStatus(std::float_t initLoad = 0.0f) :
+            load(initLoad),
+            voltage(0.0f),
+            current(0.0f),
+            limitLoad(0.0f)
+        {}
+
+        void reset(){
+            current = 0.0f;
+            voltage = 0.0f;
+            limitLoad = 0.0f;
+            load = BATT_CAPACITY * COULOMBS_CAPACITY_RATE / 20.0f;
+        }
+
+    }status;
+
 private:
     std::uint16_t temperature_;
     std::uint16_t voltage_;
@@ -120,6 +144,14 @@ private:
     static std::float_t load_;
     static std::float_t limitLoad_;
     static std::float_t loadDt_;
+
+    static const std::float_t BATT_CAPACITY;
+    static const std::float_t COULOMBS_CAPACITY_RATE;
+    static const std::float_t BATT_CHARGE_REG_RESOLUTION;
+
+    std::float_t getLoad();
+    std::float_t getIntensityCurrent();
+    std::float_t getBattLvl();
 
     bool state_;
     int identifier_;
