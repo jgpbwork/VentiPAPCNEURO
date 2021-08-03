@@ -35,8 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
     main_screen->hide();
     QTimer::singleShot(5000, this, &MainWindow::initApp);
 
-    connect(&timer, &QTimer::timeout, this, &MainWindow::setRandomValue);
-    timer.setInterval(1000);
+//    connect(&timer, &QTimer::timeout, this, &MainWindow::setRandomValue);
+//    timer.setInterval(1000);
     ///TODO Set timer to Turn On and Off Screen every 5 sec. !!!10 Sec off --> 5 Sec on
     /// Set On/Off Time setting adjustable from menu.
 //    timer.start();
@@ -63,7 +63,6 @@ void MainWindow::initApp(){
     if(main_screen){
         main_screen->show();
     }
-    setOxygenValue(20);
 }
 
 void MainWindow::alarmType(ThrAlarm::AlarmPriority type) {
