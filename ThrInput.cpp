@@ -4,6 +4,8 @@
 #include <wiringPiI2C.h>
 #include <sys/time.h>
 
+#define MAX_COUNT 30
+
 ThrInput::ThrInput(QObject *parent) : QObject(),
                                       Singleton(this) {
     Q_UNUSED(parent)
@@ -68,6 +70,7 @@ void ThrInput::ThrInputRun() {
 //    qDebug() << "ThrInput's inner thraed: " << ThrInput::instance().qThrInput_->thread();
 //    ThrInput::instance().thread()->wait();
     std::uint16_t lastDataADC = 0, battCharge = 0;
+    std::uint8_t loop = MAX_COUNT;
     float val = 0.0f;
     float engValue = 0.0f, battVoltage = 0.0f, battTemp = 0.0f;
     ThrInput::instance().drvRtc.start();
@@ -81,6 +84,7 @@ void ThrInput::ThrInputRun() {
     {
         //ThrInput::instance().sensor->waitForReadyRead(Q_WAIT_FOREVER);  ///wait forever
         //ThrInput::instance().validateReading();      
+
         lastDataADC = 0;
         val = 0.0f;
         engValue = 0.0f;
@@ -101,8 +105,12 @@ void ThrInput::ThrInputRun() {
         if(ThrInput::instance().drvBattGauge.readTemperature(battTemp)){
             qDebug() << "BattTemperature: " << battTemp;
         }
-        if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
-            qDebug() << "BattCharge: " << battCharge;
+        if(!(--loop)){
+            battCharge = 0;
+            if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
+                qDebug() << "****BattCharge: " << battCharge << " ****";
+            }
+            loop = MAX_COUNT;
         }
 
         /// Continue to read RTC
