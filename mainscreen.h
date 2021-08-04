@@ -22,9 +22,12 @@ public:
     ~MainScreen();
 
     void setOxygenImage(QString image);
+    void setValueText(QString text);
+    void emitAlarm(bool);
 
 public slots:
-    void checkColorOfDisplay(double value);
+    void checkFontOfDisplay(double value);
+    void checkFontOfDisplay(QString text);
     void setOxygenValue(double value);
     void setDate(QDate date);
     void setTime(QTime time);

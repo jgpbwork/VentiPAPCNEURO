@@ -40,6 +40,8 @@ public:
     MainScreen *getMainScreenInstance();
 
     void setMainScreenImage(QString image_name);
+    void setMainScreenValueText(QString text);
+    void turnOffAlarm();
     void unBlockDisplayValue();
     QJsonObject getJsonObjectStateErrorCalibration();
     QJsonObject getJsonObjectStateCancelCalibration();
@@ -71,7 +73,7 @@ private:
     QTimer minCalTimer, maxCalTimer;
 
     double minCalValue = -1;
-    double maxCalValue = -1;
+    double maxCalValue = -2;
 
 };
 

@@ -40,7 +40,8 @@ public:
         if (OptionAlarmLimit->objectName().isEmpty())
             OptionAlarmLimit->setObjectName(QStringLiteral("OptionAlarmLimit"));
         OptionAlarmLimit->resize(320, 314);
-        OptionAlarmLimit->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
+        OptionAlarmLimit->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"border-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(OptionAlarmLimit);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 314));

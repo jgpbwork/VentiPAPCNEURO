@@ -14,7 +14,8 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);</string>
+   <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);
+border-image: url(:/icons/general/fondo_transparente.png);</string>
   </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">

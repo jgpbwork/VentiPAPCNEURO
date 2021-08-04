@@ -28,6 +28,7 @@ OptionCalibration::~OptionCalibration()
 }
 
 void OptionCalibration::initMinCalibration(){
+    turnOffAlarm();
     minCalibrationProgress = 0;
     ui->pbar_calibration_state_progress->setValue(minCalibrationProgress);
     QEventLoop loop;
@@ -40,6 +41,7 @@ void OptionCalibration::initMinCalibration(){
 }
 void OptionCalibration::initMaxCalibration(){
     maxCalibrationProgress = 0;
+    setMainScreenValueText("...");
     ui->pbar_calibration_state_progress->setValue(maxCalibrationProgress);
     QEventLoop loop;
     connect(this, &OptionCalibration::maxCalibrationEnded, &loop, &QEventLoop::quit);
@@ -50,7 +52,9 @@ void OptionCalibration::initMaxCalibration(){
     navigateNextState();
 }
 void OptionCalibration::incProgressMinCalibration(){
+
     minCalibrationProgress += CAL_INCREASE_VALUE;
+    setMainScreenValueText("...");
     ui->pbar_calibration_state_progress->setValue(minCalibrationProgress);
     if(minCalibrationProgress >= 80){
         if(minCalValue >= 0){
@@ -85,6 +89,7 @@ void OptionCalibration::incProgressMaxCalibration(){
         emit maxCalibrationEnded();
     }
 }void OptionCalibration::on_l_calibration_back_clicked(){
+    setMainScreenValueText("--");
     unBlockDisplayValue();
     this->close();
     emit closing();
@@ -102,6 +107,26 @@ void OptionCalibration::on_l_calibration_state_button_clicked()
 }
 void OptionCalibration::navigateNextState(){
     currentState++;
+
+    if(currentState >= jsonArrayStates.size() - 1){
+        double m = 79.1/(maxCalValue - minCalValue);
+        double n = 100 - (maxCalValue*(GlobalFunctions::m_slope_value));
+
+         qDebug()<<"calibration m_slope_value" << m;
+         qDebug()<<"calibration n_value" << n;
+        if(!(m > 0
+                && (n < 10
+                    && n > -10))){
+            QString mess = "Error configurando calibracion"
+                           ", reintente calibrar";
+            GlobalFunctions::setWarningMessage(this->parentWidget()->parentWidget(), mess + "\n m = "
+            + QString::number(m) + "\n n = " + QString::number(n));
+        }
+        currentState = 0;
+        currentStateJsonObject = getJsonObjectStateCancelCalibration();
+        setCurrentState(currentStateJsonObject);
+        return;
+    }
     if(currentState >= jsonArrayStates.size()){
 
         GlobalFunctions::m_slope_value = 79.1/(maxCalValue - minCalValue);
@@ -116,16 +141,7 @@ void OptionCalibration::navigateNextState(){
             GlobalFunctions::saveData();
             on_l_calibration_back_clicked();
         }
-        else{
-            QString mess = "Error de calibracion"
-                           ", reintente calibrar";
-            GlobalFunctions::setErrorMessage(this, mess + "\n m = " 
-            + QString::number(GlobalFunctions::m_slope_value) + "\n n = " + QString::number(GlobalFunctions::n_value));
-            QTimer::singleShot(4000, this, &OptionCalibration::
-                               on_l_calibration_back_clicked);
-        }
 
-        return;
     }
     currentStateJsonObject = jsonArrayStates.at(currentState).toObject();
     setCurrentState(currentStateJsonObject);
@@ -147,6 +163,18 @@ MainScreen* OptionCalibration::getMainScreenInstance(){
     }else{
         qDebug()<<"Casteo ERROR";
         return nullptr;
+    }
+}
+void OptionCalibration::turnOffAlarm(){
+    MainScreen *mainScreen = getMainScreenInstance();
+    if(mainScreen){
+        mainScreen->emitAlarm(false);
+    }
+}
+void OptionCalibration::setMainScreenValueText(QString text){
+    MainScreen *mainScreen = getMainScreenInstance();
+    if(mainScreen){
+        mainScreen->setValueText(text);
     }
 }
 void OptionCalibration::setMainScreenImage(QString image_name){

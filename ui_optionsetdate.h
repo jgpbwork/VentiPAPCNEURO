@@ -40,7 +40,8 @@ public:
         if (OptionSetDate->objectName().isEmpty())
             OptionSetDate->setObjectName(QStringLiteral("OptionSetDate"));
         OptionSetDate->resize(320, 314);
-        OptionSetDate->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
+        OptionSetDate->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"border-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(OptionSetDate);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 314));

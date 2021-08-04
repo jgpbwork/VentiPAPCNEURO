@@ -143,9 +143,6 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess){
     eff->setColor(QColor(Qt::red));
     widget->setGraphicsEffect(eff);
 
-    widget_blur->show();
-    widget->show();
-    widget->raise();
 
     QPushButton *accept_button = new QPushButton(widget);
     QIcon icon_accept(":icons/main_menu/calibration_menu/ok.png");
@@ -155,9 +152,14 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess){
     accept_button->setText("ACEPTAR");
     accept_button->setFixedSize(100, 30);
     accept_button->move(190,110);
+    accept_button->raise();
 
     connect(accept_button, &QPushButton::clicked, widget, &QWidget::close);
     connect(accept_button, &QPushButton::clicked, widget_blur, &QWidget::close);
+
+    widget_blur->show();
+    widget->show();
+    widget->raise();
 
     return true;
 }

@@ -31,11 +31,13 @@ public:
         if (MainMenu->objectName().isEmpty())
             MainMenu->setObjectName(QStringLiteral("MainMenu"));
         MainMenu->resize(320, 345);
-        MainMenu->setStyleSheet(QStringLiteral(""));
+        MainMenu->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"border-image: url(:/icons/general/fondo_transparente.png);"));
         widget_menu = new MyWidgetAnimated(MainMenu);
         widget_menu->setObjectName(QStringLiteral("widget_menu"));
         widget_menu->setGeometry(QRect(0, 0, 320, 345));
-        widget_menu->setStyleSheet(QStringLiteral("background-image: url(:/icons/main_screen/widget_settings_on.png);"));
+        widget_menu->setStyleSheet(QLatin1String("background-image: url(:/icons/main_screen/widget_settings_on.png);\n"
+"border-image: url(:/icons/general/fondo_transparente.png);"));
         l_calibration = new MyLabelAnimated(widget_menu);
         l_calibration->setObjectName(QStringLiteral("l_calibration"));
         l_calibration->setGeometry(QRect(0, 140, 320, 84));

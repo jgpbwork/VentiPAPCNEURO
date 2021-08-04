@@ -38,7 +38,8 @@ public:
         if (OptionSetTime->objectName().isEmpty())
             OptionSetTime->setObjectName(QStringLiteral("OptionSetTime"));
         OptionSetTime->resize(320, 314);
-        OptionSetTime->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
+        OptionSetTime->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"border-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(OptionSetTime);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 314));

@@ -32,7 +32,8 @@ public:
         if (OptionDateTime->objectName().isEmpty())
             OptionDateTime->setObjectName(QStringLiteral("OptionDateTime"));
         OptionDateTime->resize(320, 320);
-        OptionDateTime->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
+        OptionDateTime->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"border-image: url(:/icons/general/fondo_transparente.png);"));
         l_date_time_back = new MyLabelAnimated(OptionDateTime);
         l_date_time_back->setObjectName(QStringLiteral("l_date_time_back"));
         l_date_time_back->setGeometry(QRect(0, 0, 320, 75));

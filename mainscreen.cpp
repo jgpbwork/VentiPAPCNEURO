@@ -129,6 +129,15 @@ void MainScreen::setTime(QTime time){
     }
 }
 
+void MainScreen::emitAlarm(bool active){
+    if(active) {
+        emit alarmOn();
+    }
+    else {
+        emit alarmOff();
+    }
+}
+
 void MainScreen::setOxygenValue(double value)
 {
     GlobalFunctions::lastSettedValue = value;
@@ -152,7 +161,7 @@ void MainScreen::setOxygenValue(double value)
             ui->widget_o2_porcentile->hide();
             emit alarmOn();
             emit alarmType(ThrAlarm::P_HIGH);
-            checkColorOfDisplay(value);
+            checkFontOfDisplay(value);
 
             ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
         }
@@ -196,7 +205,7 @@ void MainScreen::setOxygenValue(double value)
         ui->l_oxygen_value->setStyleSheet(style);
     }
 
-    checkColorOfDisplay(value);
+    checkFontOfDisplay(value);
 
     if(!blockedDisplayValue){
         ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
@@ -204,8 +213,11 @@ void MainScreen::setOxygenValue(double value)
     GlobalFunctions::lastSettedValue = value;
 }
 
-void MainScreen::checkColorOfDisplay(double value){
-    if(QString::number(value, 'f', 0).size() >= 3){
+void MainScreen::checkFontOfDisplay(double value){
+    checkFontOfDisplay(QString::number(value, 'f', 0));
+}
+void MainScreen::checkFontOfDisplay(QString text){
+    if(text.size() >= 3){
         QFont f = ui->l_oxygen_value->font();
         if(shownMenu){
             f.setPointSize(24);
@@ -226,7 +238,11 @@ void MainScreen::checkColorOfDisplay(double value){
         ui->l_oxygen_value->setFont(f);
     }
 }
-
+void MainScreen::setValueText(QString text){
+    blockedDisplayValue = true;
+    ui->l_oxygen_value->setText(text);
+    ui->l_oxygen_value->raise();
+}
 void MainScreen::setOxygenImage(QString image)
 {
     blockedDisplayValue = true;
@@ -250,9 +266,7 @@ void MainScreen::showWidgetMenu(){
 
         ui->l_oxygen_value->move(125, 70);
         ui->l_oxygen_value->setFixedSize(70, 70);
-        QFont f = ui->l_oxygen_value->font();
-        f.setPointSize(50);
-        ui->l_oxygen_value->setFont(f);
+        checkFontOfDisplay(ui->l_oxygen_value->text());
         ui->widget_o2_porcentile_mini->show();
         ui->widget_max_value->hide();
         ui->widget_o2_porcentile->hide();
@@ -265,9 +279,7 @@ void MainScreen::hideWidgetMenu(){
         shownMenu = false;
         ui->l_oxygen_value->move(50, 130);
         ui->l_oxygen_value->setFixedSize(221, 221);
-        QFont f = ui->l_oxygen_value->font();
-        f.setPointSize(180);
-        ui->l_oxygen_value->setFont(f);
+        checkFontOfDisplay(ui->l_oxygen_value->text());
         ui->widget_o2_porcentile_mini->hide();
         ui->widget_max_value->show();
         ui->widget_o2_porcentile->show();

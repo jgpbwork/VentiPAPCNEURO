@@ -32,7 +32,8 @@ public:
         if (OptionGeneral->objectName().isEmpty())
             OptionGeneral->setObjectName(QStringLiteral("OptionGeneral"));
         OptionGeneral->resize(320, 322);
-        OptionGeneral->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
+        OptionGeneral->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+"border-image: url(:/icons/general/fondo_transparente.png);"));
         widget = new QWidget(OptionGeneral);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(0, 0, 320, 322));

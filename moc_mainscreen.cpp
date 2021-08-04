@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainScreen_t {
-    QByteArrayData data[20];
-    char stringdata0[232];
+    QByteArrayData data[22];
+    char stringdata0[256];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,26 +38,29 @@ QT_MOC_LITERAL(3, 25, 7), // "alarmOn"
 QT_MOC_LITERAL(4, 33, 8), // "alarmOff"
 QT_MOC_LITERAL(5, 42, 9), // "alarmType"
 QT_MOC_LITERAL(6, 52, 23), // "ThrAlarm::AlarmPriority"
-QT_MOC_LITERAL(7, 76, 14), // "setOxygenValue"
-QT_MOC_LITERAL(8, 91, 5), // "value"
-QT_MOC_LITERAL(9, 97, 7), // "setDate"
-QT_MOC_LITERAL(10, 105, 4), // "date"
-QT_MOC_LITERAL(11, 110, 7), // "setTime"
-QT_MOC_LITERAL(12, 118, 4), // "time"
-QT_MOC_LITERAL(13, 123, 22), // "setBlockedDisplayValue"
-QT_MOC_LITERAL(14, 146, 1), // "b"
-QT_MOC_LITERAL(15, 148, 22), // "getBlockedDisplayValue"
-QT_MOC_LITERAL(16, 171, 15), // "emitMenuClicked"
-QT_MOC_LITERAL(17, 187, 14), // "hideWidgetMenu"
-QT_MOC_LITERAL(18, 202, 14), // "showWidgetMenu"
-QT_MOC_LITERAL(19, 217, 14) // "setAlarmLimits"
+QT_MOC_LITERAL(7, 76, 18), // "checkFontOfDisplay"
+QT_MOC_LITERAL(8, 95, 5), // "value"
+QT_MOC_LITERAL(9, 101, 4), // "text"
+QT_MOC_LITERAL(10, 106, 14), // "setOxygenValue"
+QT_MOC_LITERAL(11, 121, 7), // "setDate"
+QT_MOC_LITERAL(12, 129, 4), // "date"
+QT_MOC_LITERAL(13, 134, 7), // "setTime"
+QT_MOC_LITERAL(14, 142, 4), // "time"
+QT_MOC_LITERAL(15, 147, 22), // "setBlockedDisplayValue"
+QT_MOC_LITERAL(16, 170, 1), // "b"
+QT_MOC_LITERAL(17, 172, 22), // "getBlockedDisplayValue"
+QT_MOC_LITERAL(18, 195, 15), // "emitMenuClicked"
+QT_MOC_LITERAL(19, 211, 14), // "hideWidgetMenu"
+QT_MOC_LITERAL(20, 226, 14), // "showWidgetMenu"
+QT_MOC_LITERAL(21, 241, 14) // "setAlarmLimits"
 
     },
     "MainScreen\0menu_clicked\0\0alarmOn\0"
     "alarmOff\0alarmType\0ThrAlarm::AlarmPriority\0"
-    "setOxygenValue\0value\0setDate\0date\0"
-    "setTime\0time\0setBlockedDisplayValue\0"
-    "b\0getBlockedDisplayValue\0emitMenuClicked\0"
+    "checkFontOfDisplay\0value\0text\0"
+    "setOxygenValue\0setDate\0date\0setTime\0"
+    "time\0setBlockedDisplayValue\0b\0"
+    "getBlockedDisplayValue\0emitMenuClicked\0"
     "hideWidgetMenu\0showWidgetMenu\0"
     "setAlarmLimits"
 };
@@ -69,7 +72,7 @@ static const uint qt_meta_data_MainScreen[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -77,21 +80,23 @@ static const uint qt_meta_data_MainScreen[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   79,    2, 0x06 /* Public */,
-       3,    0,   80,    2, 0x06 /* Public */,
-       4,    0,   81,    2, 0x06 /* Public */,
-       5,    1,   82,    2, 0x06 /* Public */,
+       1,    0,   89,    2, 0x06 /* Public */,
+       3,    0,   90,    2, 0x06 /* Public */,
+       4,    0,   91,    2, 0x06 /* Public */,
+       5,    1,   92,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    1,   85,    2, 0x0a /* Public */,
-       9,    1,   88,    2, 0x0a /* Public */,
-      11,    1,   91,    2, 0x0a /* Public */,
-      13,    1,   94,    2, 0x0a /* Public */,
-      15,    0,   97,    2, 0x0a /* Public */,
-      16,    0,   98,    2, 0x08 /* Private */,
-      17,    0,   99,    2, 0x08 /* Private */,
-      18,    0,  100,    2, 0x08 /* Private */,
-      19,    0,  101,    2, 0x08 /* Private */,
+       7,    1,   95,    2, 0x0a /* Public */,
+       7,    1,   98,    2, 0x0a /* Public */,
+      10,    1,  101,    2, 0x0a /* Public */,
+      11,    1,  104,    2, 0x0a /* Public */,
+      13,    1,  107,    2, 0x0a /* Public */,
+      15,    1,  110,    2, 0x0a /* Public */,
+      17,    0,  113,    2, 0x0a /* Public */,
+      18,    0,  114,    2, 0x08 /* Private */,
+      19,    0,  115,    2, 0x08 /* Private */,
+      20,    0,  116,    2, 0x08 /* Private */,
+      21,    0,  117,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -101,9 +106,11 @@ static const uint qt_meta_data_MainScreen[] = {
 
  // slots: parameters
     QMetaType::Void, QMetaType::Double,    8,
-    QMetaType::Void, QMetaType::QDate,   10,
-    QMetaType::Void, QMetaType::QTime,   12,
-    QMetaType::Void, QMetaType::Bool,   14,
+    QMetaType::Void, QMetaType::QString,    9,
+    QMetaType::Void, QMetaType::Double,    8,
+    QMetaType::Void, QMetaType::QDate,   12,
+    QMetaType::Void, QMetaType::QTime,   14,
+    QMetaType::Void, QMetaType::Bool,   16,
     QMetaType::Bool,
     QMetaType::Void,
     QMetaType::Void,
@@ -123,16 +130,18 @@ void MainScreen::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 1: _t->alarmOn(); break;
         case 2: _t->alarmOff(); break;
         case 3: _t->alarmType((*reinterpret_cast< ThrAlarm::AlarmPriority(*)>(_a[1]))); break;
-        case 4: _t->setOxygenValue((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 5: _t->setDate((*reinterpret_cast< QDate(*)>(_a[1]))); break;
-        case 6: _t->setTime((*reinterpret_cast< QTime(*)>(_a[1]))); break;
-        case 7: _t->setBlockedDisplayValue((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 8: { bool _r = _t->getBlockedDisplayValue();
+        case 4: _t->checkFontOfDisplay((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 5: _t->checkFontOfDisplay((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 6: _t->setOxygenValue((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 7: _t->setDate((*reinterpret_cast< QDate(*)>(_a[1]))); break;
+        case 8: _t->setTime((*reinterpret_cast< QTime(*)>(_a[1]))); break;
+        case 9: _t->setBlockedDisplayValue((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 10: { bool _r = _t->getBlockedDisplayValue();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 9: _t->emitMenuClicked(); break;
-        case 10: _t->hideWidgetMenu(); break;
-        case 11: _t->showWidgetMenu(); break;
-        case 12: _t->setAlarmLimits(); break;
+        case 11: _t->emitMenuClicked(); break;
+        case 12: _t->hideWidgetMenu(); break;
+        case 13: _t->showWidgetMenu(); break;
+        case 14: _t->setAlarmLimits(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -193,13 +202,13 @@ int MainScreen::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 13)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 13)
+        if (_id < 15)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 13;
+        _id -= 15;
     }
     return _id;
 }

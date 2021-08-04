@@ -14,7 +14,8 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);
+border-image: url(:/icons/general/fondo_transparente.png);</string>
   </property>
   <widget class="MyWidgetAnimated" name="widget_menu" native="true">
    <property name="geometry">
@@ -26,7 +27,8 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/icons/main_screen/widget_settings_on.png);</string>
+    <string notr="true">background-image: url(:/icons/main_screen/widget_settings_on.png);
+border-image: url(:/icons/general/fondo_transparente.png);</string>
    </property>
    <widget class="MyLabelAnimated" name="l_calibration">
     <property name="geometry">

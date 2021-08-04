@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    connect(this, &MainWindow::alarmOn, &thrAlarm, &ThrAlarm::alarmOn);
 //    connect(this, &MainWindow::alarmOff, &thrAlarm, &ThrAlarm::alarmOff);
 
-    qDebug()<<"Application changes ok" << "66" <<"********************************";
+    qDebug()<<"Application changes ok" << "111" <<"********************************";
 }
 
 MainWindow::~MainWindow()
