@@ -36,4 +36,4 @@ moc_*.o
 
 Doc/Html/*
 Doc/
-
+.vscode
