@@ -148,6 +148,7 @@ bool LTC2942::getCtrlReg(std::uint8_t &value){
     int data = 0;
     if (this->readDevice(CONTROL_REG, data)){
         value = static_cast<std::uint8_t>(data);
+        // this->controlReg = reinterpret_cast<LTC2942::controlReg>(value);
         return true;
     }
     return false;
