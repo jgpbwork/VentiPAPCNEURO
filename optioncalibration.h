@@ -41,8 +41,10 @@ public:
 
     void setMainScreenImage(QString image_name);
     void setMainScreenValueText(QString text);
+    void setMainScreenBatteryText(QString text);
     void turnOffAlarm();
     void unBlockDisplayValue();
+    void blockDisplayValue();
     QJsonObject getJsonObjectStateErrorCalibration();
     QJsonObject getJsonObjectStateCancelCalibration();
 signals:

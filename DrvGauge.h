@@ -93,7 +93,7 @@ public:
         std::uint8_t AlertCharge    : 2;
         std::uint8_t Shutdown       : 1;
 
-        ControlReg() : AdcMode(LTC2942::SLEEP),
+        ControlReg() : AdcMode(LTC2942::AUTO_MODE),
                        Prescaler(LTC2942::M128),
                        AlertCharge(LTC2942::ALERT_OUTPUT),
                        Shutdown(0)

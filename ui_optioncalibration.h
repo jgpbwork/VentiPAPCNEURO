@@ -72,6 +72,7 @@ public:
 "	text-align: center;\n"
 "}"));
         pt_calibration_state_text->setFrameShadow(QFrame::Plain);
+        pt_calibration_state_text->setReadOnly(true);
         l_calibration_state_footer_text_1 = new QLabel(widget);
         l_calibration_state_footer_text_1->setObjectName(QStringLiteral("l_calibration_state_footer_text_1"));
         l_calibration_state_footer_text_1->setGeometry(QRect(60, 290, 201, 31));

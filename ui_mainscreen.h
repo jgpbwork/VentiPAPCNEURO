@@ -114,7 +114,7 @@ public:
         font3.setFamily(QStringLiteral("Segoe UI"));
         font3.setPointSize(14);
         l_battery_icon->setFont(font3);
-        l_battery_icon->setPixmap(QPixmap(QString::fromUtf8(":/icons/general/battery_75.png")));
+        l_battery_icon->setPixmap(QPixmap(QString::fromUtf8(":/icons/general/battery_100.png")));
         l_battery_icon->setScaledContents(true);
         l_battery_icon->setAlignment(Qt::AlignCenter);
         l_lightning = new QLabel(widget_2);
@@ -338,10 +338,10 @@ public:
         MainScreen->setWindowTitle(QApplication::translate("MainScreen", "Form", nullptr));
         l_time->setText(QApplication::translate("MainScreen", "15:00", nullptr));
         l_date->setText(QApplication::translate("MainScreen", "mi\303\251 31/07/2021", nullptr));
-        l_battery_text->setText(QApplication::translate("MainScreen", "5h 12m", nullptr));
+        l_battery_text->setText(QApplication::translate("MainScreen", "...", nullptr));
         l_battery_icon->setText(QString());
         l_lightning->setText(QString());
-        l_oxygen_value->setText(QApplication::translate("MainScreen", "21", nullptr));
+        l_oxygen_value->setText(QApplication::translate("MainScreen", "--", nullptr));
         l_max_value->setText(QApplication::translate("MainScreen", "28", nullptr));
         label_11->setText(QApplication::translate("MainScreen", "max", nullptr));
         l_min_value->setText(QApplication::translate("MainScreen", "21", nullptr));

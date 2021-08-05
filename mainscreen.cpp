@@ -16,6 +16,8 @@ MainScreen::MainScreen(QWidget *parent) :
     setWindowFlags(Qt::CustomizeWindowHint);
 
     ui->l_error_text->hide();
+    ui->l_lightning->hide();
+//    ui->l_battery_text->hide();
 
     main_menu = new MainMenu(this);
     main_menu->hide();
@@ -209,8 +211,8 @@ void MainScreen::setOxygenValue(double value)
 
     if(!blockedDisplayValue){
         ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
+        GlobalFunctions::lastSettedValue = value;
     }
-    GlobalFunctions::lastSettedValue = value;
 }
 
 void MainScreen::checkFontOfDisplay(double value){
@@ -237,6 +239,11 @@ void MainScreen::checkFontOfDisplay(QString text){
         }
         ui->l_oxygen_value->setFont(f);
     }
+}
+
+void MainScreen::setLBatteryText(QString text){
+    ui->l_battery_text->setText(text);
+    ui->l_battery_text->raise();
 }
 void MainScreen::setValueText(QString text){
     blockedDisplayValue = true;

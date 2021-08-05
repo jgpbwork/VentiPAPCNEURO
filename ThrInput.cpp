@@ -88,6 +88,7 @@ void ThrInput::ThrInputRun() {
         lastDataADC = 0;
         val = 0.0f;
         engValue = 0.0f;
+        //ThrInputinstance().drvBattGauge.
         if(!ThrInput::instance().drvAdc.readData(lastDataADC)) {
             ///Signal Device Error Reading...
             continue;

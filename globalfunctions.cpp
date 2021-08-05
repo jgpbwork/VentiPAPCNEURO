@@ -15,9 +15,9 @@
 bool GlobalFunctions::myanimationEnabled = true;
 int GlobalFunctions::configured_min_limit = 21;
 int GlobalFunctions::configured_max_limit = 28;
-double GlobalFunctions::lastSettedValue = -1;
-double GlobalFunctions::m_slope_value = -1;
-double GlobalFunctions::n_value = -1;
+double GlobalFunctions::lastSettedValue = 0;
+double GlobalFunctions::m_slope_value = 100;
+double GlobalFunctions::n_value = 0;
 bool GlobalFunctions::calibrated = false;
 QDateTime GlobalFunctions::dateTime = QDateTime::currentDateTime();
 
@@ -93,6 +93,7 @@ bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess){
     messageText->setPlainText(mess);
     messageText->setFont(f);
     messageText->move(10,55);
+    messageText->setReadOnly(true);
 
     QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(parent);
     eff->setBlurRadius(20);

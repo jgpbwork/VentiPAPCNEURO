@@ -10,6 +10,8 @@ OptionCalibration::OptionCalibration(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    currentState = 0;
+
     jsonArrayStates.append(getJsonObjectStateInitInformation());
     jsonArrayStates.append(getJsonObjectStateInitMinCalibration());
     jsonArrayStates.append(getJsonObjectStateRunningMinCalibration());
@@ -65,6 +67,7 @@ void OptionCalibration::incProgressMinCalibration(){
             minCalValue = GlobalFunctions::lastSettedValue;
             qDebug()<<"minCalValue"<<minCalValue<<"******************************************";
         }
+        setMainScreenBatteryText(QString::number(minCalValue, 'f', 6));
     }
     if(minCalibrationProgress >= 100){
         minCalTimer.stop();
@@ -83,12 +86,14 @@ void OptionCalibration::incProgressMaxCalibration(){
             maxCalValue = GlobalFunctions::lastSettedValue;
             qDebug()<<"maxCalValue"<<maxCalValue<<"******************************************";
         }
+        setMainScreenBatteryText(QString::number(maxCalValue, 'f', 6));
     }
     if(maxCalibrationProgress >= 100){
         maxCalTimer.stop();
         emit maxCalibrationEnded();
     }
-}void OptionCalibration::on_l_calibration_back_clicked(){
+}
+void OptionCalibration::on_l_calibration_back_clicked(){
     setMainScreenValueText("--");
     unBlockDisplayValue();
     this->close();
@@ -108,7 +113,7 @@ void OptionCalibration::on_l_calibration_state_button_clicked()
 void OptionCalibration::navigateNextState(){
     currentState++;
 
-    if(currentState >= jsonArrayStates.size() - 1){
+    if(currentState == jsonArrayStates.size() - 1){
         double m = 79.1/(maxCalValue - minCalValue);
         double n = 100 - (maxCalValue*(GlobalFunctions::m_slope_value));
 
@@ -121,11 +126,11 @@ void OptionCalibration::navigateNextState(){
                            ", reintente calibrar";
             GlobalFunctions::setWarningMessage(this->parentWidget()->parentWidget(), mess + "\n m = "
             + QString::number(m) + "\n n = " + QString::number(n));
+            currentStateJsonObject = getJsonObjectStateCancelCalibration();
+            setCurrentState(currentStateJsonObject);
+            return;
         }
-        currentState = 0;
-        currentStateJsonObject = getJsonObjectStateCancelCalibration();
-        setCurrentState(currentStateJsonObject);
-        return;
+
     }
     if(currentState >= jsonArrayStates.size()){
 
@@ -171,6 +176,12 @@ void OptionCalibration::turnOffAlarm(){
         mainScreen->emitAlarm(false);
     }
 }
+void OptionCalibration::setMainScreenBatteryText(QString text){
+    MainScreen *mainScreen = getMainScreenInstance();
+    if(mainScreen){
+        mainScreen->setLBatteryText(text);
+    }
+}
 void OptionCalibration::setMainScreenValueText(QString text){
     MainScreen *mainScreen = getMainScreenInstance();
     if(mainScreen){
@@ -187,6 +198,12 @@ void OptionCalibration::unBlockDisplayValue(){
     MainScreen *mainScreen = getMainScreenInstance();
     if(mainScreen){
         mainScreen->setBlockedDisplayValue(false);
+    }
+}
+void OptionCalibration::blockDisplayValue(){
+    MainScreen *mainScreen = getMainScreenInstance();
+    if(mainScreen){
+        mainScreen->setBlockedDisplayValue(true);
     }
 }
 

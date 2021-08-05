@@ -23,6 +23,7 @@ public:
 
     void setOxygenImage(QString image);
     void setValueText(QString text);
+    void setLBatteryText(QString text);
     void emitAlarm(bool);
 
 public slots:

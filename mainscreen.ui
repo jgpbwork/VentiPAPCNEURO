@@ -214,7 +214,7 @@
      <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);</string>
     </property>
     <property name="text">
-     <string>5h 12m</string>
+     <string>...</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -276,7 +276,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="assets.qrc">:/icons/general/battery_75.png</pixmap>
+     <pixmap resource="assets.qrc">:/icons/general/battery_100.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -411,7 +411,7 @@
 </string>
    </property>
    <property name="text">
-    <string>21</string>
+    <string>--</string>
    </property>
    <property name="pixmap">
     <pixmap resource="assets.qrc">:/icons/general/alarm_icon.png</pixmap>
