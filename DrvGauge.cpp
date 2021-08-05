@@ -58,6 +58,16 @@ void LTC2942::setCtrlReg(std::uint8_t data) {
     this->controlReg.Shutdown = (data & SHUTDOWN);
 }
 
+bool LTC2942::getCtrlReg(std::uint8_t &value){
+    int data = 0;
+    if (this->readDevice(CONTROL_REG, data)){
+        value = static_cast<std::uint8_t>(data);
+        this->controlReg = *reinterpret_cast<LTC2942::ControlReg*>(&value);
+        return true;
+    }
+    return false;
+}
+
 void LTC2942::setCharge(std::float_t charge) {
      std::uint16_t chargeReg = static_cast<std::uint16_t>((charge / BATT_CHARGE_REG_RESOLUTION));
      this->powerDown();
@@ -144,15 +154,7 @@ bool LTC2942::readCharge(std::uint16_t &refValue){
     return false;
 }
 
-bool LTC2942::getCtrlReg(std::uint8_t &value){
-    int data = 0;
-    if (this->readDevice(CONTROL_REG, data)){
-        value = static_cast<std::uint8_t>(data);
-        // this->controlReg = reinterpret_cast<LTC2942::controlReg>(value);
-        return true;
-    }
-    return false;
-}
+
 
 bool LTC2942::setChargeRegister(std::uint16_t charge) {
     std::uint8_t regLow, regHigh;

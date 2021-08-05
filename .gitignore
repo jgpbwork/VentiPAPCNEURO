@@ -1,15 +1,18 @@
 #ignore thumbnails created by windows
 Thumbs.db
+Makefile
 
 #Prerequisites
 *.d
 
 #Ignore Compiled Object Files 
+*.o
+
 *.slo
 *.lo
-*.o
 *.obj
 moc_*.o
+
 # Precompiled Headers
 *.gch
 *.pch
