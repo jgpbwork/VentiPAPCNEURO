@@ -63,6 +63,12 @@ bool LTC2942::getCtrlReg(std::uint8_t &value){
     if (this->readDevice(CONTROL_REG, data)){
         value = static_cast<std::uint8_t>(data);
         this->controlReg = *reinterpret_cast<LTC2942::ControlReg*>(&value);
+        if(this->controlReg.Shutdown){
+            this->controlReg.AdcMode = LTC2942::AUTO_MODE;
+            this->controlReg.Shutdown = ~LTC2942::SHUTDOWN;
+            value = this->controlReg.value();
+            return this->writeDevice(CONTROL_REG, value);
+        }
         return true;
     }
     return false;
