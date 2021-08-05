@@ -144,6 +144,15 @@ bool LTC2942::readCharge(std::uint16_t &refValue){
     return false;
 }
 
+bool LTC2942::getCtrlReg(std::uint8_t &value){
+    int data = 0;
+    if (this->readDevice(CONTROL_REG, data)){
+        value = static_cast<std::uint8_t>(data);
+        return true;
+    }
+    return false;
+}
+
 bool LTC2942::setChargeRegister(std::uint16_t charge) {
     std::uint8_t regLow, regHigh;
     regLow = static_cast<std::uint8_t>(charge);

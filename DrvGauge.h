@@ -18,6 +18,7 @@ public:
     void setCharge(std::float_t charge);
 
 
+    bool getCtrlReg(std::uint8_t &value);
 
 
     bool powerDown();

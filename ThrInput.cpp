@@ -71,6 +71,7 @@ void ThrInput::ThrInputRun() {
 //    ThrInput::instance().thread()->wait();
     std::uint16_t lastDataADC = 0, battCharge = 0;
     std::uint8_t loop = MAX_COUNT;
+    static std::uint8_t regCtrl=0;
     float val = 0.0f;
     float engValue = 0.0f, battVoltage = 0.0f, battTemp = 0.0f;
     ThrInput::instance().drvRtc.start();
@@ -88,7 +89,9 @@ void ThrInput::ThrInputRun() {
         lastDataADC = 0;
         val = 0.0f;
         engValue = 0.0f;
-        //ThrInputinstance().drvBattGauge.
+        
+        if(!ThrInput::instance().drvBattGauge.getCtrlReg(regCtrl))
+            regCtrl = 0;
         if(!ThrInput::instance().drvAdc.readData(lastDataADC)) {
             ///Signal Device Error Reading...
             continue;

@@ -67,7 +67,7 @@ void OptionCalibration::incProgressMinCalibration(){
             minCalValue = GlobalFunctions::lastSettedValue;
             qDebug()<<"minCalValue"<<minCalValue<<"******************************************";
         }
-        setMainScreenBatteryText(QString::number(minCalValue, 'f', 6));
+        // setMainScreenBatteryText(QString::number(minCalValue, 'f', 6));
     }
     if(minCalibrationProgress >= 100){
         minCalTimer.stop();
@@ -86,7 +86,7 @@ void OptionCalibration::incProgressMaxCalibration(){
             maxCalValue = GlobalFunctions::lastSettedValue;
             qDebug()<<"maxCalValue"<<maxCalValue<<"******************************************";
         }
-        setMainScreenBatteryText(QString::number(maxCalValue, 'f', 6));
+        //setMainScreenBatteryText(QString::number(maxCalValue, 'f', 6));
     }
     if(maxCalibrationProgress >= 100){
         maxCalTimer.stop();

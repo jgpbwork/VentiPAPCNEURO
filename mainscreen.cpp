@@ -143,6 +143,8 @@ void MainScreen::emitAlarm(bool active){
 void MainScreen::setOxygenValue(double value)
 {
     GlobalFunctions::lastSettedValue = value;
+        setLBatteryText(QString::number(value, 'f', 6));
+
     value = GlobalFunctions::getRealValue(value);
 
     value = static_cast<int>(value);
