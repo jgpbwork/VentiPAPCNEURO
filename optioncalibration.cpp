@@ -120,8 +120,8 @@ void OptionCalibration::navigateNextState(){
          qDebug()<<"calibration m_slope_value" << m;
          qDebug()<<"calibration n_value" << n;
         if(!(m > 0
-                && (n < 10
-                    && n > -10))){
+                && (n < 100
+                    && n > -100))){
             QString mess = "Error configurando calibracion"
                            ", reintente calibrar";
             GlobalFunctions::setWarningMessage(this->parentWidget()->parentWidget(), mess + "\n m = "
@@ -140,8 +140,8 @@ void OptionCalibration::navigateNextState(){
          qDebug()<<"calibration m_slope_value" << GlobalFunctions::m_slope_value;
          qDebug()<<"calibration n_value" << GlobalFunctions::n_value;
         if(GlobalFunctions::m_slope_value > 0
-                && (GlobalFunctions::n_value < 10
-                    && GlobalFunctions::n_value > -10)){
+                && (GlobalFunctions::n_value < 100
+                    && GlobalFunctions::n_value > -100)){
             GlobalFunctions::calibrated = true;
             GlobalFunctions::saveData();
             on_l_calibration_back_clicked();

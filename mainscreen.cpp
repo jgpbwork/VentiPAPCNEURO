@@ -17,6 +17,7 @@ MainScreen::MainScreen(QWidget *parent) :
 
     ui->l_error_text->hide();
     ui->l_lightning->hide();
+    ui->l_battery_text->hide();
 
     main_menu = new MainMenu(this);
     main_menu->hide();
@@ -134,12 +135,15 @@ void MainScreen::setOxygenValue(double value)
     GlobalFunctions::lastSettedValue = value;
         setLBatteryText(QString::number(value, 'f', 6));
 
+    if(blockedDisplayValue){
+        return;
+    }
     value = GlobalFunctions::getRealValue(value);
 
     value = static_cast<int>(value);
 
     if(value < MIX_OXY_ALLOWED || value > MAX_OXY_ALLOWED){
-        if(!blockedDisplayValue){
+        
             //            ui->l_oxygen_value->setPixmap(QPixmap(":icons/general/alarm_icon.png"));
             ui->l_oxygen_value->setScaledContents(true);
 
@@ -157,7 +161,7 @@ void MainScreen::setOxygenValue(double value)
             checkFontOfDisplay(value);
 
             ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
-        }
+        
         return;
     }
     else{
@@ -177,7 +181,6 @@ void MainScreen::setOxygenValue(double value)
         ui->l_oxygen_value->setStyleSheet(style);
 
     }
-
     ///TODO if Value is out or Range, start alarm process
     /// if Value is in Range, stop alarm process
 
@@ -200,10 +203,9 @@ void MainScreen::setOxygenValue(double value)
 
     checkFontOfDisplay(value);
 
-    if(!blockedDisplayValue){
-        ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
-        GlobalFunctions::lastSettedValue = value;
-    }
+    ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
+    GlobalFunctions::lastSettedValue = value;
+    
 }
 
 void MainScreen::checkFontOfDisplay(double value){

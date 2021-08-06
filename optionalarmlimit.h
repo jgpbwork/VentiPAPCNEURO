@@ -2,7 +2,7 @@
 #define OPTIONALARMLIMIT_H
 
 #include <QWidget>
-#define MAX_ALARM_CONFIG 50
+#define MAX_ALARM_CONFIG 100
 #define MIN_ALARM_CONFIG 21
 
 namespace Ui {
