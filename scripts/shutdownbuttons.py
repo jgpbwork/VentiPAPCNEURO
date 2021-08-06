@@ -12,7 +12,7 @@ import time
 
 
 # Define GPIO ****************************************************************
-reset_pin = 3  #I do not know what pin Tony is Using for reset
+reset_pin = 3  #Toggle pin 3 and 4 between Hardware versions, Add pin 5 to script to disable shutdown, i2c conflict
 power_off_pin = 4 #I do not know what pin Tony is Using for shutdown
 # End Define GPIO ************************************************************
 
