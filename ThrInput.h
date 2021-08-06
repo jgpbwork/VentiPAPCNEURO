@@ -38,7 +38,7 @@ signals:
     void outOfRange();
 
 public slots:   
-    void readValue();
+   
     void updateReadings(std::float_t oxygenVal, std::float_t battVal);
     void updateDateTime(QDateTime &refValue);
     void setMinimumValue(const QString &value);
@@ -46,7 +46,7 @@ public slots:
 
 private:
     QThread* qThrInput_;    
-//    QSerialPort* sensor;
+
     QString portName_;
 
     ADS1115 drvAdc;

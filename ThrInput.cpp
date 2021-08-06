@@ -12,63 +12,35 @@ ThrInput::ThrInput(QObject *parent) : QObject(),
     this->minVal = 0.0f;
     this->maxVal = 100.0f;
     this->lastReading = 20.9f;
-//    this->sensor = new QSerialPort(this);
 
     /// Low Level Driver Initialization Sequence...
     /// Real Time Clock Initialization.
     /// Analog to Digital Converter for Oxigen Sensor Initialization Sequence...
-
     this->drvAdc.Initialize();
     this->drvRtc.Initialize();    
     this->drvBattGauge.Initialize();
 
     /// Instance Variables Initialization and Synchronization Sequence...
-
     qThrInput_ = QThread::create(&ThrInput::ThrInputRun);
-    if(qThrInput_ != nullptr /*&& this->sensor != nullptr*/){
+    if(qThrInput_ != nullptr){
         qThrInput_->setParent(this);
         this->deviceInit();
 //        qDebug() << "At ThrInput Constructor: " << this->thread();
-//        qDebug() << "ThrInput's QserialPort: " << this->sensor->thread();
 //        qDebug() << "ThrInput's inner thraed: " << this->qThrInput_->thread();
         this->moveToThread(qThrInput_);
         qThrInput_->start();
     }
 }
 
-ThrInput::~ThrInput() {
-    //this->sensor->close();
-}
+ThrInput::~ThrInput() {}
 
-void ThrInput::deviceInit() {
-//    if(sensor != nullptr) {
-//        if(deviceConfigure()) {
-//            QObject::connect(this->sensor, &QSerialPort::readyRead, this, &ThrInput::readValue);
-////            QObject::connect(sensor, SIGNAL(readyRead()), this, SLOT(readValue()));
-////            QMetaMethod signal = QMetaMethod::fromSignal(&QSerialPort::readyRead);
-////            qDebug() << "Device Configured...";
-////            qDebug() << "connected signal: " << signal.name();
-////            qDebug() << signal.methodSignature() << signal.isValid();
-//        }
-//    }
-}
+void ThrInput::deviceInit() {}
 
 bool ThrInput::deviceConfigure() {
-//    this->sensor->setPortName("/dev/serial0");//portName_);
-//    qDebug() << ((this->sensor->open(QSerialPort::ReadOnly) == true) ? "Device open: " : "Device not open") << this->sensor->portName();
-//    this->sensor->setBaudRate(921600);
-//    this->sensor->setDataBits(QSerialPort::Data8);
-//    this->sensor->setFlowControl(QSerialPort::NoFlowControl);
-//    this->sensor->setParity(QSerialPort::NoParity);
-//    this->sensor->setStopBits(QSerialPort::OneStop);
     return true;
 }
 
 void ThrInput::ThrInputRun() {
-//    qDebug() << "ThrInput's new thread Run method: " << ThrInput::instance().thread();
-//    qDebug() << "ThrInput's QserialPort: " << ThrInput::instance().sensor->thread();
-//    qDebug() << "ThrInput's inner thraed: " << ThrInput::instance().qThrInput_->thread();
-//    ThrInput::instance().thread()->wait();
     std::uint16_t lastDataADC = 0, battCharge = 0;
     std::uint8_t loop = MAX_COUNT;
     static std::uint8_t regCtrl=0;
@@ -82,10 +54,7 @@ void ThrInput::ThrInputRun() {
     struct tm *timeInfo;
 
     while(true)
-    {
-        //ThrInput::instance().sensor->waitForReadyRead(Q_WAIT_FOREVER);  ///wait forever
-        //ThrInput::instance().validateReading();      
-
+    {        
         lastDataADC = 0;
         val = 0.0f;
         engValue = 0.0f;
@@ -139,7 +108,6 @@ void ThrInput::validateReading(){
     else{
         emit ThrInput::instance().outOfRange();
     }
-
 }
 
 bool ThrInput::setDateTime(QDateTime currentDate)
@@ -160,26 +128,6 @@ void ThrInput::updateReadings(std::float_t oxygenVal, std::float_t battVal) {
 void ThrInput::updateDateTime(QDateTime &refValue) {
     if(refValue.isValid())
         emit updateRealTimeClock(refValue);
-}
-
-void ThrInput::readValue()
-{
-//    QByteArray bytes = this->sensor->readAll();
-//    qDebug() << "At input Slot: " << this->thread();
-//    qDebug() << "New data has been read...";
-//    qDebug() << "Readed " << bytes.size() << " bytes...";
-////    for(uint8_t index = 0; index < bytes.size(); index++)
-////        qDebug() << "Byte " << index <<": " << bytes.at(index);
-
-//    if(bytes.size() == sizeof(float)) {
-//        float engValue = IEEE_754::convertirDesde_754_32(IEEE_754::convert_Bytes_To_Uint32(bytes));
-////        qDebug() << "Readed value: " << engValue;
-//        this->lastReading = engValue;
-//        emit updateOxygenLevel(QString::number(static_cast<double>(engValue), 'f', 1));
-//    }
-//    else {
-//        this->sensor->flush();
-//    }
 }
 
 void ThrInput::setMinimumValue(const QString& value)
