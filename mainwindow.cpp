@@ -20,9 +20,8 @@
 // Alarm Type (high, medium)
 //
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), 
+                                          ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     if(QApplication::desktop()->width() < 1000){
@@ -35,22 +34,15 @@ MainWindow::MainWindow(QWidget *parent)
     main_screen->hide();
     QTimer::singleShot(5000, this, &MainWindow::initApp);
 
-//    connect(&timer, &QTimer::timeout, this, &MainWindow::setRandomValue);
-//    timer.setInterval(1000);
-    ///TODO Set timer to Turn On and Off Screen every 5 sec. !!!10 Sec off --> 5 Sec on
-    /// Set On/Off Time setting adjustable from menu.
-//    timer.start();
-
     connect(&thrInput, &ThrInput::updateOxygenLevel, this, &MainWindow::setOxygenValue);
     connect(&thrInput, &ThrInput::updateRealTimeClock, this, &MainWindow::setDateTime);
     connect(main_screen, &MainScreen::alarmOn, this, &MainWindow::alarmOn);
     connect(main_screen, &MainScreen::alarmOff, this, &MainWindow::alarmOff);
     connect(main_screen, &MainScreen::alarmType, this, &MainWindow::alarmType);
 
-//    connect(this, &MainWindow::alarmOn, &thrAlarm, &ThrAlarm::alarmOn);
-//    connect(this, &MainWindow::alarmOff, &thrAlarm, &ThrAlarm::alarmOff);
-
-    qDebug()<<"Application changes ok" << "151" <<"********************************";
+    qDebug()<< "Application has Started ok" 
+            << "151" 
+            << "********************************";
 }
 
 MainWindow::~MainWindow()
