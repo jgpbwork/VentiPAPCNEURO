@@ -17,7 +17,7 @@ MainScreen::MainScreen(QWidget *parent) :
 
     ui->l_error_text->hide();
     ui->l_lightning->hide();
-    ui->l_battery_text->hide();
+    // ui->l_battery_text->hide();
 
     main_menu = new MainMenu(this);
     main_menu->hide();
