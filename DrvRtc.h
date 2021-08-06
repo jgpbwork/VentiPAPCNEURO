@@ -57,12 +57,9 @@ private:
         DAY_MAX             = 0x31,
         WDAY_MIN            = 0x01,
         WDAY_MAX            = 0x07,
-        HOUR_MIN            = 0x00,
-        HOUR_MAX            = 0x23,
-        MINUTES_MIN         = 0x00,
-        MINUTES_MAX         = 0x59,
-        SEC_MIN             = 0x00,
-        SEC_MAX             = 0x59,
+
+
+
         HOUR_FORMAT_12      = 0x40,
         SEC_BCD_FORMAT_MASK = 0x7F,
         MIN_BCD_FORMAT_MASK = 0x7F,
@@ -74,6 +71,13 @@ private:
 
 
     };
+
+    static const std::uint8_t SEC_MIN = 0x00;
+    static const std::uint8_t SEC_MAX = 0x59;
+    static const std::uint8_t HOUR_MIN = 0x00;
+    static const std::uint8_t HOUR_MAX = 0x23;
+    static const std::uint8_t MINUTES_MIN = 0x00;
+    static const std::uint8_t MINUTES_MAX = 0x59;
 
     bool state_;
     bool isRunning_;
