@@ -37,11 +37,11 @@ public:
     ///
     void setup(int pinNumber, GpioPinMode mode = DrvGpio::GPIO_IN);
 
-
-
+    ///
+    /// \brief write
+    /// \param pinNumber  The number for the GPIO to modified.
+    /// \param pinLevel The value to be written in the GPIO. Posible values comes from @ref GpioPinLevel. 
+    ///        Defaul value if non is set is @ref DrvGpio::GpioPinLevel "GPIO_LOW".
     void write(int pinNumber, GpioPinLevel pinLevel = DrvGpio::GPIO_LOW);
 };
-
-
-
 #endif // DRVGPIO_H

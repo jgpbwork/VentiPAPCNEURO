@@ -57,9 +57,6 @@ private:
         DAY_MAX             = 0x31,
         WDAY_MIN            = 0x01,
         WDAY_MAX            = 0x07,
-
-
-
         HOUR_FORMAT_12      = 0x40,
         SEC_BCD_FORMAT_MASK = 0x7F,
         MIN_BCD_FORMAT_MASK = 0x7F,
@@ -72,6 +69,8 @@ private:
 
     };
 
+    //Set as constants to fix Compile time warning issue
+    ///TODO This feature is not working yet...
     static const std::uint8_t SEC_MIN = 0x00;
     static const std::uint8_t SEC_MAX = 0x59;
     static const std::uint8_t HOUR_MIN = 0x00;
