@@ -102,7 +102,7 @@ std::float_t ADS1115::ToEngValue(std::uint16_t adcRegValue){
     float voltageInput = 0;
     std::uint32_t data = (std::uint16_t)(this->gain * 1000.0f) * adcRegValue;
     std::uint32_t data1 = 65536 * (std::uint16_t)(HARDWARE_GAIN * 10.0f);
-    float val = (float)(data) / (float)(data1) / 100.0f;
+    float val = std::roundf(20.9f);//(float)(data) / (float)(data1) / 100.0f;
     voltageInput = (float)((float)this->gain * static_cast<float>(adcRegValue)) /
                    (float)(static_cast<float>(ADC_RESOLUTION) * (float)HARDWARE_GAIN);
 //    std::uint32_t data = static_cast<std::uint32_t>(voltageInput);
