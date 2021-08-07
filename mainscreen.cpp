@@ -17,7 +17,7 @@ MainScreen::MainScreen(QWidget *parent) :
 
     ui->l_error_text->hide();
     ui->l_lightning->hide();
-    // ui->l_battery_text->hide();
+    ui->l_battery_text->hide();
 
     main_menu = new MainMenu(this);
     main_menu->hide();
@@ -139,8 +139,7 @@ void MainScreen::setOxygenValue(double value)
         return;
     }
     value = GlobalFunctions::getRealValue(value);
-
-    value = static_cast<int>(value);
+    value = static_cast<std::double_t>(qRound(value));
 
     if(value < MIX_OXY_ALLOWED || value > MAX_OXY_ALLOWED){
         
@@ -160,7 +159,7 @@ void MainScreen::setOxygenValue(double value)
             emit alarmType(ThrAlarm::P_HIGH);
             checkFontOfDisplay(value);
 
-            ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
+            ui->l_oxygen_value->setText(QString::number(qRound(value)));
         
         return;
     }
@@ -200,16 +199,14 @@ void MainScreen::setOxygenValue(double value)
         style.remove("color: rgb(239, 169, 3);");
         ui->l_oxygen_value->setStyleSheet(style);
     }
-
     checkFontOfDisplay(value);
 
-    ui->l_oxygen_value->setText(QString::number(value, 'f', 0));
-    GlobalFunctions::lastSettedValue = value;
-    
+    ui->l_oxygen_value->setText(QString::number(qRound(value)));
+    GlobalFunctions::lastSettedValue = value;    
 }
 
 void MainScreen::checkFontOfDisplay(double value){
-    checkFontOfDisplay(QString::number(value, 'f', 0));
+    checkFontOfDisplay(QString::number(qRound(value)));
 }
 void MainScreen::checkFontOfDisplay(QString text){
     if(text.size() >= 3){
