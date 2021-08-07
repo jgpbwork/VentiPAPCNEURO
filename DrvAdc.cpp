@@ -99,12 +99,12 @@ bool ADS1115::startSingleConversion(){
 }
 
 std::float_t ADS1115::ToEngValue(std::uint16_t adcRegValue){
-    float voltageInput = 0;
-    std::uint32_t data = (std::uint16_t)(this->gain * 1000.0f) * adcRegValue;
-    std::uint32_t data1 = 65536 * (std::uint16_t)(HARDWARE_GAIN * 10.0f);
-    float val = (float)(data) / (float)(data1) / 100.0f;
-    voltageInput = (float)((float)this->gain * static_cast<float>(adcRegValue)) /
-                   (float)(static_cast<float>(ADC_RESOLUTION) * (float)HARDWARE_GAIN);
+    std::float voltageInput = 0;
+    std::uint32_t data = static_cast<std::uint32_t>(static_cast<std::uint16_t>(this->gain * 1000.0f) * adcRegValue);
+    std::uint32_t data1 = static_cast<std::uint32_t>(65536 * static_cast<std::uint16_t>(HARDWARE_GAIN * 10.0f));
+    float val = std::roundf(static_cast<std::float>(data) / static_cast<std::float>(data1) / 100.0f);
+    voltageInput = static_cast<std::float>(static_cast<std::float>(this->gain) * static_cast<float>(adcRegValue)) /
+                   static_cast<std::float>((static_cast<float>(ADC_RESOLUTION) * static_cast<std::float>(HARDWARE_GAIN)));
 //    std::uint32_t data = static_cast<std::uint32_t>(voltageInput);
 //    voltageInput = (std::float_t)data / (float_t)ADC_RESOLUTION;
 //    voltageInput = static_cast<std::float_t>(data) / HARDWARE_GAIN;
@@ -141,5 +141,3 @@ void ADS1115::setGain(ProgramableGainConfigure regGain){
         break;
     }
 }
-
-
