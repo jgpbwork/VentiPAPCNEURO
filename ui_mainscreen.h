@@ -153,7 +153,7 @@ public:
         l_oxygen_value->setAlignment(Qt::AlignCenter);
         widget_max_value = new QWidget(MainScreen);
         widget_max_value->setObjectName(QStringLiteral("widget_max_value"));
-        widget_max_value->setGeometry(QRect(20, 70, 50, 71));
+        widget_max_value->setGeometry(QRect(9, 70, 71, 71));
         widget_max_value->setStyleSheet(QStringLiteral("background-image: url(:/icons/general/fondo_transparente.png);"));
         verticalLayout = new QVBoxLayout(widget_max_value);
         verticalLayout->setSpacing(1);
@@ -341,7 +341,7 @@ public:
         l_battery_text->setText(QApplication::translate("MainScreen", "...", nullptr));
         l_battery_icon->setText(QString());
         l_lightning->setText(QString());
-        l_oxygen_value->setText(QApplication::translate("MainScreen", "--", nullptr));
+        l_oxygen_value->setText(QString());
         l_max_value->setText(QApplication::translate("MainScreen", "28", nullptr));
         label_11->setText(QApplication::translate("MainScreen", "max", nullptr));
         l_min_value->setText(QApplication::translate("MainScreen", "21", nullptr));
