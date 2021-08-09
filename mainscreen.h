@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include "mainmenu.h"
 #include "ThrAlarm.h"
+#include <QTimer>
 
 #define MIX_OXY_ALLOWED 17
 #define MAX_OXY_ALLOWED 105
@@ -48,11 +49,18 @@ private slots:
     void hideWidgetMenu();
     void showWidgetMenu();
     void setAlarmLimits();
+
+    void turnOnBlinking();
+    void turnOffBlinking();
+    void toggleLabelVisibility();
+    void setBlinkState(bool);
+
 private:
     Ui::MainScreen *ui;
     MainMenu *main_menu = nullptr;
     bool shownMenu =false;
     bool blockedDisplayValue = false;
+    QTimer timerBlink;
 };
 
 #endif // MAINSCREEN_H

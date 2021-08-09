@@ -31,6 +31,12 @@ MainScreen::MainScreen(QWidget *parent) :
     connect(main_menu, &MainMenu::alarmLimitSetted,
             this, &MainScreen::setAlarmLimits);
 
+
+    connect(main_menu, &MainMenu::alarmOn,
+                this, &MainScreen::turnOnBlinking);
+        connect(main_menu, &MainMenu::alarmOff,
+                this, &MainScreen::turnOffBlinking);
+
     ui->widget_o2_porcentile_mini->hide();
 
     QString answer_shutdown = ProcessesClass::
@@ -61,6 +67,36 @@ MainScreen::MainScreen(QWidget *parent) :
 MainScreen::~MainScreen()
 {
     delete ui;
+}
+
+
+void MainScreen::turnOnBlinking(){
+    setBlinkState(true);
+}
+void MainScreen::turnOffBlinking(){
+    setBlinkState(false);
+}
+
+void MainScreen::toggleLabelVisibility(){
+    if (ui->l_oxygen_value->isHidden()) {
+        ui->l_oxygen_value->show();
+    }
+    else {
+        ui->l_oxygen_value->hide();
+    }
+}
+
+void MainScreen::setBlinkState(bool active){
+    if(active) {
+        timerBlink.setInterval(1000);
+        connect(&timerBlink, &QTimer::timeout, this, &MainScreen::toggleLabelVisibility);
+        timerBlink.start();
+    }
+    else {
+        timerBlink.stop();
+        disconnect(&timerBlink, &QTimer::timeout, this, &MainScreen::toggleLabelVisibility);
+        ui->l_oxygen_value->show();
+    }
 }
 
 void MainScreen::setAlarmLimits(){
