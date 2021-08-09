@@ -25,15 +25,20 @@ bool LTC2942::Initialize()
     if(this->state_ == ACTIVE) {
         this->readDevice(CONTROL_REG, data);
         if(data != -1) {
+//            this->controlReg.AlertCharge = DISABLE;
             this->setCtrlReg(static_cast<std::uint8_t>(data));
             if(this->controlReg.AlertCharge != CHARGE_CMP_IN) {
-                this->controlReg.AlertCharge = CHARGE_CMP_IN;
+                this->controlReg.AlertCharge = DISABLE;
                 this->controlReg.Prescaler = Prescaler::M64;
                 this->controlReg.AdcMode = AUTO_MODE;
+                this->controlReg.Shutdown = ~SHUTDOWN;
                 std::uint8_t val = this->controlReg.value();
-                this->writeDevice(CONTROL_REG, this->controlReg.value());
+                if(this->writeDevice(CONTROL_REG, this->controlReg.value()))
+                    if(this->readDevice(CONTROL_REG, data))
+                        val = static_cast<std::uint8_t>(data);
             }
         }
+
         this->setCharge(this->status.load);
         if(readDevice(STATUS_REG, data)){
             this->statusReg_ = static_cast<std::uint8_t>(data);
@@ -80,8 +85,14 @@ void LTC2942::setCharge(std::float_t charge) {
      this->setChargeRegister(chargeReg);
      this->powerUp();
      std::uint16_t chargeRegBack = 0;
-     if(this->readCharge(chargeRegBack))
-         return;
+     std::uint8_t ctrlReg = 0;
+     std::uint8_t regStatus = 0;
+     int data;
+     if(/*this->readStatus(regStatus) && */this->readDevice(CONTROL_REG, data)){
+        ctrlReg = static_cast<std::uint8_t>(data);
+         if(this->readCharge(chargeRegBack))
+             return;
+     }
          ///TODO signal error
 
 }
@@ -109,12 +120,32 @@ std::float_t LTC2942::getIntensityCurrent() {
 
 bool LTC2942::powerDown() {
     this->controlReg.Shutdown = SHUTDOWN;
-    return this->writeDevice(CONTROL_REG, *reinterpret_cast<int*>(&this->controlReg));
+    std::uint8_t val = this->controlReg.value();
+    std::uint8_t ctrlReg;
+    int data;
+    if(this->writeDevice(CONTROL_REG, static_cast<int>(val))){
+        if(this->readDevice(CONTROL_REG, data)){
+            ctrlReg = static_cast<std::uint8_t>(data);
+//            this->controlReg = *reinterpret_cast<LTC2942::ControlReg*>(&ctrlReg); create setValue()
+            return true;
+        }
+        return false;
+    }
+    return false;
 }
 
 bool LTC2942::powerUp() {
     this->controlReg.Shutdown = static_cast<std::uint8_t>(~SHUTDOWN);
-    return this->writeDevice(CONTROL_REG, *reinterpret_cast<int*>(&this->controlReg));
+    std::uint8_t val = this->controlReg.value();
+    int data;
+    if(this->writeDevice(CONTROL_REG, static_cast<int>(val))){
+        if(this->readDevice(CONTROL_REG, data)){
+            val = static_cast<std::uint8_t>(data);
+            return val == this->controlReg.value();
+        }
+        return false;
+    }
+    return false;
 }
 
 bool LTC2942::readTemperature(std::float_t &refValue) {
@@ -152,9 +183,19 @@ bool LTC2942::readCharge(std::uint16_t &refValue){
     int dataL = 0, dataH = 0;
     if(this->readDevice(CHARGE_CUMUL_H, dataH) &&
        this->readDevice(CHARGE_CUMUL_L, dataL)){
-        this->charge_ = ((static_cast<std::uint16_t>(dataH) << 8) |
-                         static_cast<std::uint16_t>(dataL));
+        this->charge_ = (static_cast<std::uint16_t>(dataH) << static_cast<std::uint8_t>(8)) |
+                         static_cast<std::uint16_t>(dataL);
         refValue = this->charge_;
+        return true;
+    }
+    return false;
+}
+
+bool LTC2942::readStatus(uint8_t &regValue)
+{
+    int data;
+    if(this->readDevice(STATUS_REG, data)){
+        regValue = static_cast<std::uint8_t>(data);
         return true;
     }
     return false;

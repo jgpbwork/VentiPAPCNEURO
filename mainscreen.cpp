@@ -32,9 +32,9 @@ MainScreen::MainScreen(QWidget *parent) :
             this, &MainScreen::setAlarmLimits);
 
 
-    connect(main_menu, &MainMenu::alarmOn,
+    connect(this, &MainScreen::alarmOn,
                 this, &MainScreen::turnOnBlinking);
-        connect(main_menu, &MainMenu::alarmOff,
+        connect(this, &MainScreen::alarmOff,
                 this, &MainScreen::turnOffBlinking);
 
     ui->widget_o2_porcentile_mini->hide();

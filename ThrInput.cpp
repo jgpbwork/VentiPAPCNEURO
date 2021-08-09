@@ -46,6 +46,7 @@ void ThrInput::ThrInputRun() {
     static std::uint8_t regCtrl=0;
     float val = 0.0f;
     float engValue = 0.0f, battVoltage = 0.0f, battTemp = 0.0f;
+    int data;
     ThrInput::instance().drvRtc.start();
 
     qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
@@ -59,7 +60,7 @@ void ThrInput::ThrInputRun() {
         val = 0.0f;
         engValue = 0.0f;
         
-        if(!ThrInput::instance().drvBattGauge.getCtrlReg(regCtrl))
+        if(!ThrInput::instance().drvBattGauge.readDevice(LTC2942::CONTROL_REG, data))
             regCtrl = 0;
         if(!ThrInput::instance().drvAdc.readData(lastDataADC)) {
             ///Signal Device Error Reading...
@@ -75,14 +76,16 @@ void ThrInput::ThrInputRun() {
         if(ThrInput::instance().drvBattGauge.readVoltage(battVoltage)){
             qDebug() << "BattVoltage: " << battVoltage;
         }
-        if(ThrInput::instance().drvBattGauge.readTemperature(battTemp)){
-            qDebug() << "BattTemperature: " << battTemp;
-        }
+//        if(ThrInput::instance().drvBattGauge.readTemperature(battTemp)){
+//            qDebug() << "BattTemperature: " << battTemp;
+//        }
         if(!(--loop)){
             battCharge = 0;
+            if(ThrInput::instance().drvBattGauge.readDevice(LTC2942::CONTROL_REG, data))
             if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
                 qDebug() << "****BattCharge: " << battCharge << " ****";
             }
+            ThrInput::instance().drvBattGauge.readDevice(LTC2942::CONTROL_REG, data);
             loop = MAX_COUNT;
         }
 
