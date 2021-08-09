@@ -25,10 +25,9 @@ bool LTC2942::Initialize()
     if(this->state_ == ACTIVE) {
         this->readDevice(CONTROL_REG, data);
         if(data != -1) {
-//            this->controlReg.AlertCharge = DISABLE;
             this->setCtrlReg(static_cast<std::uint8_t>(data));
             if(this->controlReg.AlertCharge != CHARGE_CMP_IN) {
-                this->controlReg.AlertCharge = DISABLE;
+                this->controlReg.AlertCharge = DISABLE; //CHARGE_CMP_IN;
                 this->controlReg.Prescaler = Prescaler::M64;
                 this->controlReg.AdcMode = AUTO_MODE;
                 this->controlReg.Shutdown = ~SHUTDOWN;
@@ -67,14 +66,13 @@ bool LTC2942::getCtrlReg(std::uint8_t &value){
     int data = 0;
     if (this->readDevice(CONTROL_REG, data)){
         value = static_cast<std::uint8_t>(data);
-        this->controlReg = *reinterpret_cast<LTC2942::ControlReg*>(&value);
-        if(this->controlReg.Shutdown){
-            this->controlReg.AdcMode = LTC2942::AUTO_MODE;
-            this->controlReg.Shutdown = ~LTC2942::SHUTDOWN;
-            value = this->controlReg.value();
-            return this->writeDevice(CONTROL_REG, value);
-        }
-        return true;
+        this->controlReg.AdcMode = ((value & MODE_MASK) >> MODE_SHIFF);
+        this->controlReg.Prescaler = ((value & PRESCALER_MASK) >> PRESCALER_SHIFF);
+        this->controlReg.AlertCharge = ((value & ALERT_CHARGE_MASK) >> ALERT_CHARGE_SHIFF);
+        this->controlReg.Shutdown = (value & SHUTDOWN);
+//        this->controlReg = *reinterpret_cast<LTC2942::ControlReg*>(&value);
+        value = this->controlReg.value();
+        return this->writeDevice(CONTROL_REG, value);
     }
     return false;
 }
@@ -200,8 +198,6 @@ bool LTC2942::readStatus(uint8_t &regValue)
     }
     return false;
 }
-
-
 
 bool LTC2942::setChargeRegister(std::uint16_t charge) {
     std::uint8_t regLow, regHigh;
