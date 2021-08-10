@@ -14,6 +14,7 @@ class ThrInput : public QObject,
                  public Singleton<ThrInput>
 {
     Q_OBJECT
+    static const std::uint8_t MAX_AVERAGE = 5;
 public:
     explicit ThrInput(QObject *parent = nullptr);
 
@@ -57,7 +58,11 @@ private:
     std::float_t maxVal;
     std::float_t lastReading;
 
+    std::array<std::uint16_t, MAX_AVERAGE> readings;
+
     [[noreturn]] static void ThrInputRun();
+
+    void processReadings(void);
 };
 
 inline QThread& ThrInput::getThreadInstance() {

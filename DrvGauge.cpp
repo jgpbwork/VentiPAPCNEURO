@@ -9,6 +9,8 @@ std::float_t LTC2942::loadDt_;
 const std::float_t LTC2942::BATT_CAPACITY = 1900.0f;
 const std::float_t LTC2942::COULOMBS_CAPACITY_RATE = 3.6f;
 const std::float_t LTC2942::BATT_CHARGE_REG_RESOLUTION = 0.104371f;
+const std::float_t LTC2942::CHARGE_COULOMB_RATIO_M64 = 0.0425f;
+const std::float_t LTC2942::CHARGE_COULOMB_RATIO_M128 = 0.085f;
 
 LTC2942::LTC2942() : controlReg(), status(BATT_CAPACITY * COULOMBS_CAPACITY_RATE / 20.0f), ///Assumes battery is at 5% -> (Full charge / 20)
                      temperature_(0), voltage_(0), statusReg_(0),
@@ -27,7 +29,7 @@ bool LTC2942::Initialize()
         if(data != -1) {
             this->setCtrlReg(static_cast<std::uint8_t>(data));
             if(this->controlReg.AlertCharge != CHARGE_CMP_IN) {
-                this->controlReg.AlertCharge = DISABLE; //CHARGE_CMP_IN;
+                this->controlReg.AlertCharge = CHARGE_CMP_IN;
                 this->controlReg.Prescaler = Prescaler::M64;
                 this->controlReg.AdcMode = AUTO_MODE;
                 this->controlReg.Shutdown = ~SHUTDOWN;

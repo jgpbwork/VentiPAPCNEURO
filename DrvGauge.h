@@ -133,6 +133,9 @@ public:
 
     }status;
 
+    static const std::float_t CHARGE_COULOMB_RATIO_M64;
+    static const std::float_t CHARGE_COULOMB_RATIO_M128;
+
 private:
     std::uint16_t temperature_;
     std::uint16_t voltage_;

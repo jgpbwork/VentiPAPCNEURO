@@ -12,6 +12,15 @@ ThrInput::ThrInput(QObject *parent) : QObject(),
     this->minVal = 0.0f;
     this->maxVal = 100.0f;
     this->lastReading = 20.9f;
+    this->readings = std::array<std::uint16_t, ThrInput::MAX_AVERAGE>{65520,65520,65520,65520,65520};
+    this->processReadings();
+    this->readings.fill(0);
+
+    ///delete this after testing
+    std::float_t cal;
+    std::uint16_t diff = 30;
+
+     cal = static_cast<std::float_t>(diff) * 0.085f * ((false) ?0.5f:1.0f);
 
     /// Low Level Driver Initialization Sequence...
     /// Real Time Clock Initialization.
@@ -43,6 +52,7 @@ bool ThrInput::deviceConfigure() {
 void ThrInput::ThrInputRun() {
     std::uint16_t lastDataADC = 0, battCharge = 0;
     std::uint8_t loop = MAX_COUNT;
+    std::uint8_t average = 0;
     static std::uint8_t regCtrl=0;
     float val = 0.0f;
     float engValue = 0.0f, battVoltage = 0.0f, battTemp = 0.0f;
@@ -84,9 +94,15 @@ void ThrInput::ThrInputRun() {
             if(ThrInput::instance().drvBattGauge.readDevice(LTC2942::CONTROL_REG, data))
             if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
                 qDebug() << "****BattCharge: " << battCharge << " ****";
+                ThrInput::instance().readings.at(average++) = battCharge;
+                if(average == MAX_AVERAGE){
+                    ThrInput::instance().processReadings();
+                    average = 0;
+                }
             }
             ThrInput::instance().drvBattGauge.readDevice(LTC2942::CONTROL_REG, data);
             loop = MAX_COUNT;
+
         }
 
         /// Continue to read RTC
@@ -101,6 +117,58 @@ void ThrInput::ThrInputRun() {
         ThrInput::instance().updateReadings(val, battVoltage);
         ThrInput::instance().qThrInput_->msleep(1000);   ///Wait a second to update next readings...
     }
+}
+
+void ThrInput::processReadings(void){
+    std::uint16_t diff;
+    std::float_t cal, ave = 0.0f;
+    for (uint8_t i = 0, n = MAX_AVERAGE - 1; i < n; ++i){
+        if(this->readings.at(i) > this->readings.at(i + 1)){ //is discharging
+            std::uint16_t val = this->readings.at(i);
+            std::uint16_t nextVal = this->readings.at(i + 1);
+            diff = (val - nextVal);
+            cal = static_cast<std::float_t>(diff) * ((this->drvBattGauge.controlReg.Prescaler == LTC2942::M64) ?
+                                                      LTC2942::CHARGE_COULOMB_RATIO_M64 :
+                                                      (this->drvBattGauge.controlReg.Prescaler == LTC2942::M128) ?
+                                                      LTC2942::CHARGE_COULOMB_RATIO_M128 : 0.0f) * -1.0f;
+            ///send discharge signal with value;
+            qDebug() << "*********Discharge: " << cal;
+
+            if (i == 0)
+                ave += cal;
+            else {
+                ave = (ave + cal) / 2.0f;
+            }
+            continue;
+        }
+        else if(this->readings.at(i) < this->readings.at(i + 1)){ //is charging
+            /// Send Charge signal with value;
+            diff = this->readings.at(i + 1) - this->readings.at(i);
+            cal = static_cast<std::float_t>(diff) * ((this->drvBattGauge.controlReg.Prescaler == LTC2942::M64) ?
+                                                         LTC2942::CHARGE_COULOMB_RATIO_M64 :
+                                                         (this->drvBattGauge.controlReg.Prescaler == LTC2942::M128) ?
+                                                         LTC2942::CHARGE_COULOMB_RATIO_M128 : 0.0f);
+            ///Send Charging signal with value;
+            qDebug() << "**********Charging: " << cal;
+
+            if (i == 0)
+                ave += cal;
+            else {
+                ave = (ave + cal) / 2.0f;
+            }
+            continue;
+        }
+        else {
+            if(this->readings.at(i) == std::numeric_limits<std::uint16_t>::max()){
+                ///TODO emit signal baterry fully charge;
+                this->readings.fill(0);
+                return;
+            }
+            qDebug() << "Error at Battery charge: " << this->readings.at(i);
+        }
+    }
+    qDebug() << "Emit signal Ave: " << ave;
+    this->readings.fill(0);
 }
 
 void ThrInput::validateReading(){
