@@ -37,6 +37,7 @@ public slots:
     void setBlockedDisplayValue(bool b){ blockedDisplayValue = b; }
     bool getBlockedDisplayValue(){ return blockedDisplayValue; }
 
+    void setBatteryMeasurementValue(double value);
 signals:
     void menu_clicked();
     void alarmOn();
@@ -61,6 +62,7 @@ private:
     bool shownMenu =false;
     bool blockedDisplayValue = false;
     QTimer timerBlink;
+    double processBatteryMeasurementValue(double);
 };
 
 #endif // MAINSCREEN_H

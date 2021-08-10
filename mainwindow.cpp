@@ -40,6 +40,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(main_screen, &MainScreen::alarmOff, this, &MainWindow::alarmOff);
     connect(main_screen, &MainScreen::alarmType, this, &MainWindow::alarmType);
 
+//    connect(&thrInput, &ThrInput::updateBatteryMeasurementValue, this, &MainScreen::setBatteryMeasurementValue);
+
     qDebug()<< "Application has Started ok" 
             << "151" 
             << "********************************";
