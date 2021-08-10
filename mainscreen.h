@@ -27,6 +27,7 @@ public:
     void setLBatteryText(QString text);
     void emitAlarm(bool);
 
+    void setRemainingTime(double);
 public slots:
     void checkFontOfDisplay(double value);
     void checkFontOfDisplay(QString text);
@@ -37,6 +38,8 @@ public slots:
     void setBlockedDisplayValue(bool b){ blockedDisplayValue = b; }
     bool getBlockedDisplayValue(){ return blockedDisplayValue; }
 
+    void setBatteryMeasurementValue(double value);
+    void setConnectionState(bool state);
 signals:
     void menu_clicked();
     void alarmOn();
@@ -61,6 +64,7 @@ private:
     bool shownMenu =false;
     bool blockedDisplayValue = false;
     QTimer timerBlink;
+    double processBatteryMeasurementValue(double);
 };
 
 #endif // MAINSCREEN_H

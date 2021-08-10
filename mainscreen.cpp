@@ -31,10 +31,9 @@ MainScreen::MainScreen(QWidget *parent) :
     connect(main_menu, &MainMenu::alarmLimitSetted,
             this, &MainScreen::setAlarmLimits);
 
-
     connect(this, &MainScreen::alarmOn,
                 this, &MainScreen::turnOnBlinking);
-        connect(this, &MainScreen::alarmOff,
+    connect(this, &MainScreen::alarmOff,
                 this, &MainScreen::turnOffBlinking);
 
     ui->widget_o2_porcentile_mini->hide();
@@ -69,6 +68,40 @@ MainScreen::~MainScreen()
     delete ui;
 }
 
+
+void MainScreen::setBatteryMeasurementValue(double value){
+   //process value here
+   double processedValue = processBatteryMeasurementValue(value);
+   if(processedValue > 0){ //processedValue is a value between 0 and 100
+       int batteryValue = qRound(processedValue / 25) * 25;
+       ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_" + QString::number(batteryValue) +".png"));
+       ui->l_battery_value->setText(QString::number(processedValue, "f", 0) +"%");
+   }
+   if(processedValue <= 10) {
+       ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
+       emit alarmType(ThrAlarm::P_HIGH);
+       emit alarmOn();
+   }
+   else {
+      emit alarmOff();
+   }
+   setRemainingTime(processedValue);
+}
+void MainScreen::setRemainingTime(double value) {
+    ui->l_battery_text->setText("");
+}
+double MainScreen::processBatteryMeasurementValue(double value){
+    return value;
+}
+
+void MainScreen::setConnectionState(bool state) {
+    if(state) {
+        ui->l_lightning->show();
+    }
+    else {
+        ui->l_lightning->hide();
+    }
+}
 
 void MainScreen::turnOnBlinking(){
     setBlinkState(true);
@@ -191,8 +224,8 @@ void MainScreen::setOxygenValue(double value)
             ui->widget_max_value->hide();
             ui->widget_o2_porcentile_mini->hide();
             ui->widget_o2_porcentile->hide();
-            emit alarmOn();
             emit alarmType(ThrAlarm::P_HIGH);
+            emit alarmOn();
             checkFontOfDisplay(value);
 
             ui->l_oxygen_value->setText(QString::number(qRound(value)));
