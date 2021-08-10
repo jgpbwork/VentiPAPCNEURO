@@ -27,6 +27,7 @@ public:
     void setLBatteryText(QString text);
     void emitAlarm(bool);
 
+    void setRemainingTime(double);
 public slots:
     void checkFontOfDisplay(double value);
     void checkFontOfDisplay(QString text);
@@ -38,6 +39,7 @@ public slots:
     bool getBlockedDisplayValue(){ return blockedDisplayValue; }
 
     void setBatteryMeasurementValue(double value);
+    void setConnectionState(bool state);
 signals:
     void menu_clicked();
     void alarmOn();

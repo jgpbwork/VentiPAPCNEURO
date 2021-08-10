@@ -31,10 +31,9 @@ MainScreen::MainScreen(QWidget *parent) :
     connect(main_menu, &MainMenu::alarmLimitSetted,
             this, &MainScreen::setAlarmLimits);
 
-
     connect(this, &MainScreen::alarmOn,
                 this, &MainScreen::turnOnBlinking);
-        connect(this, &MainScreen::alarmOff,
+    connect(this, &MainScreen::alarmOff,
                 this, &MainScreen::turnOffBlinking);
 
     ui->widget_o2_porcentile_mini->hide();
@@ -86,10 +85,22 @@ void MainScreen::setBatteryMeasurementValue(double value){
    else {
       emit alarmOff();
    }
+   setRemainingTime(processedValue);
 }
-
+void MainScreen::setRemainingTime(double value) {
+    ui->l_battery_text->setText("");
+}
 double MainScreen::processBatteryMeasurementValue(double value){
     return value;
+}
+
+void MainScreen::setConnectionState(bool state) {
+    if(state) {
+        ui->l_lightning->show();
+    }
+    else {
+        ui->l_lightning->hide();
+    }
 }
 
 void MainScreen::turnOnBlinking(){
