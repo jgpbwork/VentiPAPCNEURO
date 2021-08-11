@@ -11,7 +11,7 @@ Makefile
 *.slo
 *.lo
 *.obj
-moc_*.o
+moc_*.[o]
 
 # Precompiled Headers
 *.gch

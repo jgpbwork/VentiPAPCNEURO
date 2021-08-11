@@ -14,6 +14,7 @@ class ThrInput : public QObject,
                  public Singleton<ThrInput>
 {
     Q_OBJECT
+    static const std::uint8_t MAX_AVERAGE = 5;
 public:
     explicit ThrInput(QObject *parent = nullptr);
 
@@ -31,15 +32,18 @@ public:
 
 signals:
     void updateOxygenLevel(double);
-    void updateBatteryLevel(QString);
+    void updateBatteryCharge(double);
+    void batteryIsCharging(bool); /// not needed;
+    void batteryFull(void);
+
+    void updateBatteryVoltage(QString);
     void updateRealTimeClock(QDateTime);
 
     void inRange();
     void outOfRange();
 
-public slots:   
-   
-    void updateReadings(std::float_t oxygenVal, std::float_t battVal);
+public slots:      
+    void updateReadings(std::float_t oxygenVal, std::float_t battVoltage);
     void updateDateTime(QDateTime &refValue);
     void setMinimumValue(const QString &value);
     void setMaximumValue(const QString value);
@@ -57,7 +61,11 @@ private:
     std::float_t maxVal;
     std::float_t lastReading;
 
+    std::array<std::uint16_t, MAX_AVERAGE> readings;
+
     [[noreturn]] static void ThrInputRun();
+
+    void processReadings(void);
 };
 
 inline QThread& ThrInput::getThreadInstance() {

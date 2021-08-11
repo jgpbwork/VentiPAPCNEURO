@@ -5,10 +5,11 @@
 #include <QDateTime>
 #include "mainmenu.h"
 #include "ThrAlarm.h"
+#include <QTimer>
 
 #define MIX_OXY_ALLOWED 17
 #define MAX_OXY_ALLOWED 105
-
+#define BLINK_INTERVAL 500 //ms
 namespace Ui {
 class MainScreen;
 }
@@ -26,6 +27,7 @@ public:
     void setLBatteryText(QString text);
     void emitAlarm(bool);
 
+    void setRemainingTime(double);
 public slots:
     void checkFontOfDisplay(double value);
     void checkFontOfDisplay(QString text);
@@ -36,6 +38,9 @@ public slots:
     void setBlockedDisplayValue(bool b){ blockedDisplayValue = b; }
     bool getBlockedDisplayValue(){ return blockedDisplayValue; }
 
+    void setBatteryMeasurementValue(double value);
+    void setConnectionState(bool state);
+    void onBatteryFull();
 signals:
     void menu_clicked();
     void alarmOn();
@@ -48,11 +53,23 @@ private slots:
     void hideWidgetMenu();
     void showWidgetMenu();
     void setAlarmLimits();
+
+    void turnOnBlinking();
+    void turnOffBlinking();
+    void toggleLabelVisibility();
+    void setBlinkState(bool);
+
 private:
     Ui::MainScreen *ui;
     MainMenu *main_menu = nullptr;
     bool shownMenu =false;
     bool blockedDisplayValue = false;
+    QTimer timerBlink;
+    double processBatteryMeasurementValue(double);
+    bool batteryFull = false;
+    double batteryMaximunDefaultConfiguration = 6500;
+    double batteryChargeValue = 0;
+    bool lowBattery = false;
 };
 
 #endif // MAINSCREEN_H

@@ -9,6 +9,8 @@ std::float_t LTC2942::loadDt_;
 const std::float_t LTC2942::BATT_CAPACITY = 1900.0f;
 const std::float_t LTC2942::COULOMBS_CAPACITY_RATE = 3.6f;
 const std::float_t LTC2942::BATT_CHARGE_REG_RESOLUTION = 0.104371f;
+const std::float_t LTC2942::CHARGE_COULOMB_RATIO_M64 = 0.0425f;
+const std::float_t LTC2942::CHARGE_COULOMB_RATIO_M128 = 0.085f;
 
 LTC2942::LTC2942() : controlReg(), status(BATT_CAPACITY * COULOMBS_CAPACITY_RATE / 20.0f), ///Assumes battery is at 5% -> (Full charge / 20)
                      temperature_(0), voltage_(0), statusReg_(0),
@@ -30,10 +32,14 @@ bool LTC2942::Initialize()
                 this->controlReg.AlertCharge = CHARGE_CMP_IN;
                 this->controlReg.Prescaler = Prescaler::M64;
                 this->controlReg.AdcMode = AUTO_MODE;
+                this->controlReg.Shutdown = ~SHUTDOWN;
                 std::uint8_t val = this->controlReg.value();
-                this->writeDevice(CONTROL_REG, this->controlReg.value());
+                if(this->writeDevice(CONTROL_REG, this->controlReg.value()))
+                    if(this->readDevice(CONTROL_REG, data))
+                        val = static_cast<std::uint8_t>(data);
             }
         }
+
         this->setCharge(this->status.load);
         if(readDevice(STATUS_REG, data)){
             this->statusReg_ = static_cast<std::uint8_t>(data);
@@ -62,14 +68,13 @@ bool LTC2942::getCtrlReg(std::uint8_t &value){
     int data = 0;
     if (this->readDevice(CONTROL_REG, data)){
         value = static_cast<std::uint8_t>(data);
-        this->controlReg = *reinterpret_cast<LTC2942::ControlReg*>(&value);
-        if(this->controlReg.Shutdown){
-            this->controlReg.AdcMode = LTC2942::AUTO_MODE;
-            this->controlReg.Shutdown = ~LTC2942::SHUTDOWN;
-            value = this->controlReg.value();
-            return this->writeDevice(CONTROL_REG, value);
-        }
-        return true;
+        this->controlReg.AdcMode = ((value & MODE_MASK) >> MODE_SHIFF);
+        this->controlReg.Prescaler = ((value & PRESCALER_MASK) >> PRESCALER_SHIFF);
+        this->controlReg.AlertCharge = ((value & ALERT_CHARGE_MASK) >> ALERT_CHARGE_SHIFF);
+        this->controlReg.Shutdown = (value & SHUTDOWN);
+//        this->controlReg = *reinterpret_cast<LTC2942::ControlReg*>(&value);
+        value = this->controlReg.value();
+        return this->writeDevice(CONTROL_REG, value);
     }
     return false;
 }
@@ -80,8 +85,14 @@ void LTC2942::setCharge(std::float_t charge) {
      this->setChargeRegister(chargeReg);
      this->powerUp();
      std::uint16_t chargeRegBack = 0;
-     if(this->readCharge(chargeRegBack))
-         return;
+     std::uint8_t ctrlReg = 0;
+     std::uint8_t regStatus = 0;
+     int data;
+     if(/*this->readStatus(regStatus) && */this->readDevice(CONTROL_REG, data)){
+        ctrlReg = static_cast<std::uint8_t>(data);
+         if(this->readCharge(chargeRegBack))
+             return;
+     }
          ///TODO signal error
 
 }
@@ -109,12 +120,32 @@ std::float_t LTC2942::getIntensityCurrent() {
 
 bool LTC2942::powerDown() {
     this->controlReg.Shutdown = SHUTDOWN;
-    return this->writeDevice(CONTROL_REG, *reinterpret_cast<int*>(&this->controlReg));
+    std::uint8_t val = this->controlReg.value();
+    std::uint8_t ctrlReg;
+    int data;
+    if(this->writeDevice(CONTROL_REG, static_cast<int>(val))){
+        if(this->readDevice(CONTROL_REG, data)){
+            ctrlReg = static_cast<std::uint8_t>(data);
+//            this->controlReg = *reinterpret_cast<LTC2942::ControlReg*>(&ctrlReg); create setValue()
+            return true;
+        }
+        return false;
+    }
+    return false;
 }
 
 bool LTC2942::powerUp() {
     this->controlReg.Shutdown = static_cast<std::uint8_t>(~SHUTDOWN);
-    return this->writeDevice(CONTROL_REG, *reinterpret_cast<int*>(&this->controlReg));
+    std::uint8_t val = this->controlReg.value();
+    int data;
+    if(this->writeDevice(CONTROL_REG, static_cast<int>(val))){
+        if(this->readDevice(CONTROL_REG, data)){
+            val = static_cast<std::uint8_t>(data);
+            return val == this->controlReg.value();
+        }
+        return false;
+    }
+    return false;
 }
 
 bool LTC2942::readTemperature(std::float_t &refValue) {
@@ -152,15 +183,23 @@ bool LTC2942::readCharge(std::uint16_t &refValue){
     int dataL = 0, dataH = 0;
     if(this->readDevice(CHARGE_CUMUL_H, dataH) &&
        this->readDevice(CHARGE_CUMUL_L, dataL)){
-        this->charge_ = ((static_cast<std::uint16_t>(dataH) << 8) |
-                         static_cast<std::uint16_t>(dataL));
+        this->charge_ = (static_cast<std::uint16_t>(dataH) << static_cast<std::uint8_t>(8)) |
+                         static_cast<std::uint16_t>(dataL);
         refValue = this->charge_;
         return true;
     }
     return false;
 }
 
-
+bool LTC2942::readStatus(uint8_t &regValue)
+{
+    int data;
+    if(this->readDevice(STATUS_REG, data)){
+        regValue = static_cast<std::uint8_t>(data);
+        return true;
+    }
+    return false;
+}
 
 bool LTC2942::setChargeRegister(std::uint16_t charge) {
     std::uint8_t regLow, regHigh;

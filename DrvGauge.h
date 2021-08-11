@@ -28,6 +28,8 @@ public:
     bool readVoltage(std::float_t &refValue);
     bool readCharge(std::uint16_t &refValue);
 
+    bool readStatus(std::uint8_t &regValue);
+
     bool setChargeRegister(std::uint16_t charge);
 
     std::float_t ToEngValue(std::uint16_t adcVoltVal);
@@ -130,6 +132,9 @@ public:
         }
 
     }status;
+
+    static const std::float_t CHARGE_COULOMB_RATIO_M64;
+    static const std::float_t CHARGE_COULOMB_RATIO_M128;
 
 private:
     std::uint16_t temperature_;
