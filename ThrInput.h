@@ -32,15 +32,18 @@ public:
 
 signals:
     void updateOxygenLevel(double);
-    void updateBatteryLevel(QString);
+    void updateBatteryCharge(double);
+    void batteryIsCharging(bool); /// not needed;
+    void batteryFull(void);
+
+    void updateBatteryVoltage(QString);
     void updateRealTimeClock(QDateTime);
 
     void inRange();
     void outOfRange();
 
-public slots:   
-   
-    void updateReadings(std::float_t oxygenVal, std::float_t battVal);
+public slots:      
+    void updateReadings(std::float_t oxygenVal, std::float_t battVoltage);
     void updateDateTime(QDateTime &refValue);
     void setMinimumValue(const QString &value);
     void setMaximumValue(const QString value);

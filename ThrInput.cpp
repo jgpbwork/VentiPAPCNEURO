@@ -13,7 +13,7 @@ ThrInput::ThrInput(QObject *parent) : QObject(),
     this->maxVal = 100.0f;
     this->lastReading = 20.9f;
     this->readings = std::array<std::uint16_t, ThrInput::MAX_AVERAGE>{65520,65520,65520,65520,65520};
-    this->processReadings();
+//    this->processReadings();
     this->readings.fill(0);
 
     ///delete this after testing
@@ -131,9 +131,10 @@ void ThrInput::processReadings(void){
                                                       LTC2942::CHARGE_COULOMB_RATIO_M64 :
                                                       (this->drvBattGauge.controlReg.Prescaler == LTC2942::M128) ?
                                                       LTC2942::CHARGE_COULOMB_RATIO_M128 : 0.0f) * -1.0f;
-            ///send discharge signal with value;
+            ///send discharge signal with value;            
             qDebug() << "*********Discharge: " << cal;
-
+//            emit this->batteryIsCharging(false);
+            emit this->updateBatteryCharge(static_cast<double>(cal));
             if (i == 0)
                 ave += cal;
             else {
@@ -150,7 +151,7 @@ void ThrInput::processReadings(void){
                                                          LTC2942::CHARGE_COULOMB_RATIO_M128 : 0.0f);
             ///Send Charging signal with value;
             qDebug() << "**********Charging: " << cal;
-
+            emit this->updateBatteryCharge(static_cast<double>(cal));
             if (i == 0)
                 ave += cal;
             else {
@@ -161,6 +162,7 @@ void ThrInput::processReadings(void){
         else {
             if(this->readings.at(i) == std::numeric_limits<std::uint16_t>::max()){
                 ///TODO emit signal baterry fully charge;
+                emit this->batteryFull();
                 this->readings.fill(0);
                 return;
             }
@@ -189,11 +191,12 @@ bool ThrInput::setDateTime(QDateTime currentDate)
     return false;
 }
 
-void ThrInput::updateReadings(std::float_t oxygenVal, std::float_t battVal) {
+void ThrInput::updateReadings(std::float_t oxygenVal, std::float_t battVoltage) {
     emit updateOxygenLevel(static_cast<double>(oxygenVal));
 //    emit updateOxygenLevel(QString::number(static_cast<double>(oxygenVal), 'f', 1));
-    emit updateBatteryLevel("Batt: " + QString::number(static_cast<double>(battVal), 'f', 2) + " volts");
+    emit updateBatteryVoltage("Batt: " + QString::number(static_cast<double>(battVoltage), 'f', 2) + " volts");    
     ///TODO emit RTC content with QDateTime Variable...
+
 }
 
 void ThrInput::updateDateTime(QDateTime &refValue) {
