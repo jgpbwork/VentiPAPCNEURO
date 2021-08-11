@@ -30,6 +30,7 @@ public:
     static bool setErrorMessage(QWidget *parent, QString mess);
     static QString setDateTimeInRaspi(QWidget *parent, QDateTime dt);
 
+    static int loadBatteryConfiguration();
 signals:
 
 public slots:

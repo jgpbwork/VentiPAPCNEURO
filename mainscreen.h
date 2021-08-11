@@ -9,7 +9,7 @@
 
 #define MIX_OXY_ALLOWED 17
 #define MAX_OXY_ALLOWED 105
-
+#define BLINK_INTERVAL 500 //ms
 namespace Ui {
 class MainScreen;
 }
@@ -40,6 +40,7 @@ public slots:
 
     void setBatteryMeasurementValue(double value);
     void setConnectionState(bool state);
+    void onBatteryFull();
 signals:
     void menu_clicked();
     void alarmOn();
@@ -65,6 +66,10 @@ private:
     bool blockedDisplayValue = false;
     QTimer timerBlink;
     double processBatteryMeasurementValue(double);
+    bool batteryFull = false;
+    double batteryMaximunDefaultConfiguration = 6500;
+    double batteryChargeValue = 0;
+    bool lowBattery = false;
 };
 
 #endif // MAINSCREEN_H

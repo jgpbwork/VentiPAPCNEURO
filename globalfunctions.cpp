@@ -186,6 +186,29 @@ bool GlobalFunctions::saveData(){
     return false;
 }
 
+int GlobalFunctions::loadBatteryConfiguration(){
+    QDir dir("/home/pi/VentiApp/");
+    if(!dir.exists()){
+        dir.mkpath("/home/pi/VentiApp/");
+        return 1900;
+    }
+    QFile file("/home/pi/VentiApp/battery_config.dat");
+    if(file.open(QIODevice::ReadOnly)){
+        QJsonObject jsonObject;
+        QByteArray bytes;
+        QDataStream in(&file);
+        in >> bytes;
+        file.close();
+        bool ok = false;
+        int number = bytes.toInt(&ok);
+        if(ok){
+            return number;
+        }
+
+    }
+    return 1900;
+}
+
 bool GlobalFunctions::loadData(){
     QDir dir("/home/pi/VentiApp/");
     if(!dir.exists()){

@@ -17,7 +17,6 @@ MainScreen::MainScreen(QWidget *parent) :
 
     ui->l_error_text->hide();
     ui->l_lightning->hide();
-    ui->l_battery_text->hide();
 
     main_menu = new MainMenu(this);
     main_menu->hide();
@@ -61,6 +60,9 @@ MainScreen::MainScreen(QWidget *parent) :
                        "el error, contacte a soportetecnico@cneuro.cu";
         GlobalFunctions::setErrorMessage(this, mess);
     }
+
+    batteryMaximunDefaultConfiguration = GlobalFunctions::loadBatteryConfiguration() * 3.6 - 300;
+    batteryChargeValue = batteryMaximunDefaultConfiguration;
 }
 
 MainScreen::~MainScreen()
@@ -71,26 +73,42 @@ MainScreen::~MainScreen()
 
 void MainScreen::setBatteryMeasurementValue(double value){
    //process value here
+    if(value >= 0){
+        setConnectionState(true);
+    }
+    else {
+        setConnectionState(false);
+    }
    double processedValue = processBatteryMeasurementValue(value);
+   setRemainingTime(value);
    if(processedValue > 0){ //processedValue is a value between 0 and 100
        int batteryValue = qRound(processedValue / 25) * 25;
        ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_" + QString::number(batteryValue) +".png"));
-       ui->l_battery_value->setText(QString::number(processedValue, "f", 0) +"%");
+       ui->l_battery_value->setText(QString::number(processedValue, 'f', 0) +"%");
    }
    if(processedValue <= 10) {
        ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
+       lowBattery = true;
        emit alarmType(ThrAlarm::P_HIGH);
        emit alarmOn();
    }
    else {
       emit alarmOff();
    }
-   setRemainingTime(processedValue);
 }
 void MainScreen::setRemainingTime(double value) {
-    ui->l_battery_text->setText("");
+    double remainingTime = ((batteryChargeValue / abs(value)) * 30); //seg
+    int hours = int(remainingTime / 3600);
+    double minutes = (remainingTime - (hours * 3600)) / 60;
+    QString remainingString = (((hours > 0)?QString::number(hours) + "h":"") + " "
+                               + ((minutes > 0)?QString::number(minutes, 'f', 0) + "m": "")).trimmed();
+    setLBatteryText(remainingString);
 }
 double MainScreen::processBatteryMeasurementValue(double value){
+    if(!batteryFull){
+        batteryChargeValue += value;
+    }
+    value = batteryChargeValue * 100 / batteryMaximunDefaultConfiguration;
     return value;
 }
 
@@ -101,6 +119,10 @@ void MainScreen::setConnectionState(bool state) {
     else {
         ui->l_lightning->hide();
     }
+}
+void MainScreen::onBatteryFull(){
+    ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
+    batteryFull = true;
 }
 
 void MainScreen::turnOnBlinking(){
@@ -121,7 +143,7 @@ void MainScreen::toggleLabelVisibility(){
 
 void MainScreen::setBlinkState(bool active){
     if(active) {
-        timerBlink.setInterval(1000);
+        timerBlink.setInterval(BLINK_INTERVAL);
         connect(&timerBlink, &QTimer::timeout, this, &MainScreen::toggleLabelVisibility);
         timerBlink.start();
     }
@@ -202,7 +224,7 @@ void MainScreen::emitAlarm(bool active){
 void MainScreen::setOxygenValue(double value)
 {
     GlobalFunctions::lastSettedValue = value;
-        setLBatteryText(QString::number(value, 'f', 6));
+//        setLBatteryText(QString::number(value, 'f', 6));
 
     if(blockedDisplayValue){
         return;
@@ -237,7 +259,9 @@ void MainScreen::setOxygenValue(double value)
         ui->l_error_text->hide();
         ui->widget_min_value->show();
         ui->widget_max_value->show();
-        emit alarmOff();
+        if(!lowBattery) {
+            emit alarmOff();
+        }
         if(shownMenu) {
             ui->widget_o2_porcentile_mini->show();
         }
@@ -255,15 +279,19 @@ void MainScreen::setOxygenValue(double value)
     if(value < GlobalFunctions::configured_min_limit
             || value > GlobalFunctions::configured_max_limit){
         ///TODO emit signal Alarm On
-        emit alarmOn();
-        emit alarmType(ThrAlarm::P_MEDIUM);
+        if(!lowBattery) {
+            emit alarmOn();
+            emit alarmType(ThrAlarm::P_MEDIUM);
+        }
         QString style = ui->l_oxygen_value->styleSheet();
         style += "color: rgb(239, 169, 3);";
         ui->l_oxygen_value->setStyleSheet(style);
     }
     else{
         ///TODO emit signal Alarm Off
-        emit alarmOff();
+        if(!lowBattery) {
+            emit alarmOff();
+        }
         QString style = ui->l_oxygen_value->styleSheet();
         style.remove("color: rgb(239, 169, 3);");
         ui->l_oxygen_value->setStyleSheet(style);
