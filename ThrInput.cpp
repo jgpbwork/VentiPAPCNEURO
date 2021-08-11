@@ -63,6 +63,9 @@ void ThrInput::ThrInputRun() {
 
     time_t rawTime;
     struct tm *timeInfo;
+    if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
+        emit ThrInput::instance().batteryChargeLevel(battCharge);
+    }
 
     while(true)
     {        
