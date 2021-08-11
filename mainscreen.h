@@ -38,6 +38,7 @@ public slots:
     void setBlockedDisplayValue(bool b){ blockedDisplayValue = b; }
     bool getBlockedDisplayValue(){ return blockedDisplayValue; }
 
+    void setBatteryChargeLevel(std::uint16_t value);
     void setBatteryMeasurementValue(double value);
     void setConnectionState(bool state);
     void onBatteryFull();

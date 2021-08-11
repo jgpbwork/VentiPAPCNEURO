@@ -15,6 +15,7 @@
 bool GlobalFunctions::myanimationEnabled = true;
 int GlobalFunctions::configured_min_limit = 21;
 int GlobalFunctions::configured_max_limit = 28;
+int GlobalFunctions::lastBatteryLevel = 0;
 double GlobalFunctions::lastSettedValue = 0;
 double GlobalFunctions::m_slope_value = 100;
 double GlobalFunctions::n_value = 0;
@@ -23,16 +24,15 @@ QDateTime GlobalFunctions::dateTime = QDateTime::currentDateTime();
 
 GlobalFunctions::GlobalFunctions(QWidget *parent) : QWidget(parent)
 {
-
 }
 
-
-QString GlobalFunctions::setDateTimeInRaspi(QWidget *parent, QDateTime dt){
+QString GlobalFunctions::setDateTimeInRaspi(QWidget *parent, QDateTime dt)
+{
     dateTime = dt;
     //sudo date -s "21 APR 2020 19:45:00"
     QMap<QString, int> mapMonthEnglish;
     mapMonthEnglish.insert("JANUARY", 1);
-    mapMonthEnglish.insert("FEBRUARY" , 2);
+    mapMonthEnglish.insert("FEBRUARY", 2);
     mapMonthEnglish.insert("MARCH", 3);
     mapMonthEnglish.insert("APRIL", 4);
     mapMonthEnglish.insert("MAY", 5);
@@ -44,7 +44,7 @@ QString GlobalFunctions::setDateTimeInRaspi(QWidget *parent, QDateTime dt){
     mapMonthEnglish.insert("NOVEMBER", 11);
     mapMonthEnglish.insert("DECEMBER", 12);
 
-    QString day =  " \"" + QString::number(dt.date().day());
+    QString day = " \"" + QString::number(dt.date().day());
     QString month = " " + mapMonthEnglish.key(dt.date().month()).left(3);
     QString year = " " + QString::number(dt.date().year());
 
@@ -53,12 +53,12 @@ QString GlobalFunctions::setDateTimeInRaspi(QWidget *parent, QDateTime dt){
     QProcess *proc_ovpn = new QProcess(parent);
     proc_ovpn->setProcessChannelMode(QProcess::MergedChannels);
 
-    proc_ovpn->start("sh",QStringList() << "-c" << date_string + time_string);
+    proc_ovpn->start("sh", QStringList() << "-c" << date_string + time_string);
 
-    if(!proc_ovpn->waitForStarted()) //default wait time 30 sec
+    if (!proc_ovpn->waitForStarted()) //default wait time 30 sec
         qDebug() << " cannot start process ";
 
-    int waitTime = 500 ; //60 sec
+    int waitTime = 500; //60 sec
     if (!proc_ovpn->waitForFinished(waitTime))
         qDebug() << "timeout .. ";
 
@@ -66,7 +66,8 @@ QString GlobalFunctions::setDateTimeInRaspi(QWidget *parent, QDateTime dt){
     return str;
 }
 
-bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess){
+bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess)
+{
     QWidget *widget = new QWidget(parent);
     QWidget *widget_blur = new QWidget(parent);
     widget_blur->setFixedSize(320, 480);
@@ -79,20 +80,20 @@ bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess){
     icon->setPixmap(QPixmap(":icons/main_menu/calibration_menu/error.png"));
     icon->setScaledContents(true);
     icon->setFixedSize(30, 30);
-    icon->move(10,10);
+    icon->move(10, 10);
 
     QLabel *message = new QLabel(widget);
     QFont f = parent->font();
     message->setText("Error");
     message->setFont(f);
-    message->move(120,10);
+    message->move(120, 10);
 
     QPlainTextEdit *messageText = new QPlainTextEdit(widget);
     messageText->setFixedSize(300, 85);
     f.setPointSize(12);
     messageText->setPlainText(mess);
     messageText->setFont(f);
-    messageText->move(10,55);
+    messageText->move(10, 55);
     messageText->setReadOnly(true);
 
     QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(parent);
@@ -105,10 +106,10 @@ bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess){
     widget->show();
     widget->raise();
 
-
     return true;
 }
-bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess){
+bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
+{
     QWidget *widget = new QWidget(parent);
     QWidget *widget_blur = new QWidget(parent);
     widget->setAttribute(Qt::WA_DeleteOnClose);
@@ -123,20 +124,20 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess){
     icon->setPixmap(QPixmap(":icons/main_menu/calibration_menu/error.png"));
     icon->setScaledContents(true);
     icon->setFixedSize(30, 30);
-    icon->move(10,10);
+    icon->move(10, 10);
 
     QLabel *message = new QLabel(widget);
     QFont f = parent->font();
     message->setText("Error");
     message->setFont(f);
-    message->move(120,10);
+    message->move(120, 10);
 
     QPlainTextEdit *messageText = new QPlainTextEdit(widget);
     messageText->setFixedSize(300, 85);
     f.setPointSize(12);
     messageText->setPlainText(mess);
     messageText->setFont(f);
-    messageText->move(10,55);
+    messageText->move(10, 55);
 
     QGraphicsDropShadowEffect *eff = new QGraphicsDropShadowEffect(parent);
     eff->setBlurRadius(20);
@@ -144,15 +145,14 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess){
     eff->setColor(QColor(Qt::red));
     widget->setGraphicsEffect(eff);
 
-
     QPushButton *accept_button = new QPushButton(widget);
     QIcon icon_accept(":icons/main_menu/calibration_menu/ok.png");
     accept_button->setIcon(icon_accept);
-    accept_button->setIconSize(QSize(25,25));
+    accept_button->setIconSize(QSize(25, 25));
 
     accept_button->setText("ACEPTAR");
     accept_button->setFixedSize(100, 30);
-    accept_button->move(190,110);
+    accept_button->move(190, 110);
     accept_button->raise();
 
     connect(accept_button, &QPushButton::clicked, widget, &QWidget::close);
@@ -165,13 +165,16 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess){
     return true;
 }
 
-bool GlobalFunctions::saveData(){
+bool GlobalFunctions::saveData()
+{
     QDir dir("/home/pi/VentiApp/");
-    if(!dir.exists()){
+    if (!dir.exists())
+    {
         dir.mkpath("/home/pi/VentiApp/");
     }
     QFile file("/home/pi/VentiApp/save_config.dat");
-    if(file.open(QIODevice::WriteOnly)){
+    if (file.open(QIODevice::WriteOnly))
+    {
         QJsonObject jsonObject;
         jsonObject.insert("m_slope_value", m_slope_value);
         jsonObject.insert("n_value", n_value);
@@ -186,14 +189,17 @@ bool GlobalFunctions::saveData(){
     return false;
 }
 
-int GlobalFunctions::loadBatteryConfiguration(){
+int GlobalFunctions::loadBatteryConfiguration()
+{
     QDir dir("/home/pi/VentiApp/");
-    if(!dir.exists()){
+    if (!dir.exists())
+    {
         dir.mkpath("/home/pi/VentiApp/");
         return 1900;
     }
     QFile file("/home/pi/VentiApp/battery_config.dat");
-    if(file.open(QIODevice::ReadOnly)){
+    if (file.open(QIODevice::ReadOnly))
+    {
         QJsonObject jsonObject;
         QByteArray bytes;
         QDataStream in(&file);
@@ -201,29 +207,33 @@ int GlobalFunctions::loadBatteryConfiguration(){
         file.close();
         bool ok = false;
         int number = bytes.toInt(&ok);
-        if(ok){
+        if (ok)
+        {
             return number;
         }
-
     }
     return 1900;
 }
 
-bool GlobalFunctions::loadData(){
+bool GlobalFunctions::loadData()
+{
     QDir dir("/home/pi/VentiApp/");
-    if(!dir.exists()){
+    if (!dir.exists())
+    {
         dir.mkpath("/home/pi/VentiApp/");
         return false;
     }
     QFile file("/home/pi/VentiApp/save_config.dat");
-    if(file.open(QIODevice::ReadOnly)){
+    if (file.open(QIODevice::ReadOnly))
+    {
         QJsonObject jsonObject;
         QJsonDocument d;
         QByteArray bytes;
         QDataStream in(&file);
         in >> bytes;
         d = QJsonDocument::fromJson(bytes);
-        if(d.isObject()){
+        if (d.isObject())
+        {
             jsonObject = d.object();
         }
         file.close();
@@ -238,9 +248,12 @@ bool GlobalFunctions::readValues(QJsonObject jsonObject)
     double m = jsonObject.value("m_slope_value").toDouble();
     double n = jsonObject.value("n_value").toDouble();
     bool cal = jsonObject.value("calibrated").toBool();
-    if(cal){
-        if(m > 0){
-            if((n > -10) && (n < 10)){
+    if (cal)
+    {
+        if (m > 0)
+        {
+            if ((n > -10) && (n < 10))
+            {
                 n_value = n;
                 m_slope_value = m;
                 calibrated = cal;
@@ -253,7 +266,8 @@ bool GlobalFunctions::readValues(QJsonObject jsonObject)
 
 bool GlobalFunctions::checkIfFieldValid(QString value)
 {
-    if(value != nullptr && !value.trimmed().isEmpty() && value.toLower() != "null"){
+    if (value != nullptr && !value.trimmed().isEmpty() && value.toLower() != "null")
+    {
         return true;
     }
     return false;
@@ -261,11 +275,13 @@ bool GlobalFunctions::checkIfFieldValid(QString value)
 
 double GlobalFunctions::getRealValue(double value) //aplica la correcion de la calibracion
 {
-    if(calibrated){
-        value = (m_slope_value*value) + n_value; //y = mx + n
+    if (calibrated)
+    {
+        value = (m_slope_value * value) + n_value; //y = mx + n
         return value;
-    }else{
+    }
+    else
+    {
         return -1;
     }
 }
- 

@@ -31,6 +31,8 @@ public:
     static QString setDateTimeInRaspi(QWidget *parent, QDateTime dt);
 
     static int loadBatteryConfiguration();
+
+    static int lastBatteryLevel;
 signals:
 
 public slots:

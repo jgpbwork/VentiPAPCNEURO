@@ -1,4 +1,5 @@
 #include "mainscreen.h"
+#include "DrvGauge.h"
 #include "ui_mainscreen.h"
 #include <QDebug>
 #include "globalfunctions.h"
@@ -8,9 +9,8 @@
 #include <QPlainTextEdit>
 #include <QGraphicsDropShadowEffect>
 
-MainScreen::MainScreen(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::MainScreen)
+MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
+                                          ui(new Ui::MainScreen)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::CustomizeWindowHint);
@@ -31,16 +31,17 @@ MainScreen::MainScreen(QWidget *parent) :
             this, &MainScreen::setAlarmLimits);
 
     connect(this, &MainScreen::alarmOn,
-                this, &MainScreen::turnOnBlinking);
+            this, &MainScreen::turnOnBlinking);
     connect(this, &MainScreen::alarmOff,
-                this, &MainScreen::turnOffBlinking);
+            this, &MainScreen::turnOffBlinking);
 
     ui->widget_o2_porcentile_mini->hide();
 
     QString answer_shutdown = ProcessesClass::
-            executeProcess(this,"sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
-                           ProcessesClass::LINUX, 1000, true);
-    if(!GlobalFunctions::loadData()){
+        executeProcess(this, "sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
+                       ProcessesClass::LINUX, 1000, true);
+    if (!GlobalFunctions::loadData())
+    {
         QString mess = "Error"
                        "Calibracion no encontrada. Reintente calibracion";
         GlobalFunctions::setWarningMessage(this, mess);
@@ -49,13 +50,15 @@ MainScreen::MainScreen(QWidget *parent) :
     QString answer = ProcessesClass::executeProcess(this, "sudo i2cdetect -y 1",
                                                     ProcessesClass::LINUX, 1000, true);
 
-    if( (answer.contains("48") || answer.contains("49")) && 
-        answer.contains("64") && 
-        answer.contains("68")) {
-        qDebug()<<"Debug answer"<<answer;
+    if ((answer.contains("48") || answer.contains("49")) &&
+        answer.contains("64") &&
+        answer.contains("68"))
+    {
+        qDebug() << "Debug answer" << answer;
     }
-    else{
-        qDebug()<<"answer"<<answer;
+    else
+    {
+        qDebug() << "answer" << answer;
         QString mess = "Reinicie el equipo. Si persiste "
                        "el error, contacte a soportetecnico@cneuro.cu";
         GlobalFunctions::setErrorMessage(this, mess);
@@ -70,96 +73,137 @@ MainScreen::~MainScreen()
     delete ui;
 }
 
+void MainScreen::setBatteryChargeLevel(std::uint16_t value)
+{
 
-void MainScreen::setBatteryMeasurementValue(double value){
-   //process value here
-    if(value >= 0){
+    if (value == std::numeric_limits<std::uint16_t>::max())
+    {
+        onBatteryFull();
+    }
+    else
+    {
+        int difference = value - GlobalFunctions::lastBatteryLevel; //? positive charging else disconnected
+
+        if (difference != 0)
+        {
+            double processedValue = LTC2942::CHARGE_COULOMB_RATIO_M64 * difference;
+            GlobalFunctions::lastBatteryLevel = value;
+            setBatteryMeasurementValue(processedValue);
+        }
+    }
+}
+
+void MainScreen::setBatteryMeasurementValue(double value)
+{
+    //process value here
+    if (value >= 0)
+    {
         setConnectionState(true);
     }
-    else {
+    else
+    {
         setConnectionState(false);
     }
-   double processedValue = processBatteryMeasurementValue(value);
-   setRemainingTime(value);
-   if(processedValue > 0){ //processedValue is a value between 0 and 100
-       int batteryValue = qRound(processedValue / 25) * 25;
-       ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_" + QString::number(batteryValue) +".png"));
-       ui->l_battery_value->setText(QString::number(processedValue, 'f', 0) +"%");
-   }
-   if(processedValue <= 10) {
-       ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
-       lowBattery = true;
-       emit alarmType(ThrAlarm::P_HIGH);
-       emit alarmOn();
-   }
-   else {
-      emit alarmOff();
-   }
+    double processedValue = processBatteryMeasurementValue(value);
+    setRemainingTime(value);
+    if (processedValue > 0)
+    { //processedValue is a value between 0 and 100
+        int batteryValue = qRound(processedValue / 25) * 25;
+        ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_" + QString::number(batteryValue) + ".png"));
+        ui->l_battery_value->setText(QString::number(processedValue, 'f', 0) + "%");
+    }
+    if (processedValue <= 10)
+    {
+        ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
+        lowBattery = true;
+        emit alarmType(ThrAlarm::P_HIGH);
+        emit alarmOn();
+    }
+    else
+    {
+        emit alarmOff();
+    }
 }
-void MainScreen::setRemainingTime(double value) {
+void MainScreen::setRemainingTime(double value)
+{
     double remainingTime = ((batteryChargeValue / abs(value)) * 30); //seg
     int hours = int(remainingTime / 3600);
     double minutes = (remainingTime - (hours * 3600)) / 60;
-    QString remainingString = (((hours > 0)?QString::number(hours) + "h":"") + " "
-                               + ((minutes > 0)?QString::number(minutes, 'f', 0) + "m": "")).trimmed();
+    QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "m" : "")).trimmed();
     setLBatteryText(remainingString);
 }
-double MainScreen::processBatteryMeasurementValue(double value){
-    if(!batteryFull){
+double MainScreen::processBatteryMeasurementValue(double value)
+{
+    if (!batteryFull)
+    {
         batteryChargeValue += value;
     }
     value = batteryChargeValue * 100 / batteryMaximunDefaultConfiguration;
     return value;
 }
 
-void MainScreen::setConnectionState(bool state) {
-    if(state) {
+void MainScreen::setConnectionState(bool state)
+{
+    if (state)
+    {
         ui->l_lightning->show();
     }
-    else {
+    else
+    {
         ui->l_lightning->hide();
     }
 }
-void MainScreen::onBatteryFull(){
+void MainScreen::onBatteryFull()
+{
     ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
     batteryFull = true;
 }
 
-void MainScreen::turnOnBlinking(){
+void MainScreen::turnOnBlinking()
+{
     setBlinkState(true);
 }
-void MainScreen::turnOffBlinking(){
+void MainScreen::turnOffBlinking()
+{
     setBlinkState(false);
 }
 
-void MainScreen::toggleLabelVisibility(){
-    if (ui->l_oxygen_value->isHidden()) {
+void MainScreen::toggleLabelVisibility()
+{
+    if (ui->l_oxygen_value->isHidden())
+    {
         ui->l_oxygen_value->show();
     }
-    else {
+    else
+    {
         ui->l_oxygen_value->hide();
     }
 }
 
-void MainScreen::setBlinkState(bool active){
-    if(active) {
+void MainScreen::setBlinkState(bool active)
+{
+    if (active)
+    {
         timerBlink.setInterval(BLINK_INTERVAL);
         connect(&timerBlink, &QTimer::timeout, this, &MainScreen::toggleLabelVisibility);
         timerBlink.start();
     }
-    else {
+    else
+    {
         timerBlink.stop();
         disconnect(&timerBlink, &QTimer::timeout, this, &MainScreen::toggleLabelVisibility);
         ui->l_oxygen_value->show();
     }
 }
 
-void MainScreen::setAlarmLimits(){
+void MainScreen::setAlarmLimits()
+{
     ui->l_min_value->setText(QString::number(GlobalFunctions::configured_min_limit));
     ui->l_max_value->setText(QString::number(GlobalFunctions::configured_max_limit));
 }
 
-void MainScreen::setDate(QDate date){
+void MainScreen::setDate(QDate date)
+{
     QMap<QString, QString> mapMonth;
     QMap<QString, QString> mapDays;
 
@@ -186,37 +230,47 @@ void MainScreen::setDate(QDate date){
     mapDays.insert("SAT", "SÁB");
     mapDays.insert("SUN", "DOM");
 
-    for (int i = 0; i < mapDays.size(); i++) {
+    for (int i = 0; i < mapDays.size(); i++)
+    {
         QString key = mapDays.keys().at(i);
-        if(dateString.contains(key, Qt::CaseInsensitive)) {
+        if (dateString.contains(key, Qt::CaseInsensitive))
+        {
             dateString = dateString.toUpper().replace(key, mapDays.value(key));
         }
     }
-    for (int i = 0; i < mapMonth.size(); i++) {
+    for (int i = 0; i < mapMonth.size(); i++)
+    {
         QString key = mapMonth.keys().at(i);
-        if(dateString.contains(key, Qt::CaseInsensitive)) {
+        if (dateString.contains(key, Qt::CaseInsensitive))
+        {
             dateString = dateString.toUpper().replace(key, mapMonth.value(key));
         }
     }
 
-    if(date.isValid()){
+    if (date.isValid())
+    {
         ///set label_2
         ui->l_date->setText(dateString);
     }
 }
 
-void MainScreen::setTime(QTime time){
-    if(time.isValid()){
+void MainScreen::setTime(QTime time)
+{
+    if (time.isValid())
+    {
         ///set label
         ui->l_time->setText(time.toString("hh:mm"));
     }
 }
 
-void MainScreen::emitAlarm(bool active){
-    if(active) {
+void MainScreen::emitAlarm(bool active)
+{
+    if (active)
+    {
         emit alarmOn();
     }
-    else {
+    else
+    {
         emit alarmOff();
     }
 }
@@ -224,62 +278,68 @@ void MainScreen::emitAlarm(bool active){
 void MainScreen::setOxygenValue(double value)
 {
     GlobalFunctions::lastSettedValue = value;
-//        setLBatteryText(QString::number(value, 'f', 6));
+    //        setLBatteryText(QString::number(value, 'f', 6));
 
-    if(blockedDisplayValue){
+    if (blockedDisplayValue)
+    {
         return;
     }
     value = GlobalFunctions::getRealValue(value);
     value = static_cast<std::double_t>(qRound(value));
 
-    if(value < MIX_OXY_ALLOWED || value > MAX_OXY_ALLOWED){
-        
-            //            ui->l_oxygen_value->setPixmap(QPixmap(":icons/general/alarm_icon.png"));
-            ui->l_oxygen_value->setScaledContents(true);
+    if (value < MIX_OXY_ALLOWED || value > MAX_OXY_ALLOWED)
+    {
 
-            QString style = ui->l_oxygen_value->styleSheet();
-            style += "color: rgb(239, 50, 50);";
-            ui->l_oxygen_value->setStyleSheet(style);
+        //            ui->l_oxygen_value->setPixmap(QPixmap(":icons/general/alarm_icon.png"));
+        ui->l_oxygen_value->setScaledContents(true);
 
-            ui->l_error_text->show();
-            ui->widget_min_value->hide();
-            ui->widget_max_value->hide();
-            ui->widget_o2_porcentile_mini->hide();
-            ui->widget_o2_porcentile->hide();
-            emit alarmType(ThrAlarm::P_HIGH);
-            emit alarmOn();
-            checkFontOfDisplay(value);
+        QString style = ui->l_oxygen_value->styleSheet();
+        style += "color: rgb(239, 50, 50);";
+        ui->l_oxygen_value->setStyleSheet(style);
 
-            ui->l_oxygen_value->setText(QString::number(qRound(value)));
-        
+        ui->l_error_text->show();
+        ui->widget_min_value->hide();
+        ui->widget_max_value->hide();
+        ui->widget_o2_porcentile_mini->hide();
+        ui->widget_o2_porcentile->hide();
+        emit alarmType(ThrAlarm::P_HIGH);
+        emit alarmOn();
+        checkFontOfDisplay(value);
+
+        ui->l_oxygen_value->setText(QString::number(qRound(value)));
+
         return;
     }
-    else{
+    else
+    {
         ui->l_oxygen_value->setScaledContents(true);
         ui->l_error_text->hide();
         ui->widget_min_value->show();
         ui->widget_max_value->show();
-        if(!lowBattery) {
+        if (!lowBattery)
+        {
             emit alarmOff();
         }
-        if(shownMenu) {
+        if (shownMenu)
+        {
             ui->widget_o2_porcentile_mini->show();
         }
-        else {
+        else
+        {
             ui->widget_o2_porcentile->show();
         }
         QString style = ui->l_oxygen_value->styleSheet();
         style.remove("color: rgb(239, 50, 50);");
         ui->l_oxygen_value->setStyleSheet(style);
-
     }
     ///TODO if Value is out or Range, start alarm process
     /// if Value is in Range, stop alarm process
 
-    if(value < GlobalFunctions::configured_min_limit
-            || value > GlobalFunctions::configured_max_limit){
+    if (value < GlobalFunctions::configured_min_limit || value > GlobalFunctions::configured_max_limit)
+    {
         ///TODO emit signal Alarm On
-        if(!lowBattery) {
+        if (!lowBattery)
+        {
             emit alarmOn();
             emit alarmType(ThrAlarm::P_MEDIUM);
         }
@@ -287,9 +347,11 @@ void MainScreen::setOxygenValue(double value)
         style += "color: rgb(239, 169, 3);";
         ui->l_oxygen_value->setStyleSheet(style);
     }
-    else{
+    else
+    {
         ///TODO emit signal Alarm Off
-        if(!lowBattery) {
+        if (!lowBattery)
+        {
             emit alarmOff();
         }
         QString style = ui->l_oxygen_value->styleSheet();
@@ -299,40 +361,50 @@ void MainScreen::setOxygenValue(double value)
     checkFontOfDisplay(value);
 
     ui->l_oxygen_value->setText(QString::number(qRound(value)));
-    GlobalFunctions::lastSettedValue = value;    
+    GlobalFunctions::lastSettedValue = value;
 }
 
-void MainScreen::checkFontOfDisplay(double value){
+void MainScreen::checkFontOfDisplay(double value)
+{
     checkFontOfDisplay(QString::number(qRound(value)));
 }
-void MainScreen::checkFontOfDisplay(QString text){
-    if(text.size() >= 3){
+void MainScreen::checkFontOfDisplay(QString text)
+{
+    if (text.size() >= 3)
+    {
         QFont f = ui->l_oxygen_value->font();
-        if(shownMenu){
+        if (shownMenu)
+        {
             f.setPointSize(24);
         }
-        else{
+        else
+        {
             f.setPointSize(118);
         }
         ui->l_oxygen_value->setFont(f);
     }
-    else{
+    else
+    {
         QFont f = ui->l_oxygen_value->font();
-        if(shownMenu){
+        if (shownMenu)
+        {
             f.setPointSize(50);
         }
-        else{
+        else
+        {
             f.setPointSize(180);
         }
         ui->l_oxygen_value->setFont(f);
     }
 }
 
-void MainScreen::setLBatteryText(QString text){
+void MainScreen::setLBatteryText(QString text)
+{
     ui->l_battery_text->setText(text);
     ui->l_battery_text->raise();
 }
-void MainScreen::setValueText(QString text){
+void MainScreen::setValueText(QString text)
+{
     blockedDisplayValue = true;
     ui->l_oxygen_value->setText(text);
     ui->l_oxygen_value->raise();
@@ -340,7 +412,7 @@ void MainScreen::setValueText(QString text){
 void MainScreen::setOxygenImage(QString image)
 {
     blockedDisplayValue = true;
-    qDebug()<<"image"<< image;
+    qDebug() << "image" << image;
     ui->l_oxygen_value->setPixmap(QPixmap(image));
     ui->widget_o2_porcentile_mini->hide();
     ui->l_oxygen_value->raise();
@@ -350,12 +422,14 @@ void MainScreen::emitMenuClicked()
 {
     emit menu_clicked();
 }
-void MainScreen::showWidgetMenu(){
-    if(main_menu != nullptr){
+void MainScreen::showWidgetMenu()
+{
+    if (main_menu != nullptr)
+    {
 
         shownMenu = true;
 
-        main_menu->move(0,135);
+        main_menu->move(0, 135);
         main_menu->showMenu();
 
         ui->l_oxygen_value->move(125, 70);
@@ -366,8 +440,10 @@ void MainScreen::showWidgetMenu(){
         ui->widget_o2_porcentile->hide();
     }
 }
-void MainScreen::hideWidgetMenu(){
-    if(main_menu != nullptr){
+void MainScreen::hideWidgetMenu()
+{
+    if (main_menu != nullptr)
+    {
         main_menu->hideMenu();
 
         shownMenu = false;
