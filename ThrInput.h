@@ -32,8 +32,8 @@ public:
 
 signals:
     void updateOxygenLevel(double);
-    void updateBatteryCharge(double);
-    void batteryIsCharging(bool); /// not needed;
+    void updateBatteryCharge(double);/// not needed;
+    void batteryChargeLevel(std::uint16_t);
     void batteryFull(void);
 
     void updateBatteryVoltage(QString);

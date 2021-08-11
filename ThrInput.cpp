@@ -95,8 +95,9 @@ void ThrInput::ThrInputRun() {
             if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
                 qDebug() << "****BattCharge: " << battCharge << " ****";
                 ThrInput::instance().readings.at(average++) = battCharge;
+                emit ThrInput::instance().batteryChargeLevel(battCharge);
                 if(average == MAX_AVERAGE){
-                    ThrInput::instance().processReadings();
+//                    ThrInput::instance().processReadings();
                     average = 0;
                 }
             }
