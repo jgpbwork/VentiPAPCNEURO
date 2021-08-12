@@ -40,7 +40,7 @@ bool LTC2942::Initialize()
             }
         }
 
-        this->setCharge(6500.0f);//this->status.load);
+//        this->setCharge(6500.0f);//this->status.load);
         if(readDevice(STATUS_REG, data)){
             this->statusReg_ = static_cast<std::uint8_t>(data);
         }
