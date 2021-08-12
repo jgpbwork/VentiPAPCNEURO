@@ -4,7 +4,6 @@
 #include <wiringPiI2C.h>
 #include <sys/time.h>
 
-#define MAX_COUNT 30
 
 ThrInput::ThrInput(QObject *parent) : QObject(),
                                       Singleton(this) {
@@ -49,6 +48,10 @@ bool ThrInput::deviceConfigure() {
     return true;
 }
 
+void ThrInput::emitInitialBatteryChargeValue(){
+    emit ThrInput::instance().batteryChargeLevel(currentBattCharge);
+}
+
 void ThrInput::ThrInputRun() {
     std::uint16_t lastDataADC = 0, battCharge = 0;
     std::uint8_t loop = MAX_COUNT;
@@ -64,7 +67,8 @@ void ThrInput::ThrInputRun() {
     time_t rawTime;
     struct tm *timeInfo;
     if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
-        emit ThrInput::instance().batteryChargeLevel(battCharge);
+        ThrInput::instance().currentBattCharge = battCharge;
+        QTimer::singleShot(1000, &ThrInput::instance(), SLOT(emitInitialBatteryChargeValue()));
     }
 
     while(true)
@@ -97,8 +101,9 @@ void ThrInput::ThrInputRun() {
             if(ThrInput::instance().drvBattGauge.readDevice(LTC2942::CONTROL_REG, data))
             if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
                 qDebug() << "****BattCharge: " << battCharge << " ****";
-                ThrInput::instance().readings.at(average++) = battCharge;
-                emit ThrInput::instance().batteryChargeLevel(battCharge);
+                ThrInput::instance().readings.at(average++) = battCharge;                
+                ThrInput::instance().currentBattCharge = battCharge;
+                emit ThrInput::instance().batteryChargeLevel(static_cast<int>(battCharge));
                 if(average == MAX_AVERAGE){
 //                    ThrInput::instance().processReadings();
                     average = 0;

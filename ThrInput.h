@@ -10,6 +10,8 @@
 #include "DrvRtc.h"
 #include "DrvGauge.h"
 
+#define MAX_COUNT 30
+
 class ThrInput : public QObject,
                  public Singleton<ThrInput>
 {
@@ -33,7 +35,7 @@ public:
 signals:
     void updateOxygenLevel(double);
     void updateBatteryCharge(double);/// not needed;
-    void batteryChargeLevel(std::uint16_t);
+    void batteryChargeLevel(int);
     void batteryFull(void);
 
     void updateBatteryVoltage(QString);
@@ -48,6 +50,8 @@ public slots:
     void setMinimumValue(const QString &value);
     void setMaximumValue(const QString value);
 
+private slots:
+    void emitInitialBatteryChargeValue();
 private:
     QThread* qThrInput_;    
 
@@ -62,6 +66,8 @@ private:
     std::float_t lastReading;
 
     std::array<std::uint16_t, MAX_AVERAGE> readings;
+
+    int currentBattCharge = 0;
 
     [[noreturn]] static void ThrInputRun();
 
