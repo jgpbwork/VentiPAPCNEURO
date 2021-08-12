@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include "mainmenu.h"
 #include "ThrAlarm.h"
+#include "ThrInput.h"
 #include <QTimer>
 
 #define MIX_OXY_ALLOWED 17
@@ -39,7 +40,7 @@ public slots:
     void setBlockedDisplayValue(bool b) { blockedDisplayValue = b; }
     bool getBlockedDisplayValue() { return blockedDisplayValue; }
 
-    void setBatteryChargeLevel(std::uint16_t value);
+    void setBatteryChargeLevel(int value);
     void setBatteryConnectionState(double value);
     void setConnectionState(bool state);
     void onBatteryFull();
@@ -74,6 +75,8 @@ private:
     double batteryMaximunDefaultConfiguration = 6500;
     double batteryChargeValue = 0;
     bool lowBattery = false;
+    bool lowMediumBattery = false;
+    double lastRemainingTime = -1;
 };
 
 #endif // MAINSCREEN_H

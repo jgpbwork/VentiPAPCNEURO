@@ -10,7 +10,7 @@
 #include <QGraphicsDropShadowEffect>
 
 MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
-                                          ui(new Ui::MainScreen)
+    ui(new Ui::MainScreen)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::CustomizeWindowHint);
@@ -38,8 +38,8 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
     ui->widget_o2_porcentile_mini->hide();
 
     QString answer_shutdown = ProcessesClass::
-        executeProcess(this, "sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
-                       ProcessesClass::LINUX, 1000, true);
+            executeProcess(this, "sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
+                           ProcessesClass::LINUX, 1000, true);
     if (!GlobalFunctions::loadData())
     {
         QString mess = "Error"
@@ -51,8 +51,8 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
                                                     ProcessesClass::LINUX, 1000, true);
 
     if ((answer.contains("48") || answer.contains("49")) &&
-        answer.contains("64") &&
-        answer.contains("68"))
+            answer.contains("64") &&
+            answer.contains("68"))
     {
         qDebug() << "Debug answer" << answer;
     }
@@ -73,7 +73,7 @@ MainScreen::~MainScreen()
     delete ui;
 }
 
-void MainScreen::setBatteryChargeLevel(std::uint16_t value)
+void MainScreen::setBatteryChargeLevel(int value)
 {
     int maxBatteryLevel = std::numeric_limits<std::uint16_t>::max();
     if (value == maxBatteryLevel)
@@ -85,7 +85,8 @@ void MainScreen::setBatteryChargeLevel(std::uint16_t value)
         if (GlobalFunctions::lastBatteryLevel == -1)
         {
             GlobalFunctions::lastBatteryLevel = value;
-            double porcentile = value * 100 / maxBatteryLevel;
+            double variation = static_cast<std::double_t>((value - MIN_BATTERY_LEVEL)) / static_cast<std::double_t>((maxBatteryLevel - MIN_BATTERY_LEVEL));
+            double porcentile = 100.0f * variation;
             setBatteryPorcentile(porcentile);
             return;
         }
@@ -94,26 +95,39 @@ void MainScreen::setBatteryChargeLevel(std::uint16_t value)
 
         if (difference != 0)
         {
-            double porcentile = value * 100 / maxBatteryLevel;
-            setBatteryPorcentile(porcentile);
-
-//            double processedValue = LTC2942::CHARGE_COULOMB_RATIO_M64 * difference;
+            //            double processedValue = LTC2942::CHARGE_COULOMB_RATIO_M64 * difference;
             GlobalFunctions::lastBatteryLevel = value;
+            if(difference < 0){
+                double variation = static_cast<std::double_t>((value - MIN_BATTERY_LEVEL)) / static_cast<std::double_t>((maxBatteryLevel - MIN_BATTERY_LEVEL));
+                double porcentile = 100.0f * variation;
+                setBatteryPorcentile(porcentile);
+
+                setRemainingTime(difference);
+            }
             setBatteryConnectionState(difference);
-            setRemainingTime(difference);
         }
     }
 }
 
 void MainScreen::setBatteryPorcentile(double value)
 {
-    if (value > 0)
+    if (value >= 0)
     { //processedValue is a value between 0 and 100
         int batteryValue = qRound(value / 25) * 25;
         ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_" + QString::number(batteryValue) + ".png"));
         ui->l_battery_value->setText(QString::number(value, 'f', 0) + "%");
     }
-    if (value <= 10)
+    else {
+        return;
+    }
+    if (value <= 10 && value > 5)
+    {
+        ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_medium.png"));
+        lowMediumBattery = true;
+        emit alarmType(ThrAlarm::P_MEDIUM);
+        emit alarmOn();
+    }
+    else if (value <= 5)
     {
         ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
         lowBattery = true;
@@ -132,21 +146,28 @@ void MainScreen::setBatteryConnectionState(double value)
     if (value >= 0)
     {
         setConnectionState(true);
-        // ui->l_battery_value->hide();
+        ui->l_battery_value->hide();
+        ui->l_battery_text->hide();
+        ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_100.png"));
     }
     else
     {
         setConnectionState(false);
+        ui->l_battery_value->show();
+        ui->l_battery_text->show();
     }
 }
 
 void MainScreen::setRemainingTime(double difference)
 {
-    double remainingTime = ((GlobalFunctions::lastBatteryLevel / abs(difference)) * 30); //seg
-    int hours = static_cast<int>(remainingTime / 3600);
-    double minutes = (remainingTime - (hours * 3600)) / 60;
-    QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "m" : "")).trimmed();
-    setLBatteryText(remainingString);
+    double remainingTime = (((GlobalFunctions::lastBatteryLevel - MIN_BATTERY_LEVEL) / abs(difference)) * MAX_COUNT); //seg
+    if(lastRemainingTime > remainingTime || lastRemainingTime < 0){
+        lastRemainingTime = remainingTime;
+        int hours = static_cast<int>(remainingTime / 3600);
+        double minutes = (remainingTime - (hours * 3600)) / 60;
+        QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "m" : "")).trimmed();
+        setLBatteryText(remainingString);
+    }
 }
 
 void MainScreen::setConnectionState(bool state)
@@ -163,7 +184,7 @@ void MainScreen::setConnectionState(bool state)
 
 void MainScreen::onBatteryFull()
 {
-    ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
+    ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_100.png"));
     batteryFull = true;
 }
 
@@ -324,7 +345,7 @@ void MainScreen::setOxygenValue(double value)
         ui->l_error_text->hide();
         ui->widget_min_value->show();
         ui->widget_max_value->show();
-        if (!lowBattery)
+        if (!lowBattery && !lowMediumBattery)
         {
             emit alarmOff();
         }
@@ -358,7 +379,7 @@ void MainScreen::setOxygenValue(double value)
     else
     {
         ///TODO emit signal Alarm Off
-        if (!lowBattery)
+        if (!lowBattery && !lowMediumBattery)
         {
             emit alarmOff();
         }
