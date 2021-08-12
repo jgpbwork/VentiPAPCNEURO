@@ -15,12 +15,6 @@ ThrInput::ThrInput(QObject *parent) : QObject(),
 //    this->processReadings();
     this->readings.fill(0);
 
-    ///delete this after testing
-    std::float_t cal;
-    std::uint16_t diff = 30;
-
-     cal = static_cast<std::float_t>(diff) * 0.085f * ((false) ?0.5f:1.0f);
-
     /// Low Level Driver Initialization Sequence...
     /// Real Time Clock Initialization.
     /// Analog to Digital Converter for Oxigen Sensor Initialization Sequence...
@@ -68,7 +62,9 @@ void ThrInput::ThrInputRun() {
     struct tm *timeInfo;
     if(ThrInput::instance().drvBattGauge.readCharge(battCharge)){
         ThrInput::instance().currentBattCharge = battCharge;
-        QTimer::singleShot(1000, &ThrInput::instance(), SLOT(emitInitialBatteryChargeValue()));
+        ThrInput::instance().qThrInput_->msleep(3000);
+        emit ThrInput::instance().batteryChargeLevel(battCharge);
+//        QTimer::singleShot(1000, &ThrInput::instance(), SLOT(emitInitialBatteryChargeValue()));
     }
 
     while(true)
