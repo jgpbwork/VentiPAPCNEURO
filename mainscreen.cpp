@@ -165,7 +165,7 @@ void MainScreen::setRemainingTime(double difference)
         lastRemainingTime = remainingTime;
         int hours = static_cast<int>(remainingTime / 3600);
         double minutes = (remainingTime - (hours * 3600)) / 60;
-        QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "m" : "")).trimmed();
+        QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "min" : "")).trimmed();
         setLBatteryText(remainingString);
     }
 }

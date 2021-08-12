@@ -10,7 +10,7 @@
 
 #define MIX_OXY_ALLOWED 17
 #define MAX_OXY_ALLOWED 105
-#define BLINK_INTERVAL 500 //ms
+#define BLINK_INTERVAL 1500 //ms
 namespace Ui
 {
     class MainScreen;
