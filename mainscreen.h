@@ -10,8 +10,9 @@
 #define MIX_OXY_ALLOWED 17
 #define MAX_OXY_ALLOWED 105
 #define BLINK_INTERVAL 500 //ms
-namespace Ui {
-class MainScreen;
+namespace Ui
+{
+    class MainScreen;
 }
 
 class MainScreen : public QWidget
@@ -35,13 +36,15 @@ public slots:
     void setDate(QDate date);
     void setTime(QTime time);
 
-    void setBlockedDisplayValue(bool b){ blockedDisplayValue = b; }
-    bool getBlockedDisplayValue(){ return blockedDisplayValue; }
+    void setBlockedDisplayValue(bool b) { blockedDisplayValue = b; }
+    bool getBlockedDisplayValue() { return blockedDisplayValue; }
 
     void setBatteryChargeLevel(std::uint16_t value);
-    void setBatteryMeasurementValue(double value);
+    void setBatteryConnectionState(double value);
     void setConnectionState(bool state);
     void onBatteryFull();
+    void setBatteryPorcentile(double);
+
 signals:
     void menu_clicked();
     void alarmOn();
@@ -63,7 +66,7 @@ private slots:
 private:
     Ui::MainScreen *ui;
     MainMenu *main_menu = nullptr;
-    bool shownMenu =false;
+    bool shownMenu = false;
     bool blockedDisplayValue = false;
     QTimer timerBlink;
     double processBatteryMeasurementValue(double);

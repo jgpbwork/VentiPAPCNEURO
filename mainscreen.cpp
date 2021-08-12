@@ -75,44 +75,45 @@ MainScreen::~MainScreen()
 
 void MainScreen::setBatteryChargeLevel(std::uint16_t value)
 {
-
-    if (value == std::numeric_limits<std::uint16_t>::max())
+    int maxBatteryLevel = std::numeric_limits<std::uint16_t>::max();
+    if (value == maxBatteryLevel)
     {
         onBatteryFull();
     }
     else
     {
+        if (GlobalFunctions::lastBatteryLevel == -1)
+        {
+            GlobalFunctions::lastBatteryLevel = value;
+            double porcentile = value * 100 / maxBatteryLevel;
+            setBatteryPorcentile(porcentile);
+            return;
+        }
+
         int difference = value - GlobalFunctions::lastBatteryLevel; //? positive charging else disconnected
 
         if (difference != 0)
         {
-            double processedValue = LTC2942::CHARGE_COULOMB_RATIO_M64 * difference;
+            double porcentile = value * 100 / maxBatteryLevel;
+            setBatteryPorcentile(porcentile);
+
+//            double processedValue = LTC2942::CHARGE_COULOMB_RATIO_M64 * difference;
             GlobalFunctions::lastBatteryLevel = value;
-            setBatteryMeasurementValue(processedValue);
+            setBatteryConnectionState(difference);
+            setRemainingTime(difference);
         }
     }
 }
 
-void MainScreen::setBatteryMeasurementValue(double value)
+void MainScreen::setBatteryPorcentile(double value)
 {
-    //process value here
-    if (value >= 0)
-    {
-        setConnectionState(true);
-    }
-    else
-    {
-        setConnectionState(false);
-    }
-    double processedValue = processBatteryMeasurementValue(value);
-    setRemainingTime(value);
-    if (processedValue > 0)
+    if (value > 0)
     { //processedValue is a value between 0 and 100
-        int batteryValue = qRound(processedValue / 25) * 25;
+        int batteryValue = qRound(value / 25) * 25;
         ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_" + QString::number(batteryValue) + ".png"));
-        ui->l_battery_value->setText(QString::number(processedValue, 'f', 0) + "%");
+        ui->l_battery_value->setText(QString::number(value, 'f', 0) + "%");
     }
-    if (processedValue <= 10)
+    if (value <= 10)
     {
         ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
         lowBattery = true;
@@ -124,22 +125,28 @@ void MainScreen::setBatteryMeasurementValue(double value)
         emit alarmOff();
     }
 }
-void MainScreen::setRemainingTime(double value)
+
+void MainScreen::setBatteryConnectionState(double value)
 {
-    double remainingTime = ((batteryChargeValue / abs(value)) * 30); //seg
-    int hours = int(remainingTime / 3600);
+    //process value here
+    if (value >= 0)
+    {
+        setConnectionState(true);
+        // ui->l_battery_value->hide();
+    }
+    else
+    {
+        setConnectionState(false);
+    }
+}
+
+void MainScreen::setRemainingTime(double difference)
+{
+    double remainingTime = ((GlobalFunctions::lastBatteryLevel / abs(difference)) * 30); //seg
+    int hours = static_cast<int>(remainingTime / 3600);
     double minutes = (remainingTime - (hours * 3600)) / 60;
     QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "m" : "")).trimmed();
     setLBatteryText(remainingString);
-}
-double MainScreen::processBatteryMeasurementValue(double value)
-{
-    if (!batteryFull)
-    {
-        batteryChargeValue += value;
-    }
-    value = batteryChargeValue * 100 / batteryMaximunDefaultConfiguration;
-    return value;
 }
 
 void MainScreen::setConnectionState(bool state)
@@ -153,6 +160,7 @@ void MainScreen::setConnectionState(bool state)
         ui->l_lightning->hide();
     }
 }
+
 void MainScreen::onBatteryFull()
 {
     ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
