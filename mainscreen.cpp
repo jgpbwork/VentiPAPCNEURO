@@ -10,7 +10,7 @@
 #include <QGraphicsDropShadowEffect>
 
 MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
-    ui(new Ui::MainScreen)
+                                          ui(new Ui::MainScreen)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::CustomizeWindowHint);
@@ -38,8 +38,8 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
     ui->widget_o2_porcentile_mini->hide();
 
     QString answer_shutdown = ProcessesClass::
-            executeProcess(this, "sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
-                           ProcessesClass::LINUX, 1000, true);
+        executeProcess(this, "sudo python /home/pi/VentiApp/scripts/shutdownbuttons.py &",
+                       ProcessesClass::LINUX, 1000, true);
     if (!GlobalFunctions::loadData())
     {
         QString mess = "Error"
@@ -51,8 +51,8 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
                                                     ProcessesClass::LINUX, 1000, true);
 
     if ((answer.contains("48") || answer.contains("49")) &&
-            answer.contains("64") &&
-            answer.contains("68"))
+        answer.contains("64") &&
+        answer.contains("68"))
     {
         qDebug() << "Debug answer" << answer;
     }
@@ -97,7 +97,8 @@ void MainScreen::setBatteryChargeLevel(int value)
         {
             //            double processedValue = LTC2942::CHARGE_COULOMB_RATIO_M64 * difference;
             GlobalFunctions::lastBatteryLevel = value;
-            if(difference < 0){
+            if (difference < 0)
+            {
                 double variation = static_cast<std::double_t>((value - MIN_BATTERY_LEVEL)) / static_cast<std::double_t>((maxBatteryLevel - MIN_BATTERY_LEVEL));
                 double porcentile = 100.0f * variation;
                 setBatteryPorcentile(porcentile);
@@ -117,7 +118,8 @@ void MainScreen::setBatteryPorcentile(double value)
         ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_" + QString::number(batteryValue) + ".png"));
         ui->l_battery_value->setText(QString::number(value, 'f', 0) + "%");
     }
-    else {
+    else
+    {
         return;
     }
     if (value <= 10 && value > 5)
@@ -161,7 +163,8 @@ void MainScreen::setBatteryConnectionState(double value)
 void MainScreen::setRemainingTime(double difference)
 {
     double remainingTime = (((GlobalFunctions::lastBatteryLevel - MIN_BATTERY_LEVEL) / abs(difference)) * MAX_COUNT); //seg
-    if(lastRemainingTime > remainingTime || lastRemainingTime < 0){
+    if (lastRemainingTime > remainingTime || lastRemainingTime < 0)
+    {
         lastRemainingTime = remainingTime;
         int hours = static_cast<int>(remainingTime / 3600);
         double minutes = (remainingTime - (hours * 3600)) / 60;
@@ -201,10 +204,16 @@ void MainScreen::toggleLabelVisibility()
 {
     if (ui->l_oxygen_value->isHidden())
     {
+        timerBlink.stop();
+        timerBlink.setInterval(BLINK_INTERVAL * 4);
+        timerBlink.start();
         ui->l_oxygen_value->show();
     }
     else
     {
+        timerBlink.stop();
+        timerBlink.setInterval(BLINK_INTERVAL);
+        timerBlink.start();
         ui->l_oxygen_value->hide();
     }
 }
