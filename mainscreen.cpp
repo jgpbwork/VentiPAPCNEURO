@@ -122,24 +122,6 @@ void MainScreen::setBatteryPorcentile(double value)
     {
         return;
     }
-    if (value <= 10 && value > 5)
-    {
-        ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_medium.png"));
-        lowMediumBattery = true;
-        emit alarmType(ThrAlarm::P_MEDIUM);
-        emit alarmOn();
-    }
-    else if (value <= 5)
-    {
-        ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
-        lowBattery = true;
-        emit alarmType(ThrAlarm::P_HIGH);
-        emit alarmOn();
-    }
-    else
-    {
-        emit alarmOff();
-    }
 }
 
 void MainScreen::setBatteryConnectionState(double value)
@@ -151,6 +133,12 @@ void MainScreen::setBatteryConnectionState(double value)
         ui->l_battery_value->hide();
         ui->l_battery_text->hide();
         ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_100.png"));
+        lowBattery = false;
+        lowMediumBattery = false;
+        if (!badRangeAlarmActive && errorRangeAlarmActive)
+        {
+            emit alarmOff();
+        }
     }
     else
     {
@@ -170,6 +158,30 @@ void MainScreen::setRemainingTime(double difference)
         double minutes = (remainingTime - (hours * 3600)) / 60;
         QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "min" : "")).trimmed();
         setLBatteryText(remainingString);
+    }
+    if (h <= 0)
+    {
+        int value = static_cast<int>(minutes);
+        if (value <= 10 && value > 5)
+        {
+            ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_medium.png"));
+            lowMediumBattery = true;
+            emit alarmType(ThrAlarm::P_MEDIUM);
+            emit alarmOn();
+        }
+        else if (value <= 5)
+        {
+            ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
+            lowBattery = true;
+            emit alarmType(ThrAlarm::P_HIGH);
+            emit alarmOn();
+        }
+        else
+        {
+            lowMediumBattery = false;
+            lowBattery = false;
+            emit alarmOff();
+        }
     }
 }
 
@@ -341,6 +353,7 @@ void MainScreen::setOxygenValue(double value)
         ui->widget_o2_porcentile_mini->hide();
         ui->widget_o2_porcentile->hide();
         emit alarmType(ThrAlarm::P_HIGH);
+        errorRangeAlarmActive = true;
         emit alarmOn();
         checkFontOfDisplay(value);
 
@@ -354,6 +367,7 @@ void MainScreen::setOxygenValue(double value)
         ui->l_error_text->hide();
         ui->widget_min_value->show();
         ui->widget_max_value->show();
+        errorRangeAlarmActive = false;
         if (!lowBattery && !lowMediumBattery)
         {
             emit alarmOff();
@@ -378,6 +392,7 @@ void MainScreen::setOxygenValue(double value)
         ///TODO emit signal Alarm On
         if (!lowBattery)
         {
+            badRangeAlarmActive = true;
             emit alarmOn();
             emit alarmType(ThrAlarm::P_MEDIUM);
         }
@@ -387,6 +402,7 @@ void MainScreen::setOxygenValue(double value)
     }
     else
     {
+        badRangeAlarmActive = false;
         ///TODO emit signal Alarm Off
         if (!lowBattery && !lowMediumBattery)
         {

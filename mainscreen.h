@@ -76,6 +76,8 @@ private:
     double batteryChargeValue = 0;
     bool lowBattery = false;
     bool lowMediumBattery = false;
+    bool badRangeAlarmActive = false;
+    bool errorRangeAlarmActive = false;
     double lastRemainingTime = -1;
 };
 
