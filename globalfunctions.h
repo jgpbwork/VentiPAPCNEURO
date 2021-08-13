@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QDateTime>
-#define MIN_BATTERY_LEVEL 20829
+#define MIN_BATTERY_LEVEL 21772
 
 class GlobalFunctions : public QWidget
 {

@@ -151,15 +151,15 @@ void MainScreen::setBatteryConnectionState(double value)
 void MainScreen::setRemainingTime(double difference)
 {
     double remainingTime = (((GlobalFunctions::lastBatteryLevel - MIN_BATTERY_LEVEL) / abs(difference)) * MAX_COUNT); //seg
+    int hours = static_cast<int>(remainingTime / 3600);
+    double minutes = (remainingTime - (hours * 3600)) / 60;
     if (lastRemainingTime > remainingTime || lastRemainingTime < 0)
     {
         lastRemainingTime = remainingTime;
-        int hours = static_cast<int>(remainingTime / 3600);
-        double minutes = (remainingTime - (hours * 3600)) / 60;
         QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "min" : "")).trimmed();
         setLBatteryText(remainingString);
     }
-    if (h <= 0)
+    if (hours <= 0)
     {
         int value = static_cast<int>(minutes);
         if (value <= 10 && value > 5)
@@ -183,6 +183,12 @@ void MainScreen::setRemainingTime(double difference)
             emit alarmOff();
         }
     }
+    else
+    {
+        lowMediumBattery = false;
+        lowBattery = false;
+        emit alarmOff();
+    }
 }
 
 void MainScreen::setConnectionState(bool state)
@@ -201,6 +207,13 @@ void MainScreen::onBatteryFull()
 {
     ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_100.png"));
     batteryFull = true;
+
+    lowBattery = false;
+    lowMediumBattery = false;
+
+    if(!badRangeAlarmActive && !errorRangeAlarmActive){
+        emit alarmOff();
+    }
 }
 
 void MainScreen::turnOnBlinking()

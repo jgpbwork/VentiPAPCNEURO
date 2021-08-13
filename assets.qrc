@@ -53,5 +53,7 @@
         <file>icons/general/alarm_icon.png</file>
         <file>icons/main_menu/general_menu/about_back_button.png</file>
         <file>icons/general/battery_medium.png</file>
+        <file>icons/general/battery_0.png</file>
+        <file>icons/general/battery_empty.png</file>
     </qresource>
 </RCC>
