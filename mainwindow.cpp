@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(&thrInput, &ThrInput::batteryFull, main_screen, &MainScreen::onBatteryFull);
 
     qDebug()<< "Application has Started ok" 
-            << "11111"
+            << "888"
             << "********************************";
 }
 

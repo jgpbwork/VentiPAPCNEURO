@@ -11,6 +11,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QProcess>
 #include <QDir>
+#include <QException>
 
 bool GlobalFunctions::myanimationEnabled = true;
 int GlobalFunctions::configured_min_limit = 21;
@@ -18,6 +19,7 @@ int GlobalFunctions::configured_max_limit = 28;
 int GlobalFunctions::lastBatteryLevel = -1;
 double GlobalFunctions::lastSettedValue = 0;
 double GlobalFunctions::m_slope_value = 100;
+QDateTime GlobalFunctions::lastCalibrationDateTime;
 double GlobalFunctions::n_value = 0;
 bool GlobalFunctions::calibrated = false;
 QDateTime GlobalFunctions::dateTime = QDateTime::currentDateTime();
@@ -176,6 +178,11 @@ bool GlobalFunctions::saveData()
     if (file.open(QIODevice::WriteOnly))
     {
         QJsonObject jsonObject;
+        try {
+            jsonObject.insert("lastCalibrationDateTime", lastCalibrationDateTime.toString("yyyy-MM-dd HH:mm:ss"));
+        } catch (QException e) {
+
+        }
         jsonObject.insert("m_slope_value", m_slope_value);
         jsonObject.insert("n_value", n_value);
         jsonObject.insert("calibrated", calibrated);
@@ -245,6 +252,7 @@ bool GlobalFunctions::loadData()
 
 bool GlobalFunctions::readValues(QJsonObject jsonObject)
 {
+
     double m = jsonObject.value("m_slope_value").toDouble();
     double n = jsonObject.value("n_value").toDouble();
     bool cal = jsonObject.value("calibrated").toBool();
@@ -254,6 +262,14 @@ bool GlobalFunctions::readValues(QJsonObject jsonObject)
         {
             if ((n > -10) && (n < 10))
             {
+                try {
+                    QString date = jsonObject.value("lastCalibrationDateTime").toString();
+                    if(!date.trimmed().isEmpty()){
+                        lastCalibrationDateTime = QDateTime::fromString(date, "yyyy-MM-dd HH:mm:ss");
+                    }
+                } catch (QException e) {
+
+                }
                 n_value = n;
                 m_slope_value = m;
                 calibrated = cal;

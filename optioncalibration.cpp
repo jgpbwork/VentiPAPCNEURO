@@ -2,6 +2,7 @@
 #include "ui_optioncalibration.h"
 #include "globalfunctions.h"
 #include <QDebug>
+#include <QDateTime>
 #include "mainscreen.h"
 
 OptionCalibration::OptionCalibration(QWidget *parent) :
@@ -117,15 +118,15 @@ void OptionCalibration::navigateNextState(){
         double m = 79.1/(maxCalValue - minCalValue);
         double n = 100 - (maxCalValue*(GlobalFunctions::m_slope_value));
 
-         qDebug()<<"calibration m_slope_value" << m;
-         qDebug()<<"calibration n_value" << n;
+        qDebug()<<"calibration m_slope_value" << m;
+        qDebug()<<"calibration n_value" << n;
         if(!(m > 0
-                && (n < 100
-                    && n > -100))){
+             && (n < 100
+                 && n > -100))){
             QString mess = "Error configurando calibracion"
                            ", reintente calibrar";
             GlobalFunctions::setWarningMessage(this->parentWidget()->parentWidget(), mess + "\n m = "
-            + QString::number(m) + "\n n = " + QString::number(n));
+                                               + QString::number(m) + "\n n = " + QString::number(n));
             currentStateJsonObject = getJsonObjectStateCancelCalibration();
             setCurrentState(currentStateJsonObject);
             return;
@@ -137,12 +138,13 @@ void OptionCalibration::navigateNextState(){
         GlobalFunctions::m_slope_value = 79.1/(maxCalValue - minCalValue);
         GlobalFunctions::n_value = 100 - (maxCalValue*(GlobalFunctions::m_slope_value));
         
-         qDebug()<<"calibration m_slope_value" << GlobalFunctions::m_slope_value;
-         qDebug()<<"calibration n_value" << GlobalFunctions::n_value;
+        qDebug()<<"calibration m_slope_value" << GlobalFunctions::m_slope_value;
+        qDebug()<<"calibration n_value" << GlobalFunctions::n_value;
         if(GlobalFunctions::m_slope_value > 0
                 && (GlobalFunctions::n_value < 100
                     && GlobalFunctions::n_value > -100)){
             GlobalFunctions::calibrated = true;
+            GlobalFunctions::lastCalibrationDateTime = QDateTime::currentDateTime();
             GlobalFunctions::saveData();
             on_l_calibration_back_clicked();
         }
@@ -258,12 +260,12 @@ void OptionCalibration::setCurrentState(QJsonObject jsonObjectState){
         ui->l_calibration_state_footer_text_1->hide();
     }
 
-    if(GlobalFunctions::checkIfFieldValid(jsonObjectState.value("calibration_state_footer_text_2").toString())){
-        ui->l_calibration_state_footer_text_2->setText(jsonObjectState.value("calibration_state_footer_text_2").toString());
-        ui->l_calibration_state_footer_text_2->show();
+    if(GlobalFunctions::checkIfFieldValid(jsonObjectState.value("calibration_state_footer_text_2").toString())){  //some times setted datetime here
+        ui->l_last_calibration_time->setText(jsonObjectState.value("calibration_state_footer_text_2").toString());
+        ui->l_last_calibration_time->show();
     }
     else{
-        ui->l_calibration_state_footer_text_2->hide();
+        ui->l_last_calibration_time->hide();
     }
 
     if(jsonObjectState.contains("calibration_state_error_tag")){
@@ -333,7 +335,16 @@ QJsonObject OptionCalibration::getJsonObjectStateInitInformation(){
     jsonObject.insert("calibration_state_button", "general/next_button.png");
     jsonObject.insert("calibration_state_footer_text_1", "Última calibración");
     ///TODO Set Real Calibration Date...
-    jsonObject.insert("calibration_state_footer_text_2", "12 dic. 2020 17:52");
+    if(GlobalFunctions::lastCalibrationDateTime.isValid()){
+        QString dateString = GlobalFunctions::lastCalibrationDateTime.toString("dd MMM yyyy HH:mm");
+        ui->l_last_calibration_time->text();
+        jsonObject.insert("calibration_state_footer_text_2", dateString);
+    }
+    else{
+        jsonObject.insert("calibration_state_footer_text_2", "--");
+
+    }
+
     return jsonObject;
 }
 

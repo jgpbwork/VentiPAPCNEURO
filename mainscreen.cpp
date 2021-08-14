@@ -135,7 +135,7 @@ void MainScreen::setBatteryConnectionState(double value)
         ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_100.png"));
         lowBattery = false;
         lowMediumBattery = false;
-        if (!badRangeAlarmActive && errorRangeAlarmActive)
+        if (!badRangeAlarmActive && !errorRangeAlarmActive)
         {
             emit alarmOff();
         }
@@ -156,12 +156,14 @@ void MainScreen::setRemainingTime(double difference)
     if (lastRemainingTime > remainingTime || lastRemainingTime < 0)
     {
         lastRemainingTime = remainingTime;
+        lastRemainingMinutes = minutes;
+        lastRemainingHours = hours;
         QString remainingString = (((hours > 0) ? QString::number(hours) + "h" : "") + " " + ((minutes > 0) ? QString::number(minutes, 'f', 0) + "min" : "")).trimmed();
         setLBatteryText(remainingString);
     }
-    if (hours <= 0)
+    if (lastRemainingHours <= 0)
     {
-        int value = static_cast<int>(minutes);
+        int value = qRound(lastRemainingMinutes);
         if (value <= 10 && value > 5)
         {
             ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_medium.png"));
@@ -169,9 +171,16 @@ void MainScreen::setRemainingTime(double difference)
             emit alarmType(ThrAlarm::P_MEDIUM);
             emit alarmOn();
         }
-        else if (value <= 5)
+        else if (value <= 5 && value != 0)
         {
             ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_low.png"));
+            lowBattery = true;
+            emit alarmType(ThrAlarm::P_HIGH);
+            emit alarmOn();
+        }
+        else if (value <= 0)
+        {
+            ui->l_battery_icon->setPixmap(QPixmap(":icons/general/battery_empty.png"));
             lowBattery = true;
             emit alarmType(ThrAlarm::P_HIGH);
             emit alarmOn();
@@ -180,14 +189,18 @@ void MainScreen::setRemainingTime(double difference)
         {
             lowMediumBattery = false;
             lowBattery = false;
-            emit alarmOff();
+            if(!badRangeAlarmActive && !errorRangeAlarmActive){
+                emit alarmOff();
+            }
         }
     }
     else
     {
         lowMediumBattery = false;
         lowBattery = false;
-        emit alarmOff();
+        if(!badRangeAlarmActive && !errorRangeAlarmActive){
+            emit alarmOff();
+        }
     }
 }
 
@@ -227,19 +240,38 @@ void MainScreen::turnOffBlinking()
 
 void MainScreen::toggleLabelVisibility()
 {
-    if (ui->l_oxygen_value->isHidden())
-    {
-        timerBlink.stop();
-        timerBlink.setInterval(BLINK_INTERVAL * 4);
-        timerBlink.start();
-        ui->l_oxygen_value->show();
+    bool shortInterval = false;
+    if(errorRangeAlarmActive || badRangeAlarmActive) {
+        if (ui->l_oxygen_value->isHidden())
+        {
+            ui->l_oxygen_value->show();
+        }
+        else
+        {
+            shortInterval = true;
+            ui->l_oxygen_value->hide();
+        }
     }
-    else
-    {
+    if(lowMediumBattery || lowBattery) {
+        if (ui->l_battery_icon->isHidden())
+        {
+            ui->l_battery_icon->show();
+        }
+        else
+        {
+            shortInterval = true;
+            ui->l_battery_icon->hide();
+        }
+    }
+    if(shortInterval){
         timerBlink.stop();
         timerBlink.setInterval(BLINK_INTERVAL);
         timerBlink.start();
-        ui->l_oxygen_value->hide();
+    }
+    else{
+        timerBlink.stop();
+        timerBlink.setInterval(BLINK_INTERVAL * 4);
+        timerBlink.start();
     }
 }
 
@@ -256,6 +288,7 @@ void MainScreen::setBlinkState(bool active)
         timerBlink.stop();
         disconnect(&timerBlink, &QTimer::timeout, this, &MainScreen::toggleLabelVisibility);
         ui->l_oxygen_value->show();
+        ui->l_battery_icon->show();
     }
 }
 

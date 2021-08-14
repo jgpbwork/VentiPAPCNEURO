@@ -79,6 +79,8 @@ private:
     bool badRangeAlarmActive = false;
     bool errorRangeAlarmActive = false;
     double lastRemainingTime = -1;
+    double lastRemainingHours = -1000;
+    double lastRemainingMinutes = -1000;
 };
 
 #endif // MAINSCREEN_H

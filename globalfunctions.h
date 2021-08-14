@@ -18,6 +18,7 @@ public:
     static int configured_min_limit;
     static double lastSettedValue;
 
+    static QDateTime lastCalibrationDateTime;
     static double m_slope_value;
     static double n_value;
     static bool calibrated;
