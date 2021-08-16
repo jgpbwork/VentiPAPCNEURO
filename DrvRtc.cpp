@@ -41,49 +41,50 @@ bool DS1307::Initialize() {
         QDateTime systemDateTime = QDateTime::fromString(dt);
 
         ///Reading RTC and compare to system time before update
+        /// TODO fix
         if(this->update()){
             if(this->dateTime_.isValid() && systemDateTime.isValid()){
-                if(systemDateTime > this->dateTime_){
-                    this->dateTime_ = systemDateTime;
-                    if(this->dateTime_.isValid()){
-                        int year_t = this->dateTime_.date().year();
+                qDebug() << "RTC Init Time: " << this->dateTime_.toString("ddd MMM dd hh:mm:ss yyyy");
+//                if(systemDateTime > this->dateTime_){
+//                    this->dateTime_ = systemDateTime;
+//                    if(this->dateTime_.isValid()){
+//                        int year_t = this->dateTime_.date().year();
 
-                        if(year_t >= BASE_YEAR){
-                            year_t -= BASE_YEAR;
-                        }
-                        else{
-                            year_t = BASE_YEAR + 1;
-                        }
-                        if(!year_t) year_t = BASE_YEAR_OVF;   ///Fix this
+//                        if(year_t >= BASE_YEAR){
+//                            year_t -= BASE_YEAR;
+//                        }
+//                        else{
+//                            year_t = BASE_YEAR + 1;
+//                        }
+//                        if(!year_t) year_t = BASE_YEAR_OVF;   ///Fix this
 
-                        qDebug()<< "Setting year: " << static_cast<std::uint8_t>(year_t);
-                        qDebug() << "Set Year: " << this->writeDevice(YEAR_REG,
-                                                                      DS1307::formatToBCD(static_cast<std::uint8_t>
-                                                                                          (this->dateTime_.date().year() - BASE_YEAR)))
-                                                  << this->getYear(year) << year;
-                        ThrInput::instance().getThreadInstance().msleep(10);
-                        qDebug() << "Set Month: " << this->writeDevice(MONTH_REG,
-                                                                       DS1307::formatToBCD(static_cast<std::uint8_t>
-                                                                                           (this->dateTime_.date().month())))
-                                                  << this->getMonth(month) << month;
-                        ThrInput::instance().getThreadInstance().msleep(10);
-                        qDebug() << "Set Day: " << this->writeDevice(DAY_REG,
-                                                                     DS1307::formatToBCD(static_cast<std::uint8_t>
-                                                                                         (this->dateTime_.date().day())))
-                                                << this->getDay(day) << day;
-                        ThrInput::instance().getThreadInstance().msleep(10);
-                        qDebug() << "Set Hour: " << this->writeDevice(HOURS_REG,
-                                                                      DS1307::formatToBCD(static_cast<std::uint8_t>
-                                                                                          (this->dateTime_.time().hour())))
-                                                 << this->getHours(hour) << hour;
-                        ThrInput::instance().getThreadInstance().msleep(10);
-                        qDebug() << "Set Minutes: " << this->writeDevice(MINUTES_REG,
-                                                                         DS1307::formatToBCD(static_cast<std::uint8_t>
-                                                                                             (this->dateTime_.time().minute())))
-                                                    << this->getMinutes(min) << min;
-                    }
-
-                }
+//                        qDebug()<< "Setting year: " << static_cast<std::uint8_t>(year_t);
+//                        qDebug() << "Set Year: " << this->writeDevice(YEAR_REG,
+//                                                                      DS1307::formatToBCD(static_cast<std::uint8_t>
+//                                                                                          (this->dateTime_.date().year() - BASE_YEAR)))
+//                                                  << this->getYear(year) << year;
+//                        ThrInput::instance().getThreadInstance().msleep(10);
+//                        qDebug() << "Set Month: " << this->writeDevice(MONTH_REG,
+//                                                                       DS1307::formatToBCD(static_cast<std::uint8_t>
+//                                                                                           (this->dateTime_.date().month())))
+//                                                  << this->getMonth(month) << month;
+//                        ThrInput::instance().getThreadInstance().msleep(10);
+//                        qDebug() << "Set Day: " << this->writeDevice(DAY_REG,
+//                                                                     DS1307::formatToBCD(static_cast<std::uint8_t>
+//                                                                                         (this->dateTime_.date().day())))
+//                                                << this->getDay(day) << day;
+//                        ThrInput::instance().getThreadInstance().msleep(10);
+//                        qDebug() << "Set Hour: " << this->writeDevice(HOURS_REG,
+//                                                                      DS1307::formatToBCD(static_cast<std::uint8_t>
+//                                                                                          (this->dateTime_.time().hour())))
+//                                                 << this->getHours(hour) << hour;
+//                        ThrInput::instance().getThreadInstance().msleep(10);
+//                        qDebug() << "Set Minutes: " << this->writeDevice(MINUTES_REG,
+//                                                                         DS1307::formatToBCD(static_cast<std::uint8_t>
+//                                                                                             (this->dateTime_.time().minute())))
+//                                                    << this->getMinutes(min) << min;
+//                    }
+//                }
             }
 
         }
