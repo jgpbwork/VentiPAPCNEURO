@@ -58,6 +58,20 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
     }
     else
     {
+        QStringList not_contains;
+        if (!(answer.contains("48") || answer.contains("49")))
+        {
+            not_contains << "48 o 49";
+        }
+        if (!(answer.contains("64")))
+        {
+            not_contains << "64";
+        };
+        if (!(answer.contains("68")))
+        {
+            not_contains << "68";
+        };
+
         qDebug() << "answer" << answer;
         QString mess = "Reinicie el equipo. Si persiste "
                        "el error, contacte a soportetecnico@cneuro.cu";
@@ -189,7 +203,8 @@ void MainScreen::setRemainingTime(double difference)
         {
             lowMediumBattery = false;
             lowBattery = false;
-            if(!badRangeAlarmActive && !errorRangeAlarmActive){
+            if (!badRangeAlarmActive && !errorRangeAlarmActive)
+            {
                 emit alarmOff();
             }
         }
@@ -198,7 +213,8 @@ void MainScreen::setRemainingTime(double difference)
     {
         lowMediumBattery = false;
         lowBattery = false;
-        if(!badRangeAlarmActive && !errorRangeAlarmActive){
+        if (!badRangeAlarmActive && !errorRangeAlarmActive)
+        {
             emit alarmOff();
         }
     }
@@ -224,7 +240,8 @@ void MainScreen::onBatteryFull()
     lowBattery = false;
     lowMediumBattery = false;
 
-    if(!badRangeAlarmActive && !errorRangeAlarmActive){
+    if (!badRangeAlarmActive && !errorRangeAlarmActive)
+    {
         emit alarmOff();
     }
 }
@@ -241,7 +258,8 @@ void MainScreen::turnOffBlinking()
 void MainScreen::toggleLabelVisibility()
 {
     bool shortInterval = false;
-    if(errorRangeAlarmActive || badRangeAlarmActive) {
+    if (errorRangeAlarmActive || badRangeAlarmActive)
+    {
         if (ui->l_oxygen_value->isHidden())
         {
             ui->l_oxygen_value->show();
@@ -252,7 +270,8 @@ void MainScreen::toggleLabelVisibility()
             ui->l_oxygen_value->hide();
         }
     }
-    if(lowMediumBattery || lowBattery) {
+    if (lowMediumBattery || lowBattery)
+    {
         if (ui->l_battery_icon->isHidden())
         {
             ui->l_battery_icon->show();
@@ -263,12 +282,14 @@ void MainScreen::toggleLabelVisibility()
             ui->l_battery_icon->hide();
         }
     }
-    if(shortInterval){
+    if (shortInterval)
+    {
         timerBlink.stop();
         timerBlink.setInterval(BLINK_INTERVAL);
         timerBlink.start();
     }
-    else{
+    else
+    {
         timerBlink.stop();
         timerBlink.setInterval(BLINK_INTERVAL * 4);
         timerBlink.start();
