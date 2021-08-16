@@ -43,5 +43,12 @@ public:
     /// \param pinLevel The value to be written in the GPIO. Posible values comes from @ref GpioPinLevel. 
     ///        Defaul value if non is set is @ref DrvGpio::GpioPinLevel "GPIO_LOW".
     void write(int pinNumber, GpioPinLevel pinLevel = DrvGpio::GPIO_LOW);
+
+
+    ///
+    /// \brief read
+    /// \param pinNumber  The number for the GPIO to be read.
+    /// \return The level for read GPIO.
+    int read(int pinNumber);
 };
 #endif // DRVGPIO_H

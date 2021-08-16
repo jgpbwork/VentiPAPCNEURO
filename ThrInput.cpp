@@ -11,6 +11,8 @@ ThrInput::ThrInput(QObject *parent) : QObject(),
     this->minVal = 0.0f;
     this->maxVal = 100.0f;
     this->lastReading = 20.9f;
+    this->offSignal.setup(SHUTDOWN_BUTTON_GPIO, DrvGpio::GPIO_IN);
+
     this->readings = std::array<std::uint16_t, ThrInput::MAX_AVERAGE>{65520,65520,65520,65520,65520};
 //    this->processReadings();
     this->readings.fill(0);
@@ -51,6 +53,8 @@ void ThrInput::ThrInputRun() {
     std::uint8_t loop = MAX_COUNT;
     std::uint8_t average = 0;
     static std::uint8_t regCtrl=0;
+    static int offSignalBefore = 0;
+    static int offSignalAfter = 0;
     float val = 0.0f;
     float engValue = 0.0f, battVoltage = 0.0f, battTemp = 0.0f;
     int data;
@@ -82,16 +86,18 @@ void ThrInput::ThrInputRun() {
         /// data validation...
         val = ThrInput::instance().drvAdc.ToEngValue(lastDataADC);
         engValue = (val * 1000.0f) * 20.9f / 11.5f;
-        qDebug() << "Sensor Voltage: " << val << " (" << engValue << ") % O2.";
+//        qDebug() << "Sensor Voltage: " << val << " (" << engValue << ") % O2.";
         ThrInput::instance().lastReading = val;
 
         /// Continue to read Battery Gauge Value
         if(ThrInput::instance().drvBattGauge.readVoltage(battVoltage)){
-            qDebug() << "BattVoltage: " << battVoltage;
+//            qDebug() << "BattVoltage: " << battVoltage;
         }
 //        if(ThrInput::instance().drvBattGauge.readTemperature(battTemp)){
 //            qDebug() << "BattTemperature: " << battTemp;
 //        }
+
+
         if(!(--loop)){
             battCharge = 0;
             if(ThrInput::instance().drvBattGauge.readDevice(LTC2942::CONTROL_REG, data))
@@ -112,15 +118,21 @@ void ThrInput::ThrInputRun() {
 
         /// Continue to read RTC
         if(ThrInput::instance().drvRtc.update()){
-            qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
+//            qDebug() << ThrInput::instance().drvRtc.getDateTime().toString("dd/MM/yy hh:mm:ss");
             time(&rawTime);
             timeInfo = localtime(&rawTime);
-            qDebug() << "System time: " << asctime(timeInfo);
+//            qDebug() << "System time: " << asctime(timeInfo);
             ThrInput::instance().updateRealTimeClock(ThrInput::instance().drvRtc.getDateTime());
         }
         /// emit UI signal...
         ThrInput::instance().updateReadings(val, battVoltage);
+        offSignalBefore = ThrInput::instance().offSignal.read(SHUTDOWN_BUTTON_GPIO);
         ThrInput::instance().qThrInput_->msleep(1000);   ///Wait a second to update next readings...
+
+        offSignalAfter = offSignalBefore | ThrInput::instance().offSignal.read(SHUTDOWN_BUTTON_GPIO);
+        if(!offSignalAfter) ///TODO emit off signal
+            emit ThrInput::instance().shutdownSignalArrived();
+
     }
 }
 

@@ -14,3 +14,7 @@ void DrvGpio::write(int pinNumber, GpioPinLevel level)
 {
     return digitalWrite(pinNumber, static_cast<int>(level));
 }
+
+int DrvGpio::read(int pinNumber){
+    return digitalRead(pinNumber);
+}

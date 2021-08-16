@@ -9,8 +9,10 @@
 #include "DrvAdc.h"
 #include "DrvRtc.h"
 #include "DrvGauge.h"
+#include "DrvGpio.h"
 
 #define MAX_COUNT 30
+#define SHUTDOWN_BUTTON_GPIO 7
 
 class ThrInput : public QObject,
                  public Singleton<ThrInput>
@@ -37,6 +39,7 @@ signals:
     void updateBatteryCharge(double);/// not needed;
     void batteryChargeLevel(int);
     void batteryFull(void);
+    void shutdownSignalArrived(void);
 
     void updateBatteryVoltage(QString);
     void updateRealTimeClock(QDateTime);
@@ -60,6 +63,7 @@ private:
     ADS1115 drvAdc;
     DS1307 drvRtc;
     LTC2942 drvBattGauge;
+    DrvGpio offSignal;
 
     std::float_t minVal;
     std::float_t maxVal;
