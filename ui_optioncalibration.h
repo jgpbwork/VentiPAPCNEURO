@@ -27,7 +27,7 @@ public:
     MyLabelAnimated *l_calibration_state_button;
     QTextEdit *pt_calibration_state_text;
     QLabel *l_calibration_state_footer_text_1;
-    QLabel *l_calibration_state_footer_text_2;
+    QLabel *l_last_calibration_time;
     QLabel *l_calibration_state;
     QLabel *l_calibration_state_progress_text;
     QProgressBar *pbar_calibration_state_progress;
@@ -83,13 +83,13 @@ public:
         l_calibration_state_footer_text_1->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
 "color:rgb(62, 167, 132);"));
         l_calibration_state_footer_text_1->setAlignment(Qt::AlignCenter);
-        l_calibration_state_footer_text_2 = new QLabel(widget);
-        l_calibration_state_footer_text_2->setObjectName(QStringLiteral("l_calibration_state_footer_text_2"));
-        l_calibration_state_footer_text_2->setGeometry(QRect(60, 320, 201, 31));
-        l_calibration_state_footer_text_2->setFont(font1);
-        l_calibration_state_footer_text_2->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
+        l_last_calibration_time = new QLabel(widget);
+        l_last_calibration_time->setObjectName(QStringLiteral("l_last_calibration_time"));
+        l_last_calibration_time->setGeometry(QRect(60, 320, 201, 31));
+        l_last_calibration_time->setFont(font1);
+        l_last_calibration_time->setStyleSheet(QLatin1String("background-image: url(:/icons/general/fondo_transparente.png);\n"
 "color:rgb(62, 167, 132);"));
-        l_calibration_state_footer_text_2->setAlignment(Qt::AlignCenter);
+        l_last_calibration_time->setAlignment(Qt::AlignCenter);
         l_calibration_state = new QLabel(widget);
         l_calibration_state->setObjectName(QStringLiteral("l_calibration_state"));
         l_calibration_state->setGeometry(QRect(60, 100, 201, 31));
@@ -184,7 +184,7 @@ public:
 "</style></head><body style=\" font-family:'Swis721 Lt BT'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">El dispositivo deber\303\241 realizar una medici\303\263n m\303\241xima y m\303\255nima. Para ello siga las instruciones durante el progreso una vez iniciado</p></body></html>", nullptr));
         l_calibration_state_footer_text_1->setText(QApplication::translate("OptionCalibration", "\303\232ltima calibraci\303\263n", nullptr));
-        l_calibration_state_footer_text_2->setText(QApplication::translate("OptionCalibration", "12 dic. 2020 17:52", nullptr));
+        l_last_calibration_time->setText(QApplication::translate("OptionCalibration", "12 dic. 2020 17:52", nullptr));
         l_calibration_state->setText(QApplication::translate("OptionCalibration", "Informaci\303\263n", nullptr));
         l_calibration_state_progress_text->setText(QApplication::translate("OptionCalibration", "Medici\303\263n m\303\255nima", nullptr));
         l_calibration_state_button_out->setText(QString());
