@@ -13,21 +13,66 @@
 #include <QDir>
 #include <QException>
 
-bool GlobalFunctions::myanimationEnabled = true;
+// Enables global animation of the application or not
+// (animation of buttons and widgets)
+bool GlobalFunctions::myanimationEnabled = true; 
+
+// Default  minimun value of FiO2 setted on MainScreen
 int GlobalFunctions::configured_min_limit = 21;
+
+// Default  maximun value of FiO2 setted on MainScreen
 int GlobalFunctions::configured_max_limit = 28;
+
+// Global last battery level received from sensor's thread
+// Value between 65535 and MIN_BATTERY_LEVEL -> 
+// (current battery configuration setted) 
 int GlobalFunctions::lastBatteryLevel = -1;
+
+// Global last received sensor's oxygen thread value
+// It can be the unproccess value when calibrating or 
+// proccess value after the calibration occurs
 double GlobalFunctions::lastSettedValue = 0;
+
+// Global (m) slope value setted on calibration or loading last
+// calibration slope value inside the save_config.dat file 
 double GlobalFunctions::m_slope_value = 100;
-QDateTime GlobalFunctions::lastCalibrationDateTime;
+
+// Global (n) offset value setted on calibration or loading last
+// calibration offset value inside the save_config.dat file
 double GlobalFunctions::n_value = 0;
+
+// Last calibration date time value, setted on calibration 
+// or loading last calibration inside the save_config.dat file 
+QDateTime GlobalFunctions::lastCalibrationDateTime;
+
+// Global calibration state value, setted on calibration 
+// or loading last calibration inside the save_config.dat file 
 bool GlobalFunctions::calibrated = false;
+
+// Global current date time of environment, at start of application
 QDateTime GlobalFunctions::dateTime = QDateTime::currentDateTime();
 
+/**
+ * Constructor of the class, not using it right now
+ * this is like a static class in Java, with only 
+ * static functions, an utils class
+ * 
+ * @param  {parent} undefined                                  : 
+ * @return {GlobalFunctions::GlobalFunctions(QWidgetparent)*}  : 
+ */
 GlobalFunctions::GlobalFunctions(QWidget *parent) : QWidget(parent)
 {
 }
 
+/**
+ * GlobalFunctions 
+ * 
+ * This function sets the date and time of the computer 
+ *  
+ * @param  {QWidget*} parent : Widget for parenting the QProcess
+ * @param  {QDateTime} dt    : Date and time to set
+ * @return {QString}         : Response of the Terminal of setting the date and time
+ */
 QString GlobalFunctions::setDateTimeInRaspi(QWidget *parent, QDateTime dt)
 {
     dateTime = dt;
@@ -68,6 +113,15 @@ QString GlobalFunctions::setDateTimeInRaspi(QWidget *parent, QDateTime dt)
     return str;
 }
 
+/**
+ * GlobalFunctions 
+ * 
+ * Sets an error message widget over the parent widget, it annot be closed
+ * 
+ * @param  {QWidget*} parent : Parent widget of the error message
+ * @param  {QString} mess    : Error message to display
+ * @return {bool}            : Not using the return value, it was going to be use for a try catch
+ */
 bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess)
 {
     QWidget *widget = new QWidget(parent);
@@ -110,6 +164,16 @@ bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess)
 
     return true;
 }
+
+/**
+ * GlobalFunctions 
+ * 
+ * Sets an warning message widget over the parent widget
+ * 
+ * @param  {QWidget*} parent : Parent widget of the warning message
+ * @param  {QString} mess    : Warning message to display
+ * @return {bool}            : Not using the return value, it was going to be use for a try catch
+ */
 bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
 {
     QWidget *widget = new QWidget(parent);
@@ -123,14 +187,14 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
     widget->setStyleSheet("border-radius: 10px");
 
     QLabel *icon = new QLabel(widget);
-    icon->setPixmap(QPixmap(":icons/main_menu/calibration_menu/error.png"));
+    icon->setPixmap(QPixmap(":icons/main_menu/calibration_menu/information.png"));
     icon->setScaledContents(true);
     icon->setFixedSize(30, 30);
     icon->move(10, 10);
 
     QLabel *message = new QLabel(widget);
     QFont f = parent->font();
-    message->setText("Error");
+    message->setText("Advertencia");
     message->setFont(f);
     message->move(120, 10);
 
@@ -167,6 +231,15 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
     return true;
 }
 
+/**
+ * GlobalFunctions 
+ * 
+ * Saves the calibtration data on a JsonObject format:
+ * (m, n, calibration state boolean,
+ * date and time of calibration) on a file (save_config.dat)
+ * 
+ * @return {bool}  : True if was correctly saved false if not
+ */
 bool GlobalFunctions::saveData()
 {
     QDir dir("/home/pi/VentiApp/");
@@ -196,32 +269,14 @@ bool GlobalFunctions::saveData()
     return false;
 }
 
-int GlobalFunctions::loadBatteryConfiguration()
-{
-    QDir dir("/home/pi/VentiApp/");
-    if (!dir.exists())
-    {
-        dir.mkpath("/home/pi/VentiApp/");
-        return 1900;
-    }
-    QFile file("/home/pi/VentiApp/battery_config.dat");
-    if (file.open(QIODevice::ReadOnly))
-    {
-        QJsonObject jsonObject;
-        QByteArray bytes;
-        QDataStream in(&file);
-        in >> bytes;
-        file.close();
-        bool ok = false;
-        int number = bytes.toInt(&ok);
-        if (ok)
-        {
-            return number;
-        }
-    }
-    return 1900;
-}
-
+/**
+ * GlobalFunctions 
+ * 
+ * Loads the calibration data saved on save_config.dat file
+ * and returns the valid state of reading the file
+ *  
+ * @return {bool}  : True if data was read correctly, false if not
+ */
 bool GlobalFunctions::loadData()
 {
     QDir dir("/home/pi/VentiApp/");
@@ -250,9 +305,19 @@ bool GlobalFunctions::loadData()
     return false;
 }
 
+/**
+ * GlobalFunctions 
+ * 
+ * This function is called on loadData(). 
+ * It reads the calibration values on JsonObject
+ * and validates the read values return boolean
+ * state of validation
+ * 
+ * @param  {QJsonObject} jsonObject : JsonObjec that contains the calibration values
+ * @return {bool}                   : True if read values are valid, false if not
+ */
 bool GlobalFunctions::readValues(QJsonObject jsonObject)
 {
-
     double m = jsonObject.value("m_slope_value").toDouble();
     double n = jsonObject.value("n_value").toDouble();
     bool cal = jsonObject.value("calibrated").toBool();
@@ -280,6 +345,15 @@ bool GlobalFunctions::readValues(QJsonObject jsonObject)
     return false;
 }
 
+/**
+ * GlobalFunctions 
+ * 
+ * Check whether a string is valid or not, it checks nullity,
+ * emptyness and "null" string equality
+ *   
+ * @param  {QString} value : String value to check
+ * @return {bool}          : True if string is valid, false if not
+ */
 bool GlobalFunctions::checkIfFieldValid(QString value)
 {
     if (value != nullptr && !value.trimmed().isEmpty() && value.toLower() != "null")
@@ -289,7 +363,17 @@ bool GlobalFunctions::checkIfFieldValid(QString value)
     return false;
 }
 
-double GlobalFunctions::getRealValue(double value) //aplica la correcion de la calibracion
+/**
+ * GlobalFunctions 
+ * 
+ * Processes the received sensor's thread value 
+ * and applies the last calibration function
+ * to correct the value
+ *  
+ * @param  {double} value : Unproccess value received sensor's thread
+ * @return {double}       : Corrected value applying the calibration function (-1 if not calibrated)
+ */
+double GlobalFunctions::getRealValue(double value) 
 {
     if (calibrated)
     {
@@ -300,4 +384,37 @@ double GlobalFunctions::getRealValue(double value) //aplica la correcion de la c
     {
         return -1;
     }
+}
+
+/**
+ * GlobalFunctions 
+ * 
+ * This functions is worthless right now, not using it
+ * 
+ * @return {int}  : Maximun battery value setted on config file
+ */
+int GlobalFunctions::loadBatteryConfiguration()
+{
+    QDir dir("/home/pi/VentiApp/");
+    if (!dir.exists())
+    {
+        dir.mkpath("/home/pi/VentiApp/");
+        return 1900;
+    }
+    QFile file("/home/pi/VentiApp/battery_config.dat");
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QJsonObject jsonObject;
+        QByteArray bytes;
+        QDataStream in(&file);
+        in >> bytes;
+        file.close();
+        bool ok = false;
+        int number = bytes.toInt(&ok);
+        if (ok)
+        {
+            return number;
+        }
+    }
+    return 1900;
 }
