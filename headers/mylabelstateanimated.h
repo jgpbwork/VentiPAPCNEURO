@@ -1,3 +1,12 @@
+/**
+* Created by Ing. Luis Alejandro Reyes Morales on 12/11/2019.
+*
+* email: inglreyesm@gmail.com
+* github: https://github.com/lreyesm
+* linkedin: https://linkedin.com/in/luis-alejandro-reyes-morales-9b672012a
+*
+*/
+
 #ifndef MYLABELSTATEANIMATED_H
 #define MYLABELSTATEANIMATED_H
 

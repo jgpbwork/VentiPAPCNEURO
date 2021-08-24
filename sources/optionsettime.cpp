@@ -1,3 +1,12 @@
+/**
+* Created by Ing. Luis Alejandro Reyes Morales on 9/12/2020.
+*
+* email: inglreyesm@gmail.com
+* github: https://github.com/lreyesm
+* linkedin: https://linkedin.com/in/luis-alejandro-reyes-morales-9b672012a
+*
+*/
+
 #include "optionsettime.h"
 #include "ui_optionsettime.h"
 #include "globalfunctions.h"

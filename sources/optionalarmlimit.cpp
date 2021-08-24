@@ -1,7 +1,24 @@
+/**
+* Created by Ing. Luis Alejandro Reyes Morales on 9/12/2020.
+*
+* email: inglreyesm@gmail.com
+* github: https://github.com/lreyesm
+* linkedin: https://linkedin.com/in/luis-alejandro-reyes-morales-9b672012a
+*
+*/
+
 #include "optionalarmlimit.h"
 #include "ui_optionalarmlimit.h"
 #include "globalfunctions.h"
 
+
+/**
+ * OptionAlarmLimit::OptionAlarmLimit 
+ * 
+ * Sets the configured range values and displays them on the UI
+ *
+ * @param  {QWidget*} parent : Parent of this widget
+ */
 OptionAlarmLimit::OptionAlarmLimit(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OptionAlarmLimit)
@@ -18,6 +35,11 @@ OptionAlarmLimit::~OptionAlarmLimit()
     delete ui;
 }
 
+/**
+ * OptionAlarmLimit 
+ * 
+ * Saves the values configured and closes the widget
+ */
 void OptionAlarmLimit::on_l_save_clicked(){
     GlobalFunctions::configured_min_limit = min_limit;
     GlobalFunctions::configured_max_limit = max_limit;
