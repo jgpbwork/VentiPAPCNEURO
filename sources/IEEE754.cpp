@@ -2,8 +2,8 @@
  * Created by Ing. Luis Alejandro Reyes Morales on 8/12/2020.
  *
  * email: inglreyesm@gmail.com
- * github: github.com/lreyesm
- * linkedin: linkedin.com/in/luis-alejandro-reyes-morales-9b672012a
+ * github: https://github.com/lreyesm
+ * linkedin: https://linkedin.com/in/luis-alejandro-reyes-morales-9b672012a
  *
  */
 
