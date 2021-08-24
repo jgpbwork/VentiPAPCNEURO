@@ -16,74 +16,74 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    aboutscreen.cpp \
-    main.cpp \
-    mainmenu.cpp \
-    mainscreen.cpp \
-    mainwindow.cpp \
-    mylabelanimated.cpp \
-    mywidgetanimated.cpp \
-    optiondatetime.cpp \
-    optioncalibration.cpp \
-    globalfunctions.cpp \
-    optionalarmlimit.cpp \
-    optiongeneral.cpp \
-    DrvI2C.cpp \
-    DrvAdc.cpp \
-    IEEE754.cpp \
-    DrvGauge.cpp \
-    DrvGpio.cpp \
-    DrvRtc.cpp \
-    ThrInput.cpp \
-    Time.cpp \
-    optionsetdate.cpp \
-    optionsettime.cpp \
-    processesclass.cpp \
-    ThrAlarm.cpp \
-    customeventfilter.cpp
+    sources \ aboutscreen.cpp \
+    sources \ main.cpp \
+    sources \ mainmenu.cpp \
+    sources \ mainscreen.cpp \
+    sources \ mainwindow.cpp \
+    sources \ mylabelanimated.cpp \
+    sources \ mywidgetanimated.cpp \
+    sources \ optiondatetime.cpp \
+    sources \ optioncalibration.cpp \
+    sources \ globalfunctions.cpp \
+    sources \ optionalarmlimit.cpp \
+    sources \ optiongeneral.cpp \
+    sources \ DrvI2C.cpp \
+    sources \ DrvAdc.cpp \
+    sources \ IEEE754.cpp \
+    sources \ DrvGauge.cpp \
+    sources \ DrvGpio.cpp \
+    sources \ DrvRtc.cpp \
+    sources \ ThrInput.cpp \
+    sources \ Time.cpp \
+    sources \ optionsetdate.cpp \
+    sources \ optionsettime.cpp \
+    sources \ processesclass.cpp \
+    sources \ ThrAlarm.cpp \
+    sources \ customeventfilter.cpp
 
 HEADERS += \
-    aboutscreen.h \
-    mainmenu.h \
-    mainscreen.h \
-    mainwindow.h \
-    mylabelanimated.h \
-    mywidgetanimated.h \
-    optiondatetime.h \
-    optioncalibration.h \
-    globalfunctions.h \
-    optionalarmlimit.h \
-    optiongeneral.h \
-    DrvI2C.h \
-    DrvAdc.h \
-    IEEE754.h \
-    DrvGauge.h \
-    DrvGpio.h \
-    DrvRtc.h \
-    GMacros.h \
-    Singleton.h \
-    QMath.h \
-    ThrInput.h \
-    Time.h \
-    optionsetdate.h \
-    optionsettime.h \
-    processesclass.h \
-    ThrAlarm.h \
-    customeventfilter.h
+    headers \ aboutscreen.h \
+    headers \ mainmenu.h \
+    headers \ mainscreen.h \
+    headers \ mainwindow.h \
+    headers \ mylabelanimated.h \
+    headers \ mywidgetanimated.h \
+    headers \ optiondatetime.h \
+    headers \ optioncalibration.h \
+    headers \ globalfunctions.h \
+    headers \ optionalarmlimit.h \
+    headers \ optiongeneral.h \
+    headers \ DrvI2C.h \
+    headers \ DrvAdc.h \
+    headers \ IEEE754.h \
+    headers \ DrvGauge.h \
+    headers \ DrvGpio.h \
+    headers \ DrvRtc.h \
+    headers \ GMacros.h \
+    headers \ Singleton.h \
+    headers \ QMath.h \
+    headers \ ThrInput.h \
+    headers \ Time.h \
+    headers \ optionsetdate.h \
+    headers \ optionsettime.h \
+    headers \ processesclass.h \
+    headers \ ThrAlarm.h \
+    headers \ customeventfilter.h
 
 FORMS += \
-    aboutscreen.ui \
-    mainmenu.ui \
-    mainscreen.ui \
-    mainwindow.ui \
-    optiondatetime.ui \
-    optioncalibration.ui \
-    optionalarmlimit.ui \
-    optiongeneral.ui \
-    optionsetdate.ui \
-    optionsettime.ui \
-    optionsetdate.ui \
-    optionsettime.ui
+    forms \ aboutscreen.ui \
+    forms \ mainmenu.ui \
+    forms \ mainscreen.ui \
+    forms \ mainwindow.ui \
+    forms \ optiondatetime.ui \
+    forms \ optioncalibration.ui \
+    forms \ optionalarmlimit.ui \
+    forms \ optiongeneral.ui \
+    forms \ optionsetdate.ui \
+    forms \ optionsettime.ui \
+    forms \ optionsetdate.ui \
+    forms \ optionsettime.ui
 
 LIBS += -L/usr/local/include -lwiringPi \
         -L/usr/local/lib -lpigpiod_if2 #To include libpigpiod_if2.so from /usr/local/lib
