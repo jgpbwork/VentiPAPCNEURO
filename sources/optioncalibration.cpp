@@ -14,14 +14,25 @@
 #include <QDateTime>
 #include "mainscreen.h"
 
+/**
+ * OptionCalibration :: OptionCalibration 
+ * 
+ * @param  {QWidget*} parent : Parent of this widget
+ */
 OptionCalibration::OptionCalibration(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OptionCalibration)
 {
     ui->setupUi(this);
 
+    // * This variable has the current state of the UI 
     currentState = 0;
 
+    // * This are the state of the UI, each state sets the corresponding text
+    // * to the text labels and sets the text of the buttons 
+    // * Each state is a JSON object with the key value pairs containing the
+    // * texts of labels and buttons 
+    // * All the states are inside the jsonArrayStates JsonArray variable type
     jsonArrayStates.append(getJsonObjectStateInitInformation());
     jsonArrayStates.append(getJsonObjectStateInitMinCalibration());
     jsonArrayStates.append(getJsonObjectStateRunningMinCalibration());
@@ -31,14 +42,26 @@ OptionCalibration::OptionCalibration(QWidget *parent) :
     jsonArrayStates.append(getJsonObjectStateEndedMaxCalibration());
     jsonArrayStates.append(getJsonObjectStateEndedCalibration());
 
+    // * Sets the initial state in the JSON array of states 
     setCurrentState(jsonArrayStates.at(0).toObject());
 }
+
 
 OptionCalibration::~OptionCalibration()
 {
     delete ui;
 }
 
+/**
+ * OptionCalibration :: initMinCalibration
+ * 
+ * Start the minimun calibration proccess, turn off the alarm if 
+ * it is active, inits the calibration progress bar and timer
+ * with a timeout of CAL_TIME / (100/CAL_INCREASE_VALUE),
+ * calling the initMinCalibration 
+ * function. Finally navigates to next state
+ * after the loop of increasing progress bar ended.
+ */
 void OptionCalibration::initMinCalibration(){
     turnOffAlarm();
     minCalibrationProgress = 0;
@@ -51,6 +74,18 @@ void OptionCalibration::initMinCalibration(){
     loop.exec();
     navigateNextState();
 }
+
+
+/**
+ * OptionCalibration :: initMaxCalibration
+ * 
+ * Start the maximun calibration proccess, 
+ * inits the calibration progress bar and timer
+ * with a timeout of CAL_TIME / (100/CAL_INCREASE_VALUE),
+ * calling the initMaxCalibration 
+ * function. Finally navigates to next state
+ * after the loop of increasing progress bar ended.
+ */
 void OptionCalibration::initMaxCalibration(){
     maxCalibrationProgress = 0;
     setMainScreenValueText("...");
@@ -63,8 +98,16 @@ void OptionCalibration::initMaxCalibration(){
     loop.exec();
     navigateNextState();
 }
-void OptionCalibration::incProgressMinCalibration(){
 
+/**
+ * OptionCalibration :: incProgressMinCalibration
+ * 
+ * Increments the progress bar on minimun calibration on going
+  * when get to the 80% start averaging the oxygen value unprocessed
+ * received from oxygen sensor thread 
+ * If progress bar goes to 100% stop the increment timer
+ */
+void OptionCalibration::incProgressMinCalibration(){
     minCalibrationProgress += CAL_INCREASE_VALUE;
     setMainScreenValueText("...");
     ui->pbar_calibration_state_progress->setValue(minCalibrationProgress);
@@ -84,6 +127,15 @@ void OptionCalibration::incProgressMinCalibration(){
         emit minCalibrationEnded();
     }
 }
+
+/**
+ * OptionCalibration :: incProgressMaxCalibration
+ * 
+ * Increments the progress bar on maximun calibration on going
+ * when get to the 80% start averaging the oxygen value unprocessed
+ * received from oxygen sensor thread 
+ * If progress bar goes to 100% stop the increment timer
+ */
 void OptionCalibration::incProgressMaxCalibration(){
     maxCalibrationProgress += CAL_INCREASE_VALUE;
     ui->pbar_calibration_state_progress->setValue(maxCalibrationProgress);
@@ -103,6 +155,14 @@ void OptionCalibration::incProgressMaxCalibration(){
         emit maxCalibrationEnded();
     }
 }
+
+/**
+ * OptionCalibration :: on_l_calibration_back_clicked
+ * 
+ * Closes this calibration widget and shows general widget
+ * Unblocks the display and pass the control of it 
+ * to main screen widget
+ */
 void OptionCalibration::on_l_calibration_back_clicked(){
     setMainScreenValueText("--");
     unBlockDisplayValue();
@@ -110,6 +170,12 @@ void OptionCalibration::on_l_calibration_back_clicked(){
     emit closing();
 }
 
+/**
+ * OptionCalibration :: on_l_calibration_state_button_clicked
+ * 
+ * Slot for the next state button, executes the right action 
+ * by navigating the next state depending on the current state value
+ */
 void OptionCalibration::on_l_calibration_state_button_clicked()
 {
     if(currentStateJsonObject.value("calibration_state_button").
@@ -120,6 +186,21 @@ void OptionCalibration::on_l_calibration_state_button_clicked()
     }
     navigateNextState();
 }
+
+/**
+ * OptionCalibration :: navigateNextState
+ * 
+ * Navigate next state function, sets the current state 
+ * depending on the current state variable value
+ * If current state is INIT_MIN_CAL_STATE inits the minimun calibration
+ * If current state is INIT_MAX_CAL_STATE inits the minimun calibration
+ * * If is the last state checks if the minimun and maximun calibration value 
+ * * average is between the correct range.
+ * * If it's in the right range save the values and calculates the m slope
+ * * and n offset value, saves them to a file and go out of calibration
+ * * else shows a warning and retries the calibration
+ * ! The calibration retries process has an error needs test and fix 
+ */
 void OptionCalibration::navigateNextState(){
     currentState++;
 
@@ -171,6 +252,13 @@ void OptionCalibration::navigateNextState(){
     }
 }
 
+/**
+ * OptionCalibration :: getMainScreenInstance
+ * 
+ * Get the main screen instance to access it public functions
+ *
+ * @return {MainScreen*}  : Returns the instance of main screen widget if it was found
+ */
 MainScreen* OptionCalibration::getMainScreenInstance(){
     MainScreen *mainWindow = qobject_cast<MainScreen*>(this->parent()->parent());
     if(mainWindow){
@@ -181,36 +269,80 @@ MainScreen* OptionCalibration::getMainScreenInstance(){
         return nullptr;
     }
 }
+
+/**
+ * OptionCalibration :: turnOffAlarm
+ * 
+ * Sets the alarm off by accessing the main screen instance
+ */
 void OptionCalibration::turnOffAlarm(){
     MainScreen *mainScreen = getMainScreenInstance();
     if(mainScreen){
         mainScreen->emitAlarm(false);
     }
 }
+
+/**
+ * OptionCalibration :: setMainScreenBatteryText
+ * 
+ * Sets the text in battery label (remaining time) 
+ * by accessing the main screen instance
+ * This is for debugging purposes
+ *
+ * @param  {QString} text : Text to display in battery label
+ */
 void OptionCalibration::setMainScreenBatteryText(QString text){
     MainScreen *mainScreen = getMainScreenInstance();
     if(mainScreen){
         mainScreen->setLBatteryText(text);
     }
 }
+
+/**
+ * OptionCalibration :: setMainScreenValueText
+ * 
+ * Sets the text in oxygen label by accessing the main screen instance 
+ *
+ * @param  {QString} text : Text to display in oxygen label
+ */
 void OptionCalibration::setMainScreenValueText(QString text){
     MainScreen *mainScreen = getMainScreenInstance();
     if(mainScreen){
         mainScreen->setValueText(text);
     }
 }
+
+/**
+ * OptionCalibration :: setMainScreenImage
+ * 
+ * Sets an image in oxygen label by accessing the main screen instance 
+ *
+ * @param  {QString} image_name : Image to display in oxygen label 
+ */
 void OptionCalibration::setMainScreenImage(QString image_name){
     MainScreen *mainScreen = getMainScreenInstance();
     if(mainScreen){
         mainScreen->setOxygenImage(image_name);
     }
 }
+
+/**
+ * OptionCalibration :: unBlockDisplayValue
+ * 
+ * Pass the control of the oxygen label to the main screen widget
+ */
 void OptionCalibration::unBlockDisplayValue(){
     MainScreen *mainScreen = getMainScreenInstance();
     if(mainScreen){
         mainScreen->setBlockedDisplayValue(false);
     }
 }
+
+/**
+ * OptionCalibration :: blockDisplayValue
+ * 
+ * Pass the control of the oxygen label to this calibration widget
+ */
 void OptionCalibration::blockDisplayValue(){
     MainScreen *mainScreen = getMainScreenInstance();
     if(mainScreen){
@@ -218,6 +350,14 @@ void OptionCalibration::blockDisplayValue(){
     }
 }
 
+/**
+ * OptionCalibration :: setCurrentState
+ * 
+ * Sets the corresponding state, corresponding text labels and buttons
+ * on the UI, if is the last state pass the control the main screen widget
+ *
+ * @param  {QJsonObject} jsonObjectState : JSON object containing the state keys values pairs to set
+ */
 void OptionCalibration::setCurrentState(QJsonObject jsonObjectState){
 
     if(GlobalFunctions::checkIfFieldValid(jsonObjectState.value("calibration_state").toString())){
@@ -332,6 +472,11 @@ void OptionCalibration::setCurrentState(QJsonObject jsonObjectState){
     }
 }
 
+/**
+ * OptionCalibration :: getJsonObjectStateInitInformation
+ * 
+ * @return {QJsonObject}  : Return the init information json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateInitInformation(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "Información");
@@ -357,6 +502,11 @@ QJsonObject OptionCalibration::getJsonObjectStateInitInformation(){
     return jsonObject;
 }
 
+/**
+ * OptionCalibration :: getJsonObjectStateInitMinCalibration
+ * 
+ * @return {QJsonObject}  : Return the init minimun calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateInitMinCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "Medición mínima");
@@ -372,6 +522,11 @@ QJsonObject OptionCalibration::getJsonObjectStateInitMinCalibration(){
     return jsonObject;
 }
 
+/**
+ * OptionCalibration :: getJsonObjectStateRunningMinCalibration
+ * 
+ * @return {QJsonObject}  : Return the running minimun calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateRunningMinCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "");
@@ -384,6 +539,11 @@ QJsonObject OptionCalibration::getJsonObjectStateRunningMinCalibration(){
     return jsonObject;
 }
 
+/**
+ * OptionCalibration :: getJsonObjectStateEndedMinCalibration
+ * 
+ * @return {QJsonObject}  : Return the ended minimun calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateEndedMinCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "");
@@ -397,6 +557,11 @@ QJsonObject OptionCalibration::getJsonObjectStateEndedMinCalibration(){
     return jsonObject;
 }
 
+/**
+ * OptionCalibration :: getJsonObjectStateInitMaxCalibration
+ * 
+ * @return {QJsonObject}  : Return the init maximun calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateInitMaxCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "Medición máxima");
@@ -411,6 +576,11 @@ QJsonObject OptionCalibration::getJsonObjectStateInitMaxCalibration(){
     return jsonObject;
 }
 
+/**
+ * OptionCalibration :: getJsonObjectStateRunningMaxCalibration
+ * 
+ * @return {QJsonObject}  : Return the running maximun calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateRunningMaxCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "");
@@ -423,6 +593,12 @@ QJsonObject OptionCalibration::getJsonObjectStateRunningMaxCalibration(){
     return jsonObject;
 }
 
+
+/**
+ * OptionCalibration :: getJsonObjectStateEndedMaxCalibration
+ * 
+ * @return {QJsonObject}  : Return the ended maximun calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateEndedMaxCalibration(){
 
     QJsonObject jsonObject;
@@ -437,6 +613,12 @@ QJsonObject OptionCalibration::getJsonObjectStateEndedMaxCalibration(){
     return jsonObject;
 }
 
+
+/**
+ * OptionCalibration :: getJsonObjectStateEndedCalibration
+ * 
+ * @return {QJsonObject}  : Return the ended calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateEndedCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "Calibración Completada");
@@ -453,6 +635,12 @@ QJsonObject OptionCalibration::getJsonObjectStateEndedCalibration(){
     return jsonObject;
 }
 
+
+/**
+ * OptionCalibration :: getJsonObjectStateErrorCalibration
+ * 
+ * @return {QJsonObject}  : Return the error calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateErrorCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "");
@@ -470,6 +658,13 @@ QJsonObject OptionCalibration::getJsonObjectStateErrorCalibration(){
     jsonObject.insert("main_screen_image", ":/icons/main_menu/calibration_menu/error.png");
     return jsonObject;
 }
+
+
+/**
+ * OptionCalibration :: getJsonObjectStateCancelCalibration
+ * 
+ * @return {QJsonObject}  : Return the cancel calibration json object state
+ */
 QJsonObject OptionCalibration::getJsonObjectStateCancelCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "");
@@ -488,11 +683,24 @@ QJsonObject OptionCalibration::getJsonObjectStateCancelCalibration(){
     return jsonObject;
 }
 
+/**
+ * OptionCalibration :: on_l_calibration_state_button_out_clicked
+ * 
+ * Slot of out button of the UI
+ * Calls the on_l_calibration_back_clicked to close
+ * this calibration widget
+ */
 void OptionCalibration::on_l_calibration_state_button_out_clicked()
 {
     on_l_calibration_back_clicked();
 }
 
+/**
+ * OptionCalibration :: on_l_calibration_state_button_repeat_clicked
+ * .
+ * Slot of repeat button of the UI
+ * Repeats the maximun or minimun calibration proccess
+ */
 void OptionCalibration::on_l_calibration_state_button_repeat_clicked()
 {
     if(currentState <= 2){

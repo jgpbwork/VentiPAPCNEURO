@@ -14,6 +14,13 @@
 
 #include <QDebug>
 
+/**
+ * OptionSetDate :: OptionSetDate
+ * 
+ * Class constructor
+ *
+ * @param  {QWidget*} parent : parent of the widget
+ */
 OptionSetDate::OptionSetDate(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OptionSetDate)
@@ -27,11 +34,18 @@ OptionSetDate::OptionSetDate(QWidget *parent) :
     updateDateInfo();
 }
 
+
 OptionSetDate::~OptionSetDate()
 {
     delete ui;
 }
 
+/**
+ * OptionSetDate :: updateDateInfo
+ * 
+ * Get global current date of the computer and set it 
+ * on this widget, displaying it on the UI 
+ */
 void OptionSetDate::updateDateInfo(){
     int d = currentDateTime.date().day();
     ui->l_day_value->setText(QString::number(d));
@@ -43,6 +57,12 @@ void OptionSetDate::updateDateInfo(){
     int y = currentDateTime.date().year();
     ui->l_year_value->setText(QString::number(y));
 }
+
+/**
+ * OptionSetDate :: fillJsonDate
+ * 
+ * Fill the json map of the month in spanish to display it on the UI
+ */
 void OptionSetDate::fillJsonDate(){
     mapMonth.insert("ENERO", 1);
     mapMonth.insert("FEBRERO" , 2);
@@ -58,72 +78,102 @@ void OptionSetDate::fillJsonDate(){
     mapMonth.insert("DICIEMBRE", 12);
 }
 
+/**
+ * OptionSetDate :: on_pb_day_down_clicked
+ * 
+ * * Day decrease button 
+ *
+ * Decrease one day and set it on the UI
+ */
 void OptionSetDate::on_pb_day_down_clicked()
 {
     QDate date = currentDateTime.date().addDays(-1);
     currentDateTime.setDate(date);
     updateDateInfo();
-
-
     qDebug()<<"on_pb_day_up_clicked" << date.toString()<<"****************************************";
 }
 
-
+/**
+ * OptionSetDate :: on_pb_day_up_clicked
+ * 
+ * * Day increase button 
+ *
+ * Increase one day and set it on the UI
+ */
 void OptionSetDate::on_pb_day_up_clicked()
 {
     QDate date = currentDateTime.date().addDays(1);
     currentDateTime.setDate(date);
     updateDateInfo();
-
-
     qDebug()<<"on_pb_day_up_clicked" << date.toString()<<"****************************************";
 }
 
-
+/**
+ * OptionSetDate :: on_pb_month_down_clicked
+ * 
+ * * Month decrease button 
+ *
+ * Decrease one month and set it on the UI
+ */
 void OptionSetDate::on_pb_month_down_clicked()
 {
     QDate date = currentDateTime.date().addMonths(-1);
     currentDateTime.setDate(date);
     updateDateInfo();
-
-
     qDebug()<<"on_pb_month_down_clicked" << date.toString()<<"****************************************";
 }
 
-
+/**
+ * OptionSetDate :: on_pb_month_up_clicked
+ * 
+ * * Month increase button 
+ *
+ * Increase one month and set it on the UI
+ */
 void OptionSetDate::on_pb_month_up_clicked()
 {
     QDate date = currentDateTime.date().addMonths(1);
     currentDateTime.setDate(date);
     updateDateInfo();
-
-
     qDebug()<<"on_pb_month_up_clicked" << date.toString()<<"****************************************";
 }
 
-
+/**
+ * OptionSetDate :: on_pb_year_down_clicked
+ * 
+ * * Month increase button 
+ *
+ * Increase one month and set it on the UI
+ */
 void OptionSetDate::on_pb_year_down_clicked()
 {
     QDate date = currentDateTime.date().addYears(-1);
     currentDateTime.setDate(date);
     updateDateInfo();
-
-
     qDebug()<<"on_pb_year_down_clicked" << date.toString()<<"****************************************";
 }
 
-
+/**
+ * OptionSetDate :: on_pb_year_up_clicked
+ * 
+ * * Year increase button 
+ *
+ * Increase one year and set it on the UI
+ */
 void OptionSetDate::on_pb_year_up_clicked()
 {
     QDate date = currentDateTime.date().addYears(1);
     currentDateTime.setDate(date);
     updateDateInfo();
-
-
-
     qDebug()<<"on_pb_year_up_clicked" << date.toString()<<"****************************************";
 }
 
+/**
+ * OptionSetDate :: on_l_save_clicked
+ * 
+ * Saves the date setted, emit the date to all widgets
+ * and close this widget
+ */
 void OptionSetDate::on_l_save_clicked()
 {
     GlobalFunctions::setDateTimeInRaspi(this, currentDateTime);
@@ -136,6 +186,14 @@ void OptionSetDate::on_l_save_clicked()
     on_l_define_date_back_clicked();
 }
 
+/**
+ * OptionSetDate :: on_l_define_date_back_clicked:: on_l_define_date_back_clicked
+ *
+ * ? Slot of back button on date menu widget 
+ *
+ * Closes about widget and show the general options widget
+ * LINK forms/optiongeneral.ui
+ */
 void OptionSetDate::on_l_define_date_back_clicked()
 {
     emit closing();

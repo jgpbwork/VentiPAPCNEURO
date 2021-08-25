@@ -7,11 +7,23 @@
 *
 */
 
+/**
+* * This class inherits from QLabel. Gives button properties to QLabels 
+* * and animates it if global animation is enabled 
+*/
+
 #include "mylabelanimated.h"
 #include <QTimer>
 #include <QDebug>
 #include "globalfunctions.h"
 
+/**
+ * MyLabelAnimated :: MyLabelAnimated 
+ * 
+ * Class constructor
+ *
+ * @param  {QWidget*} parent : Parent of this widget
+ */
 MyLabelAnimated::MyLabelAnimated(QWidget *parent)
     :QLabel(parent)
 {

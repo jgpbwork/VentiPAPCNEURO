@@ -13,7 +13,7 @@
 
 
 /**
- * OptionAlarmLimit::OptionAlarmLimit 
+ * OptionAlarmLimit :: OptionAlarmLimit
  * 
  * Sets the configured range values and displays them on the UI
  *
@@ -36,7 +36,7 @@ OptionAlarmLimit::~OptionAlarmLimit()
 }
 
 /**
- * OptionAlarmLimit 
+ * OptionAlarmLimit :: on_l_save_clicked
  * 
  * Saves the values configured and closes the widget
  */
@@ -47,6 +47,13 @@ void OptionAlarmLimit::on_l_save_clicked(){
     emit closing();
 }
 
+/**
+ * OptionAlarmLimit :: on_pb_min_limit_up_clicked
+ *
+ * * Down limit button increase
+ * Slot listening the pb_min_limit button, if value is already at
+ * the down limit of the range configure does nothing else increment it 
+ */
 void OptionAlarmLimit::on_pb_min_limit_up_clicked()
 {
     if(min_limit < max_limit){
@@ -55,6 +62,13 @@ void OptionAlarmLimit::on_pb_min_limit_up_clicked()
     }
 }
 
+/**
+ * OptionAlarmLimit :: on_pb_min_limit_down_clicked
+ *
+ * * Down limit button decrease
+ * Slot listening the pb_min_limit button, if value is already at
+ * the down limit of the range configure does nothing else decrement it 
+ */
 void OptionAlarmLimit::on_pb_min_limit_down_clicked()
 {
     if(min_limit > MIN_ALARM_CONFIG){
@@ -63,6 +77,13 @@ void OptionAlarmLimit::on_pb_min_limit_down_clicked()
     }
 }
 
+/**
+ * OptionAlarmLimit :: on_pb_max_limit_up_clicked
+ *
+ * * Up limit button increase
+ * Slot listening the pb_min_limit button, if value is already at
+ * the up limit of the range configure does nothing else increment it 
+ */
 void OptionAlarmLimit::on_pb_max_limit_up_clicked()
 {
     if(max_limit < MAX_ALARM_CONFIG){
@@ -71,6 +92,13 @@ void OptionAlarmLimit::on_pb_max_limit_up_clicked()
     }
 }
 
+/**
+ * OptionAlarmLimit :: on_pb_max_limit_down_clicked
+ * 
+ * * Up limit button increase
+ * Slot listening the pb_min_limit button, if value is already at
+ * the up limit of the range configure does nothing else decrement it 
+ */
 void OptionAlarmLimit::on_pb_max_limit_down_clicked()
 {
     if(max_limit > min_limit){

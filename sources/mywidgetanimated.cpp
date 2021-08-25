@@ -7,6 +7,11 @@
 *
 */
 
+/**
+* * This class inherits from QWidget. Gives button properties 
+* * to QWidget and animates it if global animation is enabled 
+*/
+
 #include "mywidgetanimated.h"
 #include <QDebug>
 #include <QTimer>

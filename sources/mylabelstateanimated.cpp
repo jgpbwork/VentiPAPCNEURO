@@ -7,6 +7,12 @@
 *
 */
 
+/**
+* * This class inherits from QLabel. Gives button properties to QLabel 
+* * and animates it if global animation is enabled.
+* * Set an image depending of the current state of this widget
+*/
+
 #include "mylabelstateanimated.h"
 #include <QTimer>
 

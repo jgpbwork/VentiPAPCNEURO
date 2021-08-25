@@ -10,6 +10,13 @@
 #include "aboutscreen.h"
 #include "ui_aboutscreen.h"
 
+/**
+ * AboutScreen::AboutScreen 
+ * 
+ * Class constructor
+ *
+ * @param  {QWidget*} parent : parent of the widget
+ */
 AboutScreen::AboutScreen(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AboutScreen)
@@ -27,8 +34,8 @@ AboutScreen::~AboutScreen()
  *
  * ? Slot of back button on about menu widget 
  *
- * Closes about widget and show the main menu widget
- * LINK forms/mainmenu.ui
+ * Closes about widget and show the general options widget
+ * LINK forms/optiongeneral.ui
  */
 void AboutScreen::on_l_about_back_clicked(){
     this->close();
