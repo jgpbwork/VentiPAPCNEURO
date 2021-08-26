@@ -236,7 +236,7 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
 /**
  * GlobalFunctions :: saveData
  * 
- * Saves the calibtration data on a JsonObject format:
+ * Saves the calibration data on a JsonObject format:
  * (m, n, calibration state boolean,
  * date and time of calibration) on a file (save_config.dat)
  * 

@@ -110,6 +110,18 @@ MainScreen::~MainScreen()
 }
 
 /**
+ * MainScreen :: showShutdownDialog
+ * 
+ * Shows a shutdown dialog when shutdown button is pressed
+ *
+ * @param  {void} undefined : Receives nothing
+ */
+void MainScreen::showShutdownDialog(void){
+    QString mess = "Apagando equipo ...";
+    GlobalFunctions::setWarningMessage(this, mess);
+}
+
+/**
  * MainScreen 
  * 
  * This function is a slot listening to battery change signal on sensor thread
@@ -131,7 +143,7 @@ void MainScreen::setBatteryChargeLevel(int value)
             GlobalFunctions::lastBatteryLevel = value;
             double variation = static_cast<std::double_t>((value - MIN_BATTERY_LEVEL)) / static_cast<std::double_t>((maxBatteryLevel - MIN_BATTERY_LEVEL));
             double porcentile = 100.0f * variation;
-            setBatteryPorcentile(porcentile);
+            setBatteryPercentile(porcentile);
             return;
         }
 
@@ -145,7 +157,7 @@ void MainScreen::setBatteryChargeLevel(int value)
             {
                 double variation = static_cast<std::double_t>((value - MIN_BATTERY_LEVEL)) / static_cast<std::double_t>((maxBatteryLevel - MIN_BATTERY_LEVEL));
                 double porcentile = 100.0f * variation;
-                setBatteryPorcentile(porcentile);
+                setBatteryPercentile(porcentile);
 
                 setRemainingTime(difference);
             }
@@ -162,7 +174,7 @@ void MainScreen::setBatteryChargeLevel(int value)
  *
  * @param  {double} value : 
  */
-void MainScreen::setBatteryPorcentile(double value)
+void MainScreen::setBatteryPercentile(double value)
 {
     if (value >= 0)
     { //processedValue is a value between 0 and 100

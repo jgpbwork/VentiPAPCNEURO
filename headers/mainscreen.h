@@ -54,7 +54,8 @@ public slots:
     void setBatteryConnectionState(double value);
     void setConnectionState(bool state);
     void onBatteryFull();
-    void setBatteryPorcentile(double);
+    void setBatteryPercentile(double);
+    void showShutdownDialog(void)
 
 signals:
     void menu_clicked();

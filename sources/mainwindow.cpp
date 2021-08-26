@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(&thrInput, &ThrInput::batteryChargeLevel, main_screen, &MainScreen::setBatteryChargeLevel);
     connect(&thrInput, &ThrInput::batteryFull, main_screen, &MainScreen::onBatteryFull);
 
+    connect(&thrInput, &ThrInput::shutdownSignalArrived, main_screen, &MainScreen::showShutdownDialog);
+
     qDebug()<< "Application has Started ok" 
             << "888"
             << "********************************";
