@@ -18,7 +18,7 @@ power_off_pin = 4 # Shutdown is pulling signal at pin 4 (Phisical 7)
 # End Define GPIO ************************************************************
 
 
-holdTime = int(3) # Hold Button for at least 3 seconds
+holdTime = int(10) # Hold Button for at least 3 seconds
 
 # Define Commands
 
