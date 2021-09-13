@@ -174,9 +174,9 @@ bool GlobalFunctions::setErrorMessage(QWidget *parent, QString mess)
  * 
  * @param  {QWidget*} parent : Parent widget of the warning message
  * @param  {QString} mess    : Warning message to display
- * @return {bool}            : Not using the return value, it was going to be use for a try catch
+ * @return {QWidget *}            : Pointer to the widget that show the warning, for further proccessing
  */
-bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
+QWidget * GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
 {
     QWidget *widget = new QWidget(parent);
     QWidget *widget_blur = new QWidget(parent);
@@ -195,10 +195,11 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
     icon->move(10, 10);
 
     QLabel *message = new QLabel(widget);
-    QFont f = parent->font();
+    QFont f = parent->font();    
     message->setText("Advertencia");
+    f.setPointSize(14);
     message->setFont(f);
-    message->move(120, 10);
+    message->move(85, 10);
 
     QPlainTextEdit *messageText = new QPlainTextEdit(widget);
     messageText->setFixedSize(300, 85);
@@ -226,11 +227,13 @@ bool GlobalFunctions::setWarningMessage(QWidget *parent, QString mess)
     connect(accept_button, &QPushButton::clicked, widget, &QWidget::close);
     connect(accept_button, &QPushButton::clicked, widget_blur, &QWidget::close);
 
+    connect(widget, &QWidget::destroyed, widget_blur, &QWidget::close);
+
     widget_blur->show();
     widget->show();
     widget->raise();
 
-    return true;
+    return widget;
 }
 
 /**

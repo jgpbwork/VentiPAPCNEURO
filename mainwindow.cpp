@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(&thrInput, &ThrInput::shutdownSignalArrived, main_screen, &MainScreen::showShutdownDialog);
 
     qDebug()<< "Application has Started ok" 
-            << "888"
+            << "99999"
             << "********************************";
 }
 

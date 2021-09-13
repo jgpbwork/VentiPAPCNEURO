@@ -117,8 +117,9 @@ MainScreen::~MainScreen()
  * @param  {void} undefined : Receives nothing
  */
 void MainScreen::showShutdownDialog(void){
-    QString mess = "Apagando equipo ...";
-    GlobalFunctions::setWarningMessage(this, mess);
+    QString mess = "       Apagando equipo ...";
+    QWidget * w = GlobalFunctions::setWarningMessage(this, mess);
+    QTimer::singleShot(5000, w, &QWidget::close);
 }
 
 /**
