@@ -6,11 +6,32 @@ Makefile
 *.d
 
 #Ignore Compiled Object Files 
-*.o
-
+# Compiled Static libraries
 *.slo
 *.lo
+*.o
+*.a
+*.la
+*.lai
+*.so
+*.so.*
+*.dll
+*.dylib
+*.lib
+
+#Qt
+/.qmake.cache
+/.qmake.stach
 *.obj
+*.pro.user
+*.pro.user.*
+*.qsb.user
+*.qsb.user.*
+*.moc
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
 moc_*.[o]
 
 # Precompiled Headers
@@ -25,12 +46,6 @@ moc_*.[o]
 # Fortran module files
 *.mod
 *.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
 
 # Executables
 *.exe
