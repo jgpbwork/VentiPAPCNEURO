@@ -78,7 +78,8 @@ La Habana, Cuba
 Teléfonos: +53 72637100
 ext.243, 244, 245
 Correo electrónico:
-soportetecnico@cneuro.cu</string>
+soportetecnico@cneuro.cu
+Test Jorge German</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
