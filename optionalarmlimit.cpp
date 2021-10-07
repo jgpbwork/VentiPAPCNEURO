@@ -10,7 +10,8 @@
 #include "optionalarmlimit.h"
 #include "ui_optionalarmlimit.h"
 #include "globalfunctions.h"
-
+#include <QSaveFile>
+#include <QTextStream>
 
 /**
  * OptionAlarmLimit :: OptionAlarmLimit
@@ -43,6 +44,18 @@ OptionAlarmLimit::~OptionAlarmLimit()
 void OptionAlarmLimit::on_l_save_clicked(){
     GlobalFunctions::configured_min_limit = min_limit;
     GlobalFunctions::configured_max_limit = max_limit;
+    QSaveFile file("/home/pi/alarm_limits");
+    QTextStream out(&file);
+    if(file.open(QIODevice::WriteOnly))
+    {
+        out << min_limit << "\n" << max_limit;
+        file.commit();
+    }
+    else
+    {
+        GlobalFunctions::setWarningMessage(this, "No se pudo salvar la configuracion. Contacte con el personal de Asistencia Tecnica.");
+    }
+
     this->close();
     emit closing();
 }

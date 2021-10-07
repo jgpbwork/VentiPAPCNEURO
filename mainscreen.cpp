@@ -17,6 +17,8 @@
 #include <QVBoxLayout>
 #include <QPlainTextEdit>
 #include <QGraphicsDropShadowEffect>
+#include <QFile>
+#include <QTextStream>
 
 /**
  * MainScreen
@@ -102,6 +104,18 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
 
     batteryMaximunDefaultConfiguration = GlobalFunctions::loadBatteryConfiguration() * 3.6 - 300;
     batteryChargeValue = batteryMaximunDefaultConfiguration;
+
+    QFile file("/home/pi/alarm_limits");
+    QTextStream in(&file);
+    if(file.open(QIODevice::ReadOnly))
+    {
+        in >> GlobalFunctions::configured_min_limit >> GlobalFunctions::configured_max_limit;
+    }
+    else
+    {
+        GlobalFunctions::setWarningMessage(this, "No se pudo cargar la configuracion. Contacte con el personal de Asistencia Tecnica.");
+        qDebug() << file.errorString();
+    }
 }
 
 MainScreen::~MainScreen()
