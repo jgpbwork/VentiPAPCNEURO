@@ -7,9 +7,6 @@
 
 #define BUTTON_PIN 4
 
-bool ThrButtonQuery::alarm_;
-std::uint8_t ThrButtonQuery::alarmPriority_;
-
 ThrButtonQuery::ThrButtonQuery(QObject *parent) : QObject (),
                                       Singleton(this),
                                       Time() 

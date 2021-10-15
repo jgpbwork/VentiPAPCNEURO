@@ -34,5 +34,5 @@ private:
     [[noreturn]] static void ThrButtonQueryRun();
 
 };
-}
+
 #endif // ThrButtonQuery_H
