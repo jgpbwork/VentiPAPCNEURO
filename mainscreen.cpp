@@ -83,22 +83,36 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
     else
     {
         QStringList not_contains;
+        QString mess;
+        bool previous = false;
         if (!(answer.contains("48") || answer.contains("49")))
         {
             not_contains << "48 o 49";
+            mess = "Error en la comunicación con el ADC, "
+                           "contacte a soportetecnico@cneuro.cu";
+            previous = true;
         }
         if (!(answer.contains("64")))
         {
             not_contains << "64";
+            mess = "Error en la comunicación con el medidor de batería, "
+                           "contacte a soportetecnico@cneuro.cu";
+            previous = true;
         };
         if (!(answer.contains("68")))
         {
             not_contains << "68";
+            mess = "Error en la comunicación con el RTC, "
+                           "contacte a soportetecnico@cneuro.cu";
+            previous = true;
         };
+        if (previous)
+        {
+            mess = "Error en la comunicación con mas de un dispositivo, "
+                           "contacte a soportetecnico@cneuro.cu";
+        }
 
         qDebug() << "answer" << answer;
-        QString mess = "Reinicie el equipo. Si persiste "
-                       "el error, contacte a soportetecnico@cneuro.cu";
         GlobalFunctions::setErrorMessage(this, mess);
     }
 
