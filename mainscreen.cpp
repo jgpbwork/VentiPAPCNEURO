@@ -85,17 +85,19 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
         QStringList not_contains;
         QString mess;
         bool previous = false;
+        bool fatal_error = false;
         if (!(answer.contains("48") || answer.contains("49")))
         {
             not_contains << "48 o 49";
             mess = "Error en la comunicación con el ADC, "
                            "contacte a soportetecnico@cneuro.cu";
             previous = true;
+            fatal_error = true;
         }
         if (!(answer.contains("64")))
         {
             not_contains << "64";
-            mess = "Error en la comunicación con el medidor de batería, "
+            mess = "Error en la comunicación con el circuito de medición de batería, "
                            "contacte a soportetecnico@cneuro.cu";
             previous = true;
         };
@@ -110,10 +112,14 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
         {
             mess = "Error en la comunicación con mas de un dispositivo, "
                            "contacte a soportetecnico@cneuro.cu";
+            fatal_error = true;
         }
 
         qDebug() << "answer" << answer;
-        GlobalFunctions::setErrorMessage(this, mess);
+        if(fatal_error)
+            GlobalFunctions::setErrorMessage(this, mess);
+        else
+            GlobalFunctions::setWarningMessage(this, mess);
     }
 
     batteryMaximunDefaultConfiguration = GlobalFunctions::loadBatteryConfiguration() * 3.6 - 300;
