@@ -17,7 +17,14 @@ ThrButtonQuery::ThrButtonQuery(QObject *parent) : QObject (),
 
 ThrButtonQuery::~ThrButtonQuery()
 {    
-
+    this->qThrButtonQuery_->exit();
+//    this->qThrAlarm_->wait();
+    qDebug() << "At Destructor: ThrButtonQuery isFinished: " << this->qThrButtonQuery_->isFinished();
+    if(this->qThrButtonQuery_->isRunning()) {
+        this->qThrButtonQuery_->terminate();
+    }
+//    this->gpioBuzzer.write(BUZZER_PIN, DrvGpio::GPIO_LOW);
+    //emit this->finished();
 }
 
 void ThrButtonQuery::ThrButtonQueryRun() 
