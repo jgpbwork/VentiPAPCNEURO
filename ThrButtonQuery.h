@@ -22,14 +22,18 @@ public:
     bool configureSignal();
 
 signals:
+    void ButtonPressed();
 
 public slots:
+    void shutdown();
 
 private slots:
 
 private:
     QThread* qThrButtonQuery_;
     QTimer *timer;
+
+    DrvGpio gpioButton;
 
     [[noreturn]] static void ThrButtonQueryRun();
 
