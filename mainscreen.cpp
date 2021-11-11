@@ -84,31 +84,31 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
     {
         QStringList not_contains;
         QString mess;
-        bool previous = false;
+        unsigned char previous = 0;
         bool fatal_error = false;
         if (!(answer.contains("48") || answer.contains("49")))
         {
             not_contains << "48 o 49";
             mess = "Error en la comunicación con el ADC, "
                            "contacte a soportetecnico@cneuro.cu";
-            previous = true;
+            previous++;
             fatal_error = true;
         }
         if (!(answer.contains("64")))
         {
             not_contains << "64";
             mess = "Error en la comunicación con el circuito de medición de batería, "
-                           "contacte a soportetecnico@cneuro.cu";
-            previous = true;
+                           "soportetecnico@cneuro.cu";
+            previous++;
         };
         if (!(answer.contains("68")))
         {
             not_contains << "68";
             mess = "Error en la comunicación con el RTC, "
                            "contacte a soportetecnico@cneuro.cu";
-            previous = true;
+            previous++;
         };
-        if (previous)
+        if (previous > 1)
         {
             mess = "Error en la comunicación con mas de un dispositivo, "
                            "contacte a soportetecnico@cneuro.cu";
@@ -136,6 +136,9 @@ MainScreen::MainScreen(QWidget *parent) : QWidget(parent),
         GlobalFunctions::setWarningMessage(this, "No se pudo cargar la configuracion. Contacte con el personal de Asistencia Tecnica.");
         qDebug() << file.errorString();
     }
+
+    ui->l_max_value->setText(QString::number(GlobalFunctions::configured_max_limit));
+    ui->l_min_value->setText(QString::number(GlobalFunctions::configured_min_limit));
 }
 
 MainScreen::~MainScreen()
@@ -604,7 +607,8 @@ void MainScreen::setOxygenValue(double value)
         emit alarmOn();
         checkFontOfDisplay(value);
 
-        ui->l_oxygen_value->setText(QString::number(qRound(value)));
+        //ui->l_oxygen_value->setText(QString::number(qRound(value)));
+        ui->l_oxygen_value->setPixmap(QPixmap(":icons/general/alarm_icon.png"));
 
         return;
     }
