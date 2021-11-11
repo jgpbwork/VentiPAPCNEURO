@@ -16,6 +16,7 @@
 #include <QTimer>
 #include "ThrInput.h"
 #include "ThrAlarm.h"
+#include "ThrButtonQuery.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -47,5 +48,7 @@ private:
 
     ThrAlarm thrAlarm;
     ThrInput thrInput;
+    ThrButtonQuery thrButtonQuery;
+
 };
 #endif // MAINWINDOW_H
