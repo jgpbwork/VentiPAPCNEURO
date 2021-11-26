@@ -68,7 +68,7 @@ color: rgb(77, 77, 77);</string>
      <string>VENTIPAP
 Analizador de Oxígeno
 Modelo: NV2.0-OXI
-Versión del software: 1.0
+Versión del software: 1.1
 
 Centro de Neurociencias de Cuba
 Dirección: Calle 190 entre 25 y 27
@@ -78,8 +78,7 @@ La Habana, Cuba
 Teléfonos: +53 72637100
 ext.243, 244, 245
 Correo electrónico:
-soportetecnico@cneuro.cu
-Test Jorge German</string>
+soportetecnico@cneuro.cu</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

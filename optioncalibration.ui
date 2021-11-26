@@ -72,7 +72,7 @@ border-image: url(:/icons/general/next_button.png);</string>
       <x>20</x>
       <y>130</y>
       <width>281</width>
-      <height>91</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="font">
@@ -158,37 +158,11 @@ color:rgb(62, 167, 132);</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="l_calibration_state">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>100</y>
-      <width>201</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Swis721 Lt BT</family>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/icons/general/fondo_transparente.png);
-color:rgb(62, 167, 132);</string>
-    </property>
-    <property name="text">
-     <string>Información</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
    <widget class="QLabel" name="l_calibration_state_progress_text">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>120</y>
+      <y>100</y>
       <width>280</width>
       <height>31</height>
      </rect>
@@ -289,8 +263,8 @@ border-image: url(:/icons/general/repeat_button.png);</string>
    <widget class="QLabel" name="l_calibration_state_error_tag">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>160</y>
+      <x>20</x>
+      <y>140</y>
       <width>280</width>
       <height>31</height>
      </rect>
@@ -317,8 +291,8 @@ color:rgb(255, 50, 50);</string>
    <widget class="QLabel" name="l_calibration_state_error_text">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>200</y>
+      <x>20</x>
+      <y>180</y>
       <width>280</width>
       <height>31</height>
      </rect>

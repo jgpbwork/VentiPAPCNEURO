@@ -180,8 +180,23 @@ void OptionCalibration::on_l_calibration_state_button_clicked()
 {
     if(currentStateJsonObject.value("calibration_state_button").
             toString().contains("cancel_button")){
-        currentStateJsonObject = getJsonObjectStateCancelCalibration();
-        setCurrentState(currentStateJsonObject);
+        if(currentStateJsonObject.value("calibration_state_min_or_max").toString().contains("min"))
+        {
+            currentStateJsonObject = getJsonObjectStateCancelCalibration();
+            currentStateJsonObject.insert("calibration_state_progress_text", "Medición mínima");
+            currentStateJsonObject.insert("calibration_state_error_text", "Cancelado por el usuario");
+            setCurrentState(currentStateJsonObject);
+        }
+        if(currentStateJsonObject.value("calibration_state_min_or_max").toString().contains("max"))
+        {
+            currentStateJsonObject = getJsonObjectStateCancelCalibration();
+            currentStateJsonObject.insert("calibration_state_progress_text", "Medición máxima");
+            currentStateJsonObject.insert("calibration_state_error_text", "Cancelado por el usuario");
+            setCurrentState(currentStateJsonObject);
+        }
+//        currentStateJsonObject = getJsonObjectStateCancelCalibration();
+//        setCurrentState(currentStateJsonObject);
+
         return;
     }
     navigateNextState();
@@ -213,11 +228,21 @@ void OptionCalibration::navigateNextState(){
         if(!(m > 0
              && (n < 100
                  && n > -100))){
-            QString mess = "Error configurando calibracion"
-                           ", reintente calibrar";
-            GlobalFunctions::setWarningMessage(this->parentWidget()->parentWidget(), mess + "\n m = "
-                                               + QString::number(m) + "\n n = " + QString::number(n));
-            currentStateJsonObject = getJsonObjectStateCancelCalibration();
+//            QString mess = "Error configurando calibracion"
+//                           ", reintente calibrar";
+//            GlobalFunctions::setWarningMessage(this->parentWidget()->parentWidget(), mess + "\n m = "
+//                                               + QString::number(m) + "\n n = " + QString::number(n));
+//            currentStateJsonObject = getJsonObjectStateCancelCalibration();
+
+            if(currentStateJsonObject.value("calibration_state_min_or_max").toString().contains("ended_max_calibration"))
+            {
+                currentStateJsonObject = getJsonObjectStateCancelCalibration();
+                currentStateJsonObject.insert("calibration_state_progress_text", "");
+                currentStateJsonObject.insert("calibration_state_error_tag", "Calibración Incompleta");
+                currentStateJsonObject.insert("calibration_state_error_text", "Error en la medición");
+                setCurrentState(currentStateJsonObject);
+            }
+
             setCurrentState(currentStateJsonObject);
             return;
         }
@@ -360,13 +385,13 @@ void OptionCalibration::blockDisplayValue(){
  */
 void OptionCalibration::setCurrentState(QJsonObject jsonObjectState){
 
-    if(GlobalFunctions::checkIfFieldValid(jsonObjectState.value("calibration_state").toString())){
-        ui->l_calibration_state->setText(jsonObjectState.value("calibration_state").toString());
-        ui->l_calibration_state->show();
-    }
-    else{
-        ui->l_calibration_state->hide();
-    }
+//    if(GlobalFunctions::checkIfFieldValid(jsonObjectState.value("calibration_state").toString())){
+//        ui->l_calibration_state->setText(jsonObjectState.value("calibration_state").toString());
+//        ui->l_calibration_state->show();
+//    }
+//    else{
+//        ui->l_calibration_state->hide();
+//    }
 
     if(GlobalFunctions::checkIfFieldValid(jsonObjectState.value("calibration_state_text").toString())){
         ui->pt_calibration_state_text->setPlainText(jsonObjectState.value("calibration_state_text").toString());
@@ -483,7 +508,7 @@ QJsonObject OptionCalibration::getJsonObjectStateInitInformation(){
     jsonObject.insert("calibration_state_text", "El dispositivo deberá realizar"
                                                 " una medición máxima y mínima. "
                                                 "Para ello siga las instruciones "
-                                                "durante el progreso una vez iniciado");
+                                                "durante el proceso, una vez iniciado.");
     jsonObject.insert("calibration_state_progress_text", "");
     jsonObject.insert("calibration_state_progress_value", "");
     jsonObject.insert("calibration_state_button", "general/next_button.png");
@@ -510,11 +535,12 @@ QJsonObject OptionCalibration::getJsonObjectStateInitInformation(){
 QJsonObject OptionCalibration::getJsonObjectStateInitMinCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "Medición mínima");
-    jsonObject.insert("calibration_state_text", "Para realizar la medición mínima "
-                                                "antes desconecte el dispositivo de "
-                                                "la válvula para medir el oxígeno"
-                                                " ambiente");
-    jsonObject.insert("calibration_state_progress_text", "");
+    jsonObject.insert("calibration_state_text", "Retire el sensor de oxígeno "
+                                                "del Circuito de Paciente, "
+                                                "garantizando que esté conectado al "
+                                                "Analizador de Oxígeno."
+                      );
+    jsonObject.insert("calibration_state_progress_text", "Medición mínima");
     jsonObject.insert("calibration_state_progress_value", "");
     jsonObject.insert("calibration_state_button", "general/start_button.png");
     jsonObject.insert("calibration_state_footer_text_1", "");
@@ -536,6 +562,7 @@ QJsonObject OptionCalibration::getJsonObjectStateRunningMinCalibration(){
     jsonObject.insert("calibration_state_button", "general/cancel_button.png");
     jsonObject.insert("calibration_state_footer_text_1", "");
     jsonObject.insert("calibration_state_footer_text_2", "");
+    jsonObject.insert("calibration_state_min_or_max", "min");
     return jsonObject;
 }
 
@@ -548,7 +575,7 @@ QJsonObject OptionCalibration::getJsonObjectStateEndedMinCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "");
     jsonObject.insert("calibration_state_text", "");
-    jsonObject.insert("calibration_state_progress_text", "Completada");
+    jsonObject.insert("calibration_state_progress_text", "Medición mínima");
     jsonObject.insert("calibration_state_progress_value", "100");
     jsonObject.insert("calibration_state_button", "general/next_button.png");
     jsonObject.insert("calibration_state_footer_text_1", "");
@@ -565,10 +592,12 @@ QJsonObject OptionCalibration::getJsonObjectStateEndedMinCalibration(){
 QJsonObject OptionCalibration::getJsonObjectStateInitMaxCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "Medición máxima");
-    jsonObject.insert("calibration_state_text", "Para realizar la medición máxima "
-                                                "antes conecte el dispositivo a la "
-                                                "válvula y ábrala a toda capacidad");
-    jsonObject.insert("calibration_state_progress_text", "");
+    jsonObject.insert("calibration_state_text", "Coloque el sensor de oxígeno "
+                                                "en su posición correspondiente "
+                                                "en el Circuito de Paciente "
+                                                "y abra las tres válvulas del "
+                                                "Generador de Flujo a toda capacidad.");
+    jsonObject.insert("calibration_state_progress_text", "Medición máxima");
     jsonObject.insert("calibration_state_progress_value", "");
     jsonObject.insert("calibration_state_button", "general/start_button.png");
     jsonObject.insert("calibration_state_footer_text_1", "");
@@ -590,6 +619,7 @@ QJsonObject OptionCalibration::getJsonObjectStateRunningMaxCalibration(){
     jsonObject.insert("calibration_state_button", "general/cancel_button.png");
     jsonObject.insert("calibration_state_footer_text_1", "");
     jsonObject.insert("calibration_state_footer_text_2", "");
+    jsonObject.insert("calibration_state_min_or_max", "max");
     return jsonObject;
 }
 
@@ -604,12 +634,13 @@ QJsonObject OptionCalibration::getJsonObjectStateEndedMaxCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "");
     jsonObject.insert("calibration_state_text", "");
-    jsonObject.insert("calibration_state_progress_text", "Completada");
+    jsonObject.insert("calibration_state_progress_text", "Medición máxima");
     jsonObject.insert("calibration_state_progress_value", "100");
     jsonObject.insert("calibration_state_button", "general/next_button.png");
     jsonObject.insert("calibration_state_footer_text_1", "");
     jsonObject.insert("calibration_state_footer_text_2", "");
     jsonObject.insert("main_screen_image", ":/icons/main_menu/calibration_menu/ok.png");
+    jsonObject.insert("calibration_state_min_or_max", "ended_max_calibration");
     return jsonObject;
 }
 
@@ -623,9 +654,7 @@ QJsonObject OptionCalibration::getJsonObjectStateEndedCalibration(){
     QJsonObject jsonObject;
     jsonObject.insert("calibration_state", "Calibración Completada");
     jsonObject.insert("calibration_state_text", "Se ha realizado correctamente la "
-                                                "calibración del dispositivo. "
-                                                "Puede comenzar a usarlo con "
-                                                "normalidad");
+                                                "calibración del dispositivo.");
     jsonObject.insert("calibration_state_progress_text", "");
     jsonObject.insert("calibration_state_progress_value", "");
     jsonObject.insert("calibration_state_button", "general/exit_button.png");
