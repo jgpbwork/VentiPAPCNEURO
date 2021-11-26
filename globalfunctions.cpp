@@ -330,7 +330,7 @@ bool GlobalFunctions::readValues(QJsonObject jsonObject)
     {
         if (m > 0)
         {
-            if ((n > -10) && (n < 10))
+            if ((n > -100) && (n < 100))
             {
                 try {
                     QString date = jsonObject.value("lastCalibrationDateTime").toString();
